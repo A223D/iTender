@@ -154,7 +154,11 @@ export function CampaignBoard() {
             </div>
           </div>
 
-          <div className={isMobileDetailOpen ? "block lg:block" : "hidden lg:block"}>
+          <div
+            className={`lg:min-h-0 lg:h-full ${
+              isMobileDetailOpen ? "block lg:block" : "hidden lg:block"
+            }`}
+          >
             <JobDetail
               job={selectedJob}
               totalMatches={filteredJobs.length}

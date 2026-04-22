@@ -1,6 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function NavBar() {
+  const pathname = usePathname();
+  const isDiscoverActive = pathname === "/discover-campaigns";
+
   return (
     <header className="sticky top-0 z-30 border-b border-black/5 bg-white/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -14,10 +20,13 @@ export function NavBar() {
           </div>
         </div>
 
-        <nav aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" className="flex items-center gap-6">
           <Link
             href="/discover-campaigns"
-            className="rounded-full border border-moss/20 bg-moss px-4 py-2 text-sm font-semibold text-white transition hover:bg-moss/90"
+            aria-current={isDiscoverActive ? "page" : undefined}
+            className={`text-sm font-semibold transition hover:underline hover:underline-offset-4 ${
+              isDiscoverActive ? "text-ink" : "text-ink/65"
+            }`}
           >
             Discover Campaigns
           </Link>
