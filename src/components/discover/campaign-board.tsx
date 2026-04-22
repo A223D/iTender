@@ -16,6 +16,7 @@ export function CampaignBoard() {
   const [filters, setFilters] = useState<Record<string, string>>(initialFilters);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selectedJobId, setSelectedJobId] = useState<string | null>(jobs[0]?.id ?? null);
+  const [isMobileDetailOpen, setIsMobileDetailOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const filterOptions = useMemo(
@@ -82,6 +83,7 @@ export function CampaignBoard() {
 
   function handleSelectJob(jobId: string) {
     setSelectedJobId(jobId);
+    setIsMobileDetailOpen(true);
   }
 
   function handleReset() {
@@ -89,6 +91,11 @@ export function CampaignBoard() {
     setSearchQuery("");
     setFilters(initialFilters);
     setSelectedJobId(jobs[0]?.id ?? null);
+    setIsMobileDetailOpen(false);
+  }
+
+  function handleCloseMobileDetail() {
+    setIsMobileDetailOpen(false);
   }
 
   return (
@@ -105,7 +112,11 @@ export function CampaignBoard() {
 
       <section className="mt-8 lg:mt-6 lg:min-h-0 lg:flex-1">
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-cols-[380px_minmax(0,1fr)] xl:grid-cols-[420px_minmax(0,1fr)]">
-          <div className="rounded-[2rem] border border-black/5 bg-white/78 p-3 shadow-card lg:flex lg:min-h-0 lg:flex-col">
+          <div
+            className={`rounded-[2rem] border border-black/5 bg-white/78 p-3 shadow-card lg:flex lg:min-h-0 lg:flex-col ${
+              isMobileDetailOpen ? "hidden lg:flex" : "block"
+            }`}
+          >
             <div className="border-b border-black/6 px-4 pb-4 pt-3">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-moss">Campaigns</p>
               <p className="mt-2 text-sm text-ink/60">
@@ -143,7 +154,13 @@ export function CampaignBoard() {
             </div>
           </div>
 
-          <JobDetail job={selectedJob} totalMatches={filteredJobs.length} />
+          <div className={isMobileDetailOpen ? "block lg:block" : "hidden lg:block"}>
+            <JobDetail
+              job={selectedJob}
+              totalMatches={filteredJobs.length}
+              onBack={isMobileDetailOpen ? handleCloseMobileDetail : undefined}
+            />
+          </div>
         </div>
       </section>
     </div>
