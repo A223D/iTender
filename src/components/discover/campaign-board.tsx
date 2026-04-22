@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { FilterPanel } from "@/components/discover/filter-panel";
-import { JobCard } from "@/components/discover/job-card";
+import { JobDetail } from "@/components/discover/job-detail";
+import { JobListItem } from "@/components/discover/job-list-item";
 import { filterDefinitions, getFilterOptions, jobs, matchesFilter } from "@/lib/jobs";
 
 const PAGE_SIZE = 6;
@@ -14,6 +15,7 @@ export function CampaignBoard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>(initialFilters);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(jobs[0]?.id ?? null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const filterOptions = useMemo(
@@ -63,6 +65,7 @@ export function CampaignBoard() {
   }, [filteredJobs.length]);
 
   const visibleJobs = filteredJobs.slice(0, visibleCount);
+  const selectedJob = filteredJobs.find((job) => job.id === selectedJobId) ?? filteredJobs[0] ?? null;
 
   function handleFilterChange(key: string, value: string) {
     setVisibleCount(PAGE_SIZE);
@@ -77,14 +80,19 @@ export function CampaignBoard() {
     setSearchQuery(value);
   }
 
+  function handleSelectJob(jobId: string) {
+    setSelectedJobId(jobId);
+  }
+
   function handleReset() {
     setVisibleCount(PAGE_SIZE);
     setSearchQuery("");
     setFilters(initialFilters);
+    setSelectedJobId(jobs[0]?.id ?? null);
   }
 
   return (
-    <div className="mx-auto grid max-w-7xl gap-8 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:px-8">
+    <div className="mx-auto max-w-8xl px-4 pb-16 pt-10 sm:px-6 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:px-8 lg:pb-6 lg:pt-6">
       <FilterPanel
         searchQuery={searchQuery}
         onSearchQueryChange={handleSearchQueryChange}
@@ -92,44 +100,50 @@ export function CampaignBoard() {
         filterDefinitions={filterDefinitions}
         filterOptions={filterOptions}
         onFilterChange={handleFilterChange}
-        totalCount={filteredJobs.length}
-        visibleCount={visibleJobs.length}
         onReset={handleReset}
       />
 
-      <section>
-        <div className="rounded-[2.25rem] border border-black/5 bg-board-grid bg-[size:22px_22px] p-6 sm:p-8">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-moss">Discover campaigns</p>
-            <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-              Reverse-auction opportunities built for creators who move fast.
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-ink/70">
-              Browse active brand campaigns, search inside long-form briefs, and filter by platform, category, or
-              creator fit without waiting on server round-trips.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-8 grid gap-5">
-          {visibleJobs.length > 0 ? (
-            visibleJobs.map((job) => <JobCard key={job.id} job={job} />)
-          ) : (
-            <div className="rounded-[2rem] border border-dashed border-black/15 bg-white/70 p-10 text-center shadow-card">
-              <p className="font-display text-2xl font-semibold text-ink">No campaigns matched those filters.</p>
-              <p className="mt-3 text-sm leading-7 text-ink/65">
-                Try broadening the brief search or resetting a few filter selections.
+      <section className="mt-8 lg:mt-6 lg:min-h-0 lg:flex-1">
+        <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-cols-[380px_minmax(0,1fr)] xl:grid-cols-[420px_minmax(0,1fr)]">
+          <div className="rounded-[2rem] border border-black/5 bg-white/78 p-3 shadow-card lg:flex lg:min-h-0 lg:flex-col">
+            <div className="border-b border-black/6 px-4 pb-4 pt-3">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-moss">Campaigns</p>
+              <p className="mt-2 text-sm text-ink/60">
+                {filteredJobs.length} match{filteredJobs.length === 1 ? "" : "es"}
               </p>
             </div>
-          )}
-        </div>
 
-        <div ref={loadMoreRef} className="flex min-h-24 items-center justify-center">
-          {visibleJobs.length < filteredJobs.length ? (
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-ink/45">Loading more campaigns...</p>
-          ) : filteredJobs.length > PAGE_SIZE ? (
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-ink/45">You&apos;ve reached the end</p>
-          ) : null}
+            <div className="space-y-3 overflow-y-auto px-1 py-3 lg:min-h-0 lg:flex-1">
+              {visibleJobs.length > 0 ? (
+                visibleJobs.map((job) => (
+                  <JobListItem
+                    key={job.id}
+                    job={job}
+                    isActive={job.id === selectedJob?.id}
+                    onSelect={handleSelectJob}
+                  />
+                ))
+              ) : (
+                <div className="rounded-[1.5rem] border border-dashed border-black/15 bg-white/70 p-6 text-center">
+                  <p className="font-display text-xl font-semibold text-ink">No campaigns found.</p>
+                </div>
+              )}
+
+              <div ref={loadMoreRef} className="flex min-h-20 items-center justify-center">
+                {visibleJobs.length < filteredJobs.length ? (
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/45">
+                    Loading more campaigns...
+                  </p>
+                ) : filteredJobs.length > PAGE_SIZE ? (
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/45">
+                    You&apos;ve reached the end
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <JobDetail job={selectedJob} totalMatches={filteredJobs.length} />
         </div>
       </section>
     </div>
