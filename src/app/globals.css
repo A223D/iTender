@@ -22,3 +22,121 @@ body {
 ::selection {
   background: rgba(212, 163, 115, 0.35);
 }
+
+@keyframes scout-showlight-sway {
+  0% {
+    transform: translateX(-28px) rotate(-12deg) scaleY(1);
+  }
+  25% {
+    transform: translateX(-6px) rotate(-9deg) scaleY(1.03);
+  }
+  50% {
+    transform: translateX(26px) rotate(-4deg) scaleY(1.06);
+  }
+  75% {
+    transform: translateX(8px) rotate(-8deg) scaleY(1.04);
+  }
+  100% {
+    transform: translateX(-28px) rotate(-12deg) scaleY(1);
+  }
+}
+
+@keyframes scout-showlight-sway-reverse {
+  0% {
+    transform: translateX(28px) rotate(11deg) scaleY(1);
+  }
+  25% {
+    transform: translateX(8px) rotate(7deg) scaleY(1.03);
+  }
+  50% {
+    transform: translateX(-26px) rotate(2deg) scaleY(1.06);
+  }
+  75% {
+    transform: translateX(-8px) rotate(8deg) scaleY(1.04);
+  }
+  100% {
+    transform: translateX(28px) rotate(11deg) scaleY(1);
+  }
+}
+
+@keyframes scout-showlight-sweep {
+  0% {
+    transform: translateX(-42px) rotate(-6deg) scaleY(1);
+  }
+  30% {
+    transform: translateX(4px) rotate(0deg) scaleY(1.05);
+  }
+  60% {
+    transform: translateX(42px) rotate(7deg) scaleY(1.08);
+  }
+  100% {
+    transform: translateX(-42px) rotate(-6deg) scaleY(1);
+  }
+}
+
+@keyframes scout-showlight-glow {
+  0%,
+  100% {
+    opacity: 0.34;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+
+.scout-showlight {
+  animation:
+    scout-showlight-sway 5.2s ease-in-out infinite,
+    scout-showlight-glow 2.2s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: transform, opacity;
+  mix-blend-mode: multiply;
+}
+
+.scout-showlight-reverse {
+  animation-name: scout-showlight-sway-reverse, scout-showlight-glow;
+  animation-duration: 5.6s, 2.4s;
+  animation-timing-function: ease-in-out, ease-in-out;
+}
+
+.scout-showlight-sweep {
+  animation-name: scout-showlight-sweep, scout-showlight-glow;
+  animation-duration: 6.1s, 2.6s;
+  animation-timing-function: ease-in-out, ease-in-out;
+}
+
+.scout-showlight-soft {
+  mix-blend-mode: screen;
+}
+
+.scout-showlight-delay-1 {
+  animation-delay: -1.4s, -0.9s;
+}
+
+.scout-showlight-delay-2 {
+  animation-delay: -2.5s, -1.4s;
+}
+
+.scout-showlight-delay-3 {
+  animation-delay: -3.2s, -1.8s;
+}
+
+.scout-showlight-delay-4 {
+  animation-delay: -0.8s, -1.2s;
+}
+
+.scout-showlight-delay-5 {
+  animation-delay: -2.1s, -0.6s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scout-showlight,
+  .scout-showlight-reverse,
+  .scout-showlight-sweep,
+  .scout-showlight-soft,
+  .scout-showlight-delay-1,
+  .scout-showlight-delay-2,
+  .scout-showlight-delay-3 {
+    animation: none;
+  }
+}

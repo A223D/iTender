@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "iTender | Discover Campaigns",
-  description: "Explore influencer campaigns with fast filtering and brief search.",
+  title: "Scout | Small Business Influencer Marketplace",
+  description: "Scout helps small businesses connect with micro-influencers for paid and in-kind collaborations.",
 };
 
 export default function RootLayout({

@@ -6,3 +6,5 @@ yarn-error.log*
 .env*
 dist
 aiNotes.txt
+/generated/prisma
+styles.md
