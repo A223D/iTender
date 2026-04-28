@@ -3,12 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { HomeAudienceSwitcher } from "@/components/home/home-audience-switcher";
+import type { Audience } from "@/lib/audience";
+
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/discover-campaigns", label: "Discover Campaigns" },
 ];
 
-export function NavBar() {
+type NavBarProps = {
+  initialAudience?: Audience | null;
+};
+
+export function NavBar({ initialAudience = null }: NavBarProps) {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
 
@@ -37,7 +44,7 @@ export function NavBar() {
         </div>
       ) : null}
 
-      <div className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#D19FA5] to-[#E07070] text-sm font-bold text-white shadow-[0_6px_20px_rgba(28,28,28,0.12)]">
             S
@@ -48,24 +55,28 @@ export function NavBar() {
           </div>
         </Link>
 
-        <nav aria-label="Primary navigation" className="flex items-center gap-6">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+        <div className="flex flex-wrap items-center justify-end gap-4 sm:gap-6">
+          <nav aria-label="Primary navigation" className="flex items-center gap-6">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
 
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={isActive ? "page" : undefined}
-                className={`text-sm font-semibold transition hover:underline hover:underline-offset-4 ${
-                  isActive ? "text-[#333333]" : "text-[#888888]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`text-sm font-semibold transition hover:underline hover:underline-offset-4 ${
+                    isActive ? "text-[#333333]" : "text-[#888888]"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <HomeAudienceSwitcher key={initialAudience ?? "unset"} initialAudience={initialAudience} />
+        </div>
       </div>
     </header>
   );
