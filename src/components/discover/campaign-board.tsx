@@ -5,40 +5,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FilterPanel } from "@/components/discover/filter-panel";
 import { JobDetail } from "@/components/discover/job-detail";
 import { JobListItem } from "@/components/discover/job-list-item";
-import { filterDefinitions, getFilterOptions, jobs, matchesFilter } from "@/lib/jobs";
+import { filterDefinitions, filterJobs, getFilterOptionsMap, getInitialFilters, jobs } from "@/lib/jobs";
 
 const PAGE_SIZE = 6;
 
-const initialFilters = Object.fromEntries(filterDefinitions.map((definition) => [String(definition.key), "All"]));
-
 export function CampaignBoard() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState<Record<string, string>>(initialFilters);
+  const [filters, setFilters] = useState<Record<string, string>>(getInitialFilters);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selectedJobId, setSelectedJobId] = useState<string | null>(jobs[0]?.id ?? null);
   const [isMobileDetailOpen, setIsMobileDetailOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const filterOptions = useMemo(
-    () =>
-      Object.fromEntries(
-        filterDefinitions.map((definition) => [String(definition.key), getFilterOptions(jobs, definition.key)]),
-      ),
-    [],
-  );
-
-  const filteredJobs = useMemo(() => {
-    const normalizedSearch = searchQuery.trim().toLowerCase();
-
-    return jobs.filter((job) => {
-      const matchesSearch = normalizedSearch.length === 0 || job.brief.toLowerCase().includes(normalizedSearch);
-      const matchesAllFilters = filterDefinitions.every((definition) =>
-        matchesFilter(job[definition.key], filters[String(definition.key)] ?? "All"),
-      );
-
-      return matchesSearch && matchesAllFilters;
-    });
-  }, [filters, searchQuery]);
+  const filterOptions = useMemo(() => getFilterOptionsMap(jobs), []);
+  const filteredJobs = useMemo(() => filterJobs(jobs, searchQuery, filters), [filters, searchQuery]);
 
   useEffect(() => {
     const element = loadMoreRef.current;
@@ -89,7 +69,7 @@ export function CampaignBoard() {
   function handleReset() {
     setVisibleCount(PAGE_SIZE);
     setSearchQuery("");
-    setFilters(initialFilters);
+    setFilters(getInitialFilters());
     setSelectedJobId(jobs[0]?.id ?? null);
     setIsMobileDetailOpen(false);
   }
@@ -154,11 +134,7 @@ export function CampaignBoard() {
             </div>
           </div>
 
-          <div
-            className={`lg:min-h-0 lg:h-full ${
-              isMobileDetailOpen ? "block lg:block" : "hidden lg:block"
-            }`}
-          >
+          <div className={`lg:h-full lg:min-h-0 ${isMobileDetailOpen ? "block lg:block" : "hidden lg:block"}`}>
             <JobDetail
               job={selectedJob}
               totalMatches={filteredJobs.length}

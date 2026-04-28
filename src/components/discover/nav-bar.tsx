@@ -3,21 +3,54 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { HomeAudienceLink } from "@/components/home/home-audience-link";
 import { HomeAudienceSwitcher } from "@/components/home/home-audience-switcher";
-import type { Audience } from "@/lib/audience";
+import type { Audience, HomeView } from "@/lib/audience";
 
-const navLinks = [
+const appNavLinks = [
   { href: "/", label: "Home" },
   { href: "/discover-campaigns", label: "Discover Campaigns" },
 ];
 
-type NavBarProps = {
-  initialAudience?: Audience | null;
+type HomeNavItem = {
+  label: string;
+  href?: string;
 };
 
-export function NavBar({ initialAudience = null }: NavBarProps) {
+type NavBarProps = {
+  initialAudience?: Audience | null;
+  homeView?: HomeView | null;
+};
+
+function getHomeNavLinks(homeView: HomeView | null): HomeNavItem[] {
+  if (homeView === "creator") {
+    return [
+      { label: "Home", href: "/" },
+      { label: "How it Works", href: "#how-it-works" },
+      { label: "Browse Campaigns", href: "/discover-campaigns" },
+      { label: "Why Scout?", href: "#why-scout" },
+    ];
+  }
+
+  if (homeView === "business") {
+    return [
+      { label: "Home", href: "/" },
+      { label: "How it Works", href: "#how-it-works" },
+      { label: "Browse Creators" },
+      { label: "Why Scout?", href: "#why-scout" },
+    ];
+  }
+
+  return [];
+}
+
+export function NavBar({ initialAudience = null, homeView = null }: NavBarProps) {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const isChooser = isHomePage && homeView === "chooser";
+  const isCreatorHome = isHomePage && homeView === "creator";
+  const isBusinessHome = isHomePage && homeView === "business";
+  const homeNavLinks = getHomeNavLinks(homeView);
 
   return (
     <header
@@ -55,28 +88,85 @@ export function NavBar({ initialAudience = null }: NavBarProps) {
           </div>
         </Link>
 
-        <div className="flex flex-wrap items-center justify-end gap-4 sm:gap-6">
-          <nav aria-label="Primary navigation" className="flex items-center gap-6">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+        {isChooser ? (
+          <div className="text-sm text-slate-500">
+            Already have an account?{" "}
+            <button type="button" className="font-semibold text-slate-800">
+              Login
+            </button>
+          </div>
+        ) : null}
 
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={isActive ? "page" : undefined}
-                  className={`text-sm font-semibold transition hover:underline hover:underline-offset-4 ${
-                    isActive ? "text-[#333333]" : "text-[#888888]"
-                  }`}
+        {isCreatorHome || isBusinessHome ? (
+          <>
+            <nav
+              aria-label="Primary navigation"
+              className="hidden items-center gap-6 text-sm font-medium text-slate-600 lg:flex"
+            >
+              {homeNavLinks.map((link) =>
+                link.href ? (
+                  <Link key={link.label} href={link.href} className="transition hover:text-slate-900">
+                    {link.label}
+                  </Link>
+                ) : (
+                  <button key={link.label} type="button" className="transition hover:text-slate-900">
+                    {link.label}
+                  </button>
+                ),
+              )}
+
+              {isCreatorHome ? (
+                <HomeAudienceLink
+                  audience="business"
+                  className="font-medium text-emerald-600 transition hover:text-emerald-700"
                 >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+                  Switch to Business Mode
+                </HomeAudienceLink>
+              ) : null}
 
-          <HomeAudienceSwitcher key={initialAudience ?? "unset"} initialAudience={initialAudience} />
-        </div>
+              {isBusinessHome ? (
+                <HomeAudienceLink
+                  audience="creator"
+                  className="font-medium text-emerald-600 transition hover:text-emerald-700"
+                >
+                  Switch to Creator Mode
+                </HomeAudienceLink>
+              ) : null}
+            </nav>
+
+            <button
+              type="button"
+              className="rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+            >
+              {isCreatorHome ? "Join as Creator" : "Join as a Business"}
+            </button>
+          </>
+        ) : null}
+
+        {!isHomePage ? (
+          <div className="flex flex-wrap items-center justify-end gap-4 sm:gap-6">
+            <nav aria-label="Primary navigation" className="flex items-center gap-6">
+              {appNavLinks.map((link) => {
+                const isActive = pathname === link.href;
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`text-sm font-semibold transition hover:underline hover:underline-offset-4 ${
+                      isActive ? "text-[#333333]" : "text-[#888888]"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <HomeAudienceSwitcher key={initialAudience ?? "unset"} initialAudience={initialAudience} />
+          </div>
+        ) : null}
       </div>
     </header>
   );

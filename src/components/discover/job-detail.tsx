@@ -1,3 +1,4 @@
+import { formatBudget, getCampaignSummaryLine } from "@/lib/jobs";
 import { JobRecord } from "@/types/jobs";
 
 type JobDetailProps = {
@@ -5,14 +6,6 @@ type JobDetailProps = {
   onBack?: () => void;
   totalMatches: number;
 };
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
 
 export function JobDetail({ job, onBack, totalMatches }: JobDetailProps) {
   if (!job) {
@@ -47,16 +40,12 @@ export function JobDetail({ job, onBack, totalMatches }: JobDetailProps) {
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {job.companyName}
           </h2>
-          <p className="mt-3 text-base text-ink/62">
-            {job.jobCategory} campaign
-            {" · "}
-            {job.platform.join(", ")}
-          </p>
+          <p className="mt-3 text-base text-ink/62">{getCampaignSummaryLine(job)}</p>
         </div>
 
         <div className="rounded-[1.5rem] bg-blush px-5 py-4">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/55">Max budget</p>
-          <p className="mt-2 text-2xl font-bold text-ink">{formatCurrency(job.maxBudget)}</p>
+          <p className="mt-2 text-2xl font-bold text-ink">{formatBudget(job.maxBudget)}</p>
         </div>
       </div>
 

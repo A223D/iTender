@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { startTransition, useState } from "react";
+import { useState } from "react";
 
-import { audienceCookieName, type Audience } from "@/lib/audience";
+import { useAudienceSelection } from "@/components/home/use-audience-selection";
+import { type Audience } from "@/lib/audience";
 
 type HomeAudienceSwitcherProps = {
   initialAudience: Audience | null;
@@ -11,21 +11,13 @@ type HomeAudienceSwitcherProps = {
 
 const options: Audience[] = ["creator", "business"];
 
-function persistAudienceSelection(audience: Audience) {
-  document.cookie = `${audienceCookieName}=${audience}; path=/; max-age=31536000; samesite=lax`;
-}
-
 export function HomeAudienceSwitcher({ initialAudience }: HomeAudienceSwitcherProps) {
-  const router = useRouter();
   const [selectedAudience, setSelectedAudience] = useState<Audience | null>(initialAudience);
+  const selectAudience = useAudienceSelection();
 
   function handleSelect(audience: Audience) {
     setSelectedAudience(audience);
-    persistAudienceSelection(audience);
-
-    startTransition(() => {
-      router.refresh();
-    });
+    selectAudience(audience);
   }
 
   return (

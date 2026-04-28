@@ -1,3 +1,4 @@
+import { formatBudget, getBriefPreview, getCampaignSummaryLine } from "@/lib/jobs";
 import { JobRecord } from "@/types/jobs";
 
 type JobListItemProps = {
@@ -5,24 +6,6 @@ type JobListItemProps = {
   job: JobRecord;
   onSelect: (jobId: string) => void;
 };
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function getBriefPreview(brief: string) {
-  const normalized = brief.replace(/\s+/g, " ").trim();
-
-  if (normalized.length <= 150) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, 147).trimEnd()}...`;
-}
 
 export function JobListItem({ isActive, job, onSelect }: JobListItemProps) {
   return (
@@ -39,14 +22,10 @@ export function JobListItem({ isActive, job, onSelect }: JobListItemProps) {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-moss">{job.companyCategory}</p>
           <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-ink">{job.companyName}</h3>
-          <p className="mt-1 text-sm text-ink/60">
-            {job.jobCategory}
-            {" · "}
-            {job.platform.join(", ")}
-          </p>
+          <p className="mt-1 text-sm text-ink/60">{getCampaignSummaryLine(job)}</p>
         </div>
         <span className="rounded-full bg-blush px-3 py-1 text-xs font-semibold text-ink">
-          {formatCurrency(job.maxBudget)}
+          {formatBudget(job.maxBudget)}
         </span>
       </div>
 
