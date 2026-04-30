@@ -71,8 +71,6 @@ export const creatorHomePageContent: HomePageTemplateProps = {
   whyScoutDescription:
     "Built to make creator-business partnerships easier, clearer, and more effective for everyone.",
   whyScoutCards: sharedWhyScoutCards,
-  footerLinkLabel: "Browse Campaigns",
-  footerLinkHref: "/discover-campaigns",
 };
 
 export const businessHomePageContent: HomePageTemplateProps = {

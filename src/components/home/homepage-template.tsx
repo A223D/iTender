@@ -134,23 +134,7 @@ export function HomePageTemplate({
         </div>
       </main>
 
-      <section id="how-it-works" className="border-t border-slate-100 bg-white px-8 py-20 lg:px-16">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-4xl font-bold">How it Works</h2>
-          <p className="mt-3 max-w-2xl text-slate-500">{howItWorksDescription}</p>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {howItWorksCards.map((item, index) => (
-              <div key={item.title} className="rounded-3xl border border-slate-200 p-6">
-                <div className="text-2xl font-bold">{index + 1}</div>
-                <h3 className="mt-3 font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-slate-500">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="why-scout" className="bg-rose-50/40 px-8 py-20 lg:px-16">
+      <section id="why-scout" className="border-t border-slate-100 bg-rose-50/40 px-8 py-20 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <h2 className="text-4xl font-bold">Why Scout?</h2>
           <p className="mt-3 max-w-2xl text-slate-500">{whyScoutDescription}</p>
@@ -173,6 +157,22 @@ export function HomePageTemplate({
               </Link>
             </div>
           ) : null}
+        </div>
+      </section>
+
+      <section id="how-it-works" className="bg-white px-8 py-20 lg:px-16">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="text-4xl font-bold">How it Works</h2>
+          <p className="mt-3 max-w-2xl text-slate-500">{howItWorksDescription}</p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {howItWorksCards.map((item, index) => (
+              <div key={item.title} className="rounded-3xl border border-slate-200 p-6">
+                <div className="text-2xl font-bold">{index + 1}</div>
+                <h3 className="mt-3 font-semibold">{item.title}</h3>
+                <p className="mt-2 text-sm text-slate-500">{item.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

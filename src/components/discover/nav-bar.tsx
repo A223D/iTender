@@ -7,10 +7,7 @@ import { HomeAudienceLink } from "@/components/home/home-audience-link";
 import { HomeAudienceSwitcher } from "@/components/home/home-audience-switcher";
 import type { Audience, HomeView } from "@/lib/audience";
 
-const appNavLinks = [
-  { href: "/", label: "Home" },
-  { href: "/discover-campaigns", label: "Discover Campaigns" },
-];
+const appNavLinks = [{ href: "/", label: "Home" }];
 
 type HomeNavItem = {
   label: string;
@@ -26,18 +23,17 @@ function getHomeNavLinks(homeView: HomeView | null): HomeNavItem[] {
   if (homeView === "creator") {
     return [
       { label: "Home", href: "/" },
-      { label: "How it Works", href: "#how-it-works" },
-      { label: "Browse Campaigns", href: "/discover-campaigns" },
       { label: "Why Scout?", href: "#why-scout" },
+      { label: "How it Works", href: "#how-it-works" },
     ];
   }
 
   if (homeView === "business") {
     return [
       { label: "Home", href: "/" },
+      { label: "Why Scout?", href: "#why-scout" },
       { label: "How it Works", href: "#how-it-works" },
       { label: "Browse Creators" },
-      { label: "Why Scout?", href: "#why-scout" },
     ];
   }
 
