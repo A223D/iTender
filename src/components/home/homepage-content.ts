@@ -2,35 +2,38 @@ import type { HomePageTemplateProps } from "@/components/home/homepage-template"
 
 const sharedWhyScoutCards: HomePageTemplateProps["whyScoutCards"] = [
   {
+    icon: "🤝",
     title: "Better Matches",
     description: "Creators and businesses connect based on niche, goals, and mutual fit.",
   },
   {
+    icon: "📋",
     title: "Clear Expectations",
     description: "Deliverables, compensation, and timelines are visible from the start.",
   },
   {
+    icon: "⚡",
     title: "Streamlined Outreach",
     description: "Replace scattered DMs and cold emails with one streamlined platform.",
   },
 ];
 
 export const creatorHomePageContent: HomePageTemplateProps = {
-  badge: "Get Paid to Post What You Love!",
+  badge: "✨ Get Paid to Post What You Love",
   title: "Get discovered by local businesses that fit your niche and want to work with creators like you",
   description: "Browse paid campaigns, gifted collabs, and local partnerships built for micro-creators.",
   highlightCards: [
     {
       title: "Focus",
-      items: ["Food", "Fitness", "Fashion", "Lifestyle"],
+      items: ["🍕 Food", "💪 Fitness", "👗 Fashion", "✨ Lifestyle"],
     },
     {
       title: "Compensation",
-      items: ["Cash", "Free Products", "Experiences"],
+      items: ["💸 Cash", "🎁 Free Products", "🌟 Experiences"],
     },
     {
       title: "Deliverables",
-      items: ["Reels", "Stories", "TikToks", "Photos"],
+      items: ["🎬 Reels", "📸 Stories", "📱 TikToks", "🖼️ Photos"],
     },
   ],
   primaryActionLabel: "Edit Profile",
@@ -49,21 +52,24 @@ export const creatorHomePageContent: HomePageTemplateProps = {
       title: "Bloom Cafe",
       subtitle: "Need 2 food creators",
       detail: "$120 + free brunch",
-      actionLabel: "Apply",
+      actionLabel: "Apply Now 🚀",
     },
   },
   howItWorksDescription:
     "A clear path for creators to discover, apply, and grow through local brand partnerships.",
   howItWorksCards: [
     {
+      icon: "👤",
       title: "Build Your Profile",
       description: "Import socials, showcase your niche, audience, and content style.",
     },
     {
+      icon: "🔍",
       title: "Apply to Campaigns",
       description: "Browse paid and in-kind local opportunities that match your vibe.",
     },
     {
+      icon: "🚀",
       title: "Collaborate & Grow",
       description: "Get selected, create content, and build long-term brand relationships.",
     },
@@ -74,22 +80,22 @@ export const creatorHomePageContent: HomePageTemplateProps = {
 };
 
 export const businessHomePageContent: HomePageTemplateProps = {
-  badge: "Get Local Buzz for Your Brand!",
+  badge: "🔥 Find Creators That Actually Convert",
   title: "Find local creators that fit your brand and are ready to promote your business",
   description:
     "Launch paid or gifted campaigns, review applicants, and grow through influencer partnerships. Reach your future customers through creators they trust!",
   highlightCards: [
     {
       title: "Campaign Goals",
-      items: ["Awareness", "Traffic", "Sales", "Launches"],
+      items: ["📣 Awareness", "🚗 Traffic", "💰 Sales", "🚀 Launches"],
     },
     {
       title: "Budget Types",
-      items: ["Paid", "Gifted/In-Kind", "Hybrid"],
+      items: ["💸 Paid", "🎁 Gifted/In-Kind", "🤝 Hybrid"],
     },
     {
       title: "Content Types",
-      items: ["Reels", "Stories", "TikToks", "Photos"],
+      items: ["🎬 Reels", "📸 Stories", "📱 TikToks", "🖼️ Photos"],
     },
   ],
   primaryActionLabel: "Create New Campaign",
@@ -108,21 +114,24 @@ export const businessHomePageContent: HomePageTemplateProps = {
       title: "@sarahsnaps",
       subtitle: "Food Creator • 8.2K Followers",
       detail: "See creator profile",
-      actionLabel: "Invite",
+      actionLabel: "Invite Creator 🎯",
     },
   },
   howItWorksDescription:
     "A simple workflow for businesses to launch campaigns, review creators, and grow through trusted partnerships.",
   howItWorksCards: [
     {
+      icon: "📣",
       title: "Create Your Campaign",
       description: "Set your goals, budget, deliverables, and the type of creator you want to work with.",
     },
     {
+      icon: "👥",
       title: "Review Creator Applicants",
       description: "Compare creator profiles, audience fit, content style, and campaign alignment in one place.",
     },
     {
+      icon: "🚀",
       title: "Launch & Grow",
       description: "Choose creators, launch campaigns, and turn creator attention into real customers.",
     },
