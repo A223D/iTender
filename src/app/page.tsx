@@ -11,7 +11,7 @@ export default async function HomePage() {
   const selectedAudience = getSelectedAudience(cookieStore.get(audienceCookieName)?.value);
 
   return (
-    <main id="top" className="min-h-screen bg-[#F5F5F5] text-[#333333]">
+    <main id="top" className="min-h-screen bg-void">
       <NavBar
         initialAudience={selectedAudience}
         homeView={selectedAudience === null ? "chooser" : selectedAudience}
