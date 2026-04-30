@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type RefObject, useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 import { ParticleCanvas } from "@/components/effects/particle-canvas";
 import { AnimatedDashboard, type SummaryPanel } from "@/components/home/animated-dashboard";
@@ -60,9 +60,16 @@ export function HomePageTemplate({
   footerLinkLabel,
   footerLinkHref,
 }: HomePageTemplateProps) {
-  const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const whyRef = useRef<HTMLElement>(null);
   const howRef = useRef<HTMLElement>(null);
+  const [scrollVisible, setScrollVisible] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setScrollVisible(window.scrollY < 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const el = heroRef.current;
@@ -111,7 +118,7 @@ export function HomePageTemplate({
     <div className="overflow-hidden bg-white text-gray-900">
 
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="relative flex min-h-screen items-center">
+      <section ref={heroRef} className="relative flex min-h-screen items-start lg:h-[100svh] lg:items-center lg:overflow-hidden">
         <ParticleCanvas />
 
         {/* Ambient gradient blobs */}
@@ -121,8 +128,8 @@ export function HomePageTemplate({
           <div className="absolute bottom-0 left-1/3 h-[460px] w-[460px] rounded-full bg-teal/[0.05] blur-[120px]" />
         </div>
 
-        {/* Floating decorative emojis */}
-        <div className="pointer-events-none absolute inset-0 select-none overflow-hidden">
+        {/* Floating decorative emojis — desktop only */}
+        <div className="pointer-events-none absolute inset-0 hidden select-none overflow-hidden lg:block">
           <span className="hero-emoji absolute left-[6%] top-[22%] text-4xl opacity-0 animate-float-slow">✨</span>
           <span className="hero-emoji absolute right-[10%] top-[18%] text-3xl opacity-0 animate-float-medium">🔥</span>
           <span className="hero-emoji absolute left-[3%] top-[55%] text-3xl opacity-0 animate-float-fast">💸</span>
@@ -131,35 +138,35 @@ export function HomePageTemplate({
           <span className="hero-emoji absolute right-[22%] top-[12%] text-2xl opacity-0 animate-float-fast">🎯</span>
         </div>
 
-        <div ref={heroRef} className="relative z-10 mx-auto w-full max-w-7xl px-6 py-28 lg:px-8 lg:py-0 lg:min-h-screen lg:flex lg:items-center">
-          <div className="grid w-full gap-14 lg:grid-cols-2 lg:items-center lg:gap-10">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-16 lg:px-8 lg:py-0 lg:flex lg:h-full lg:items-center">
+          <div className="grid w-full gap-10 lg:grid-cols-2 lg:items-center lg:gap-10">
 
             {/* Left: text */}
-            <div>
-              <div className="hero-badge inline-flex items-center gap-2.5 rounded-full border border-coral/25 bg-coral/[0.07] px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-coral opacity-0">
+            <div className="text-center lg:text-left">
+              <div className="hero-badge mx-auto inline-flex items-center gap-2.5 rounded-full border border-coral/25 bg-coral/[0.07] px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-coral opacity-0 lg:mx-0">
                 <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-coral" />
                 {badge}
               </div>
 
-              <h1 className="hero-title mt-6 max-w-xl font-display text-5xl font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 xl:text-6xl">
+              <h1 className="hero-title mt-5 font-display text-4xl font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 sm:text-5xl xl:text-6xl">
                 {title}
               </h1>
 
-              <p className="hero-desc mt-6 max-w-lg text-lg leading-relaxed text-gray-500 opacity-0">
+              <p className="hero-desc mt-5 text-base leading-relaxed text-gray-500 opacity-0 sm:text-lg">
                 {description}
               </p>
 
-              <div className="mt-8 space-y-3.5">
+              <div className="mt-7 space-y-3">
                 {highlightCards.map((card) => (
-                  <div key={card.title} className="hero-tag flex items-start gap-4 opacity-0">
-                    <span className="mt-0.5 w-24 shrink-0 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  <div key={card.title} className="hero-tag flex items-start justify-center gap-3 opacity-0 lg:justify-start">
+                    <span className="mt-0.5 w-20 shrink-0 text-[10px] font-bold uppercase tracking-wider text-gray-400">
                       {card.title}
                     </span>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {card.items.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-600 transition hover:border-violet/30 hover:bg-violet/[0.04]"
+                          className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-600 transition hover:border-violet/30 hover:bg-violet/[0.04]"
                         >
                           {item}
                         </span>
@@ -169,7 +176,7 @@ export function HomePageTemplate({
                 ))}
               </div>
 
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
                 <button
                   type="button"
                   className="hero-cta rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white opacity-0 shadow-glow transition hover:opacity-90 active:scale-95"
@@ -185,15 +192,17 @@ export function HomePageTemplate({
               </div>
             </div>
 
-            {/* Right: animated dashboard */}
-            <div className="flex justify-center lg:justify-end lg:pr-4">
+            {/* Right: animated dashboard — desktop only */}
+            <div className="hidden lg:flex lg:justify-end lg:pr-4">
               <AnimatedDashboard summaryPanel={summaryPanel} />
             </div>
           </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        {/* Scroll hint — fixed to viewport bottom, desktop only, fades on scroll */}
+        <div
+          className={`pointer-events-none fixed bottom-8 left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-500 lg:flex ${scrollVisible ? "opacity-100" : "opacity-0"}`}
+        >
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Scroll</span>
           <div className="h-8 w-px bg-gradient-to-b from-gray-300 to-transparent" />
         </div>

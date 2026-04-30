@@ -68,7 +68,7 @@ export function AudienceQuestionnaire() {
   }
 
   return (
-    <section className="flex min-h-[calc(100vh-72px)] items-center justify-center bg-white px-6 py-12">
+    <section className="flex min-h-[calc(100svh-64px)] items-center justify-center bg-white px-4 py-8 sm:px-6 sm:py-12">
       {/* Ambient blobs */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-32 top-1/4 h-[500px] w-[500px] rounded-full bg-violet/[0.07] blur-[120px]" />
@@ -77,24 +77,24 @@ export function AudienceQuestionnaire() {
       </div>
 
       <div ref={containerRef} className="relative w-full max-w-3xl">
-        <div className="q-heading mx-auto mb-12 max-w-2xl text-center opacity-0">
-          <div className="mb-4 text-5xl">🚀</div>
-          <h1 className="font-display text-5xl font-bold leading-tight text-gray-900 md:text-6xl">
+        <div className="q-heading mx-auto mb-6 max-w-2xl text-center opacity-0 sm:mb-10">
+          <div className="mb-3 text-4xl sm:text-5xl">🚀</div>
+          <h1 className="font-display text-3xl font-bold leading-tight text-gray-900 sm:text-5xl md:text-6xl">
             Built for Creators.{" "}
             <span className="bg-gradient-to-r from-coral via-violet to-teal bg-clip-text text-transparent">
               Built for Businesses.
             </span>
           </h1>
-          <p className="mt-5 text-lg text-gray-500">
+          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg">
             Start your journey with Scout — where creators and businesses grow together locally.
           </p>
         </div>
 
-        <p className="mb-6 text-center text-[11px] font-bold uppercase tracking-[0.28em] text-gray-400">
+        <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.28em] text-gray-400 sm:mb-6">
           I am a...
         </p>
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-5 md:grid-cols-2">
           {options.map((option) => {
             const isPending = pendingAudience === option.value;
 
@@ -103,22 +103,29 @@ export function AudienceQuestionnaire() {
                 key={option.value}
                 type="button"
                 onClick={() => handleSelect(option.value)}
-                className={`group q-card relative rounded-3xl border border-gray-200 bg-white p-8 text-left opacity-0 shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-md ${option.ring}`}
+                className={`group q-card relative rounded-2xl border border-gray-200 bg-white p-5 text-left opacity-0 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md sm:rounded-3xl sm:p-8 ${option.ring}`}
               >
                 {/* Gradient glow on hover */}
                 <div
-                  className={`pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br ${option.accent} opacity-0 blur-xl transition duration-500 group-hover:opacity-[0.06]`}
+                  className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br sm:rounded-3xl ${option.accent} opacity-0 blur-xl transition duration-500 group-hover:opacity-[0.06]`}
                 />
 
-                <div
-                  className={`relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${option.accent} text-4xl shadow-md`}
-                >
-                  {option.badge}
+                <div className="relative flex items-center gap-4 sm:block">
+                  <div
+                    className={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br sm:h-16 sm:w-16 sm:rounded-2xl ${option.accent} text-3xl shadow-md sm:text-4xl`}
+                  >
+                    {option.badge}
+                  </div>
+                  <div className="sm:hidden">
+                    <h2 className="text-lg font-bold text-gray-900">{option.title}</h2>
+                    <p className="text-sm text-gray-500">{option.description}</p>
+                  </div>
                 </div>
-                <h2 className="relative mt-5 text-2xl font-bold text-gray-900">{option.title}</h2>
-                <p className="relative mt-2 text-gray-500">{option.description}</p>
 
-                <div className={`relative mt-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${option.chipBg} ${option.chipText}`}>
+                <h2 className="relative mt-5 hidden text-2xl font-bold text-gray-900 sm:block">{option.title}</h2>
+                <p className="relative mt-2 hidden text-gray-500 sm:block">{option.description}</p>
+
+                <div className={`relative mt-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold sm:mt-5 ${option.chipBg} ${option.chipText}`}>
                   {isPending ? (
                     <>
                       <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
