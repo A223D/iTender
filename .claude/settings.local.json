@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell($jobs = Get-Content \"src\\\\data\\\\jobs.json\" -Raw | ConvertFrom-Json; \"Job count: $\\($jobs.Count\\)\"; \"Companies: $\\($jobs.companyName -join ', '\\)\")"
-    ]
-  }
-}
