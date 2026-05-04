@@ -5,43 +5,44 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FilterPanel } from "@/components/discover/filter-panel";
 import { JobDetail } from "@/components/discover/job-detail";
 import { JobListItem } from "@/components/discover/job-list-item";
-import { filterDefinitions, filterJobs, getFilterOptionsMap, getInitialFilters, jobs } from "@/lib/jobs";
+import { filterDefinitions, filterJobs, getFilterOptionsMap, getInitialFilters } from "@/lib/jobs";
+import { Campaign } from "@/types/jobs";
 
 const PAGE_SIZE = 6;
 
-export function CampaignBoard() {
+type CampaignBoardProps = {
+  initialCampaigns: Campaign[];
+};
+
+export function CampaignBoard({ initialCampaigns }: CampaignBoardProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>(getInitialFilters);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [selectedJobId, setSelectedJobId] = useState<string | null>(jobs[0]?.id ?? null);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(initialCampaigns[0]?.id ?? null);
   const [isMobileDetailOpen, setIsMobileDetailOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const filterOptions = useMemo(() => getFilterOptionsMap(jobs), []);
-  const filteredJobs = useMemo(() => filterJobs(jobs, searchQuery, filters), [filters, searchQuery]);
+  const filterOptions = useMemo(() => getFilterOptionsMap(initialCampaigns), [initialCampaigns]);
+  const filteredJobs = useMemo(
+    () => filterJobs(initialCampaigns, searchQuery, filters),
+    [initialCampaigns, filters, searchQuery],
+  );
 
   useEffect(() => {
     const element = loadMoreRef.current;
-
-    if (!element) {
-      return undefined;
-    }
+    if (!element) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const firstEntry = entries[0];
-
         if (firstEntry?.isIntersecting) {
           setVisibleCount((current) => Math.min(current + PAGE_SIZE, filteredJobs.length));
         }
       },
-      {
-        rootMargin: "240px 0px",
-      },
+      { rootMargin: "240px 0px" },
     );
 
     observer.observe(element);
-
     return () => observer.disconnect();
   }, [filteredJobs.length]);
 
@@ -50,10 +51,7 @@ export function CampaignBoard() {
 
   function handleFilterChange(key: string, value: string) {
     setVisibleCount(PAGE_SIZE);
-    setFilters((current) => ({
-      ...current,
-      [key]: value,
-    }));
+    setFilters((current) => ({ ...current, [key]: value }));
   }
 
   function handleSearchQueryChange(value: string) {
@@ -70,7 +68,7 @@ export function CampaignBoard() {
     setVisibleCount(PAGE_SIZE);
     setSearchQuery("");
     setFilters(getInitialFilters());
-    setSelectedJobId(jobs[0]?.id ?? null);
+    setSelectedJobId(initialCampaigns[0]?.id ?? null);
     setIsMobileDetailOpen(false);
   }
 
