@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { HomeAudienceLink } from "@/components/home/home-audience-link";
@@ -43,6 +43,7 @@ function getHomeNavLinks(homeView: HomeView | null): HomeNavItem[] {
 
 export function NavBar({ initialAudience = null, homeView = null }: NavBarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isHomePage = pathname === "/";
@@ -96,7 +97,11 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
           {isChooser ? (
             <div className="text-sm text-gray-500">
               Already have an account?{" "}
-              <button type="button" className="font-semibold text-gray-900 transition hover:text-violet">
+              <button
+                type="button"
+                onClick={() => router.push("/login")}
+                className="font-semibold text-gray-900 transition hover:text-violet"
+              >
                 Login
               </button>
             </div>
@@ -105,6 +110,7 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
           {hasHomeNav ? (
             <button
               type="button"
+              onClick={() => router.push("/login")}
               className="rounded-full bg-gradient-to-r from-coral to-violet px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:opacity-90 active:scale-95"
             >
               {isCreatorHome ? "Join as Creator ✨" : "Join as a Business 🚀"}
