@@ -100,7 +100,17 @@ type NormalizedCreator = {
   youtube_followers: number;
 };
 
-function CreatorCard({ creator }: { creator: NormalizedCreator }) {
+function CreatorCard({
+  creator,
+  matchId,
+  accepting,
+  onAccept,
+}: {
+  creator: NormalizedCreator;
+  matchId: string | null;
+  accepting: boolean;
+  onAccept: () => void;
+}) {
   const photo = creator.profile_photo_url ?? creator.avatar_url;
   const handle = creator.instagram_handle ? `@${creator.instagram_handle}` : creator.city ?? null;
   const platforms = [
@@ -132,6 +142,13 @@ function CreatorCard({ creator }: { creator: NormalizedCreator }) {
               <div className="min-w-0">
                 <p className="truncate font-semibold text-ink">{creator.name}</p>
                 {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
+                <Link
+                  href={`/creators/${creator.id}`}
+                  target="_blank"
+                  className="text-xs font-medium text-moss/70 transition hover:text-moss"
+                >
+                  View profile ↗
+                </Link>
               </div>
               {totalFollowers > 0 ? (
                 <span className="shrink-0 text-sm font-bold text-ink">Total: {formatFollowers(totalFollowers)}</span>
@@ -174,6 +191,32 @@ function CreatorCard({ creator }: { creator: NormalizedCreator }) {
             <p className="text-sm leading-5 text-ink/70">{creator.pitch}</p>
           </div>
         ) : null}
+
+        {/* Action row */}
+        <div className="mt-4 flex items-center justify-end gap-2">
+          {matchId ? (
+            <>
+              <span className="rounded-full bg-moss/10 px-3 py-1.5 text-xs font-semibold text-moss">
+                Accepted ✓
+              </span>
+              <Link
+                href={`/matches/${matchId}`}
+                className="rounded-xl bg-moss px-3 py-1.5 text-xs font-bold text-white transition hover:bg-moss/90"
+              >
+                Message →
+              </Link>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={onAccept}
+              disabled={accepting}
+              className="rounded-xl bg-moss px-3 py-1.5 text-xs font-bold text-white transition hover:bg-moss/90 disabled:opacity-60"
+            >
+              {accepting ? "Accepting…" : "Accept"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -192,6 +235,9 @@ function CreatorPipeline({
   setNicheFilter,
   allNiches,
   sticky,
+  localMatches,
+  accepting,
+  onAccept,
 }: {
   creators: NormalizedCreator[];
   filteredCreators: NormalizedCreator[];
@@ -203,6 +249,9 @@ function CreatorPipeline({
   setNicheFilter: (v: string) => void;
   allNiches: string[];
   sticky: boolean;
+  localMatches: Map<string, string>;
+  accepting: string | null;
+  onAccept: (creator: NormalizedCreator) => void;
 }) {
   return (
     <div>
@@ -282,7 +331,13 @@ function CreatorPipeline({
           ) : (
             <div className="space-y-3">
               {filteredCreators.map((creator, i) => (
-                <CreatorCard key={creator.id || i} creator={creator} />
+                <CreatorCard
+                  key={creator.id || i}
+                  creator={creator}
+                  matchId={localMatches.get(creator.id) ?? null}
+                  accepting={accepting === creator.id}
+                  onAccept={() => onAccept(creator)}
+                />
               ))}
             </div>
           )}
@@ -310,7 +365,7 @@ type EditForm = {
   deadline: string;
 };
 
-export function CampaignDetailView({ campaign, interestedCreators, userId }: Props) {
+export function CampaignDetailView({ campaign, interestedCreators, userId, existingMatches = new Map() }: Props) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -319,6 +374,10 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  // Accept state
+  const [accepting, setAccepting] = useState<string | null>(null);
+  const [localMatches, setLocalMatches] = useState<Map<string, string>>(existingMatches);
 
   // Creator filter state
   const [sortBy, setSortBy] = useState<"followers" | "recent">("followers");
@@ -426,6 +485,21 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
     setDocRemoved(false);
     setError(null);
     setEditing(true);
+  }
+
+  async function handleAccept(creator: NormalizedCreator) {
+    setAccepting(creator.id);
+    const { data, error: acceptError } = await supabase
+      .from("matches")
+      .insert({ campaign_id: campaign.id, creator_id: creator.id, business_id: userId })
+      .select("id")
+      .single();
+    if (data) {
+      await supabase.rpc("decrement_interested", { campaign_id: campaign.id });
+      setLocalMatches((prev) => new Map(prev).set(creator.id, data.id));
+    }
+    if (acceptError) setError("Could not accept creator. They may already be matched.");
+    setAccepting(null);
   }
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -1030,6 +1104,9 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
                   setNicheFilter={setNicheFilter}
                   allNiches={allNiches}
                   sticky={false}
+                  localMatches={localMatches}
+                  accepting={accepting}
+                  onAccept={handleAccept}
                 />
               </div>
             </div>
@@ -1047,6 +1124,9 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
                 setNicheFilter={setNicheFilter}
                 allNiches={allNiches}
                 sticky={true}
+                localMatches={localMatches}
+                accepting={accepting}
+                onAccept={handleAccept}
               />
             </div>
 
