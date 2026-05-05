@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/middleware";
 
-const PROTECTED_ROUTES = ["/dashboard", "/campaigns", "/onboarding/business"];
+const PROTECTED_ROUTES = ["/dashboard", "/campaigns", "/onboarding/business", "/matches", "/creators"];
 
 export async function middleware(request: NextRequest) {
   const { supabaseResponse, user } = await createClient(request);
