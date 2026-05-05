@@ -85,7 +85,7 @@ export default async function ChatPage({
     campaign_id: matchRaw.campaign_id,
     creator_id: matchRaw.creator_id,
     business_id: matchRaw.business_id,
-    campaigns: matchRaw.campaigns as ChatMatch["campaigns"],
+    campaigns: matchRaw.campaigns as unknown as ChatMatch["campaigns"],
     creator: rawCreator
       ? {
           id: rawCreator.id,
