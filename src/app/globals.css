@@ -40,6 +40,41 @@ html {
   animation: hero-scale-up 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+@keyframes scout-onboarding-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 1) * 14px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scout-onboarding-step-in {
+  animation: scout-onboarding-step-in 360ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes scout-confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  72% {
+    opacity: 1;
+    transform: translate3d(var(--tx), var(--ty), 0) rotate(var(--rot)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--tx), calc(var(--ty) + 90px), 0) rotate(var(--rot)) scale(0);
+  }
+}
+
+.scout-confetti-piece {
+  animation: scout-confetti-burst 1400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
 body {
   min-height: 100vh;
   background: #ffffff;
@@ -164,6 +199,11 @@ body {
   .scout-showlight-delay-1,
   .scout-showlight-delay-2,
   .scout-showlight-delay-3 {
+    animation: none;
+  }
+
+  .scout-onboarding-step-in,
+  .scout-confetti-piece {
     animation: none;
   }
 }
