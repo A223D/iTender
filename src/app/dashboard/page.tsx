@@ -43,14 +43,22 @@ export default async function DashboardPage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [{ data: profile }, { data: campaigns, error: campaignsError }] = await Promise.all([
+  const [
+    { data: profile },
+    { data: campaigns, error: campaignsError },
+    { data: unreadData },
+  ] = await Promise.all([
     supabase.from("business_profiles").select("brand_name, logo_url, website_url").eq("user_id", user.id).single(),
     supabase
       .from("campaigns")
       .select("id, title, status, deadline, interested_count, content_types, description, photo_urls, created_at, compensation_type, creators_needed")
       .eq("business_id", user.id)
       .order("created_at", { ascending: false }),
+    supabase.rpc("get_unread_counts", { p_user_id: user.id }),
   ]);
+
+  const totalUnread = ((unreadData ?? []) as { unread_count: number }[])
+    .reduce((sum, r) => sum + Number(r.unread_count), 0);
 
   if (!profile) redirect("/onboarding/business");
   if (campaignsError) {
@@ -102,6 +110,21 @@ export default async function DashboardPage({
             </svg>
             Campaigns
           </div>
+          <Link
+            href="/matches"
+            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/50 transition hover:bg-black/[0.04] hover:text-ink"
+          >
+            {/* Chat bubble icon */}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            Messages
+            {totalUnread > 0 ? (
+              <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-coral text-[10px] font-bold text-white">
+                {totalUnread > 9 ? "9+" : totalUnread}
+              </span>
+            ) : null}
+          </Link>
           <Link
             href="/onboarding/business"
             className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/50 transition hover:bg-black/[0.04] hover:text-ink"
@@ -156,6 +179,20 @@ export default async function DashboardPage({
             )}
             <p className="text-sm font-bold text-ink">{profile.brand_name}</p>
           </div>
+          <Link
+            href="/matches"
+            className="relative flex h-8 w-8 items-center justify-center rounded-xl text-ink/50 transition hover:bg-black/[0.05] hover:text-ink"
+            aria-label="Messages"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            {totalUnread > 0 ? (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[9px] font-bold text-white">
+                {totalUnread > 9 ? "9+" : totalUnread}
+              </span>
+            ) : null}
+          </Link>
           <SignOutButton />
         </header>
 
