@@ -108,63 +108,189 @@ function CreatorCard({ creator }: { creator: NormalizedCreator }) {
     { label: "TK", count: creator.tiktok_followers },
     { label: "YT", count: creator.youtube_followers },
   ].filter((p) => p.count > 0);
+  const totalFollowers = creator.instagram_followers + creator.tiktok_followers + creator.youtube_followers;
 
   return (
-    <div className="rounded-2xl border border-black/[0.08] bg-white p-5 shadow-sm">
-      <div className="flex items-start gap-4">
-        {/* Avatar */}
-        <div className="shrink-0">
-          {photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={photo} alt={creator.name} className="h-12 w-12 rounded-xl object-cover" />
-          ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-coral/20 to-violet/20 text-sm font-bold text-ink/60">
-              {creator.name.charAt(0).toUpperCase()}
+    <div className="relative overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-sm">
+      {/* Left accent bar */}
+      <div className="absolute inset-y-0 left-0 w-[3px] bg-moss/30" />
+
+      <div className="p-5">
+        <div className="flex items-start gap-3">
+          {/* Avatar */}
+          <div className="shrink-0">
+            {photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photo} alt={creator.name} className="h-11 w-11 rounded-xl object-cover" />
+            ) : (
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-coral/20 to-violet/20 text-sm font-bold text-ink/60">
+                {creator.name.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
+
+          {/* Name / handle / total followers */}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-ink">{creator.name}</p>
+                {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
+              </div>
+              {totalFollowers > 0 ? (
+                <span className="shrink-0 text-sm font-bold text-ink">{formatFollowers(totalFollowers)}</span>
+              ) : null}
             </div>
-          )}
+
+            {/* Platform pills */}
+            {platforms.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {platforms.map((p) => (
+                  <span key={p.label} className="rounded-full bg-black/[0.05] px-2 py-0.5 text-xs font-semibold text-ink/60">
+                    {p.label} {formatFollowers(p.count)}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
 
-        {/* Info */}
-        <div className="min-w-0 flex-1">
-          <p className="font-semibold text-ink">{creator.name}</p>
-          {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
+        {/* Bio */}
+        {creator.bio ? (
+          <p className="mt-3 line-clamp-2 text-sm leading-5 text-ink/60">{creator.bio}</p>
+        ) : null}
 
-          {/* Follower counts */}
-          {platforms.length > 0 ? (
-            <div className="mt-1.5 flex flex-wrap gap-2">
-              {platforms.map((p) => (
-                <span key={p.label} className="rounded-full bg-black/[0.05] px-2 py-0.5 text-xs font-semibold text-ink/60">
-                  {p.label} {formatFollowers(p.count)}
-                </span>
-              ))}
-            </div>
-          ) : null}
-        </div>
+        {/* Categories */}
+        {creator.brand_categories.length > 0 ? (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {creator.brand_categories.map((cat) => (
+              <span key={cat} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs text-ink/55">
+                {cat}
+              </span>
+            ))}
+          </div>
+        ) : null}
+
+        {/* Pitch */}
+        {creator.pitch ? (
+          <div className="mt-4 rounded-xl border border-moss/20 bg-moss/[0.04] px-4 py-3">
+            <p className="mb-1 text-xs font-semibold text-moss">Why they&apos;re a fit</p>
+            <p className="text-sm leading-5 text-ink/70">{creator.pitch}</p>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+// ── Creator pipeline panel (shared between mobile and desktop) ─────────────────
+
+function CreatorPipeline({
+  creators,
+  filteredCreators,
+  sortBy,
+  setSortBy,
+  minFollowers,
+  setMinFollowers,
+  nicheFilter,
+  setNicheFilter,
+  allNiches,
+  sticky,
+}: {
+  creators: NormalizedCreator[];
+  filteredCreators: NormalizedCreator[];
+  sortBy: "followers" | "recent";
+  setSortBy: (v: "followers" | "recent") => void;
+  minFollowers: number;
+  setMinFollowers: (v: number) => void;
+  nicheFilter: string;
+  setNicheFilter: (v: string) => void;
+  allNiches: string[];
+  sticky: boolean;
+}) {
+  return (
+    <div>
+      {/* Panel header */}
+      <div className="mb-4 flex items-center gap-3">
+        <h2 className="font-display text-lg font-semibold text-ink">Creator Pipeline</h2>
+        {creators.length > 0 ? (
+          <span className="rounded-full bg-moss/10 px-2.5 py-0.5 text-sm font-semibold text-moss">
+            {filteredCreators.length}{filteredCreators.length !== creators.length ? ` / ${creators.length}` : ""}
+          </span>
+        ) : null}
       </div>
 
-      {/* Bio */}
-      {creator.bio ? (
-        <p className="mt-3 line-clamp-3 text-sm text-ink/60">{creator.bio}</p>
-      ) : null}
-
-      {/* Categories */}
-      {creator.brand_categories.length > 0 ? (
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {creator.brand_categories.map((cat) => (
-            <span key={cat} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs text-ink/55">
-              {cat}
-            </span>
-          ))}
+      {creators.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-black/15 bg-white px-6 py-16 text-center">
+          <span className="mb-3 text-4xl">👀</span>
+          <p className="font-semibold text-ink">No creators yet</p>
+          <p className="mt-1 text-sm text-ink/50">Creators who express interest will appear here.</p>
         </div>
-      ) : null}
+      ) : (
+        <>
+          {/* Sticky filter bar */}
+          <div className={`mb-4 flex flex-wrap gap-2 ${sticky ? "sticky top-0 z-10 bg-paper/95 pb-3 pt-1 backdrop-blur" : ""}`}>
+            {/* Sort */}
+            <div className="flex overflow-hidden rounded-xl border border-black/10">
+              {(["followers", "recent"] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSortBy(s)}
+                  className={`px-3 py-1.5 text-xs font-semibold transition ${sortBy === s ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
+                >
+                  {s === "followers" ? "Most Followers" : "Most Recent"}
+                </button>
+              ))}
+            </div>
 
-      {/* Pitch */}
-      {creator.pitch ? (
-        <div className="mt-4 rounded-xl border border-moss/20 bg-moss/[0.04] px-4 py-3">
-          <p className="mb-1 text-xs font-semibold text-moss">Why they&apos;re a fit</p>
-          <p className="text-sm text-ink/70">{creator.pitch}</p>
-        </div>
-      ) : null}
+            {/* Min followers */}
+            <div className="flex overflow-hidden rounded-xl border border-black/10">
+              {[
+                { label: "Any", value: 0 },
+                { label: "1K+", value: 1_000 },
+                { label: "5K+", value: 5_000 },
+                { label: "10K+", value: 10_000 },
+                { label: "50K+", value: 50_000 },
+              ].map((f) => (
+                <button
+                  key={f.value}
+                  type="button"
+                  onClick={() => setMinFollowers(f.value)}
+                  className={`px-3 py-1.5 text-xs font-semibold transition ${minFollowers === f.value ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Niche */}
+            {allNiches.length > 0 ? (
+              <select
+                value={nicheFilter}
+                onChange={(e) => setNicheFilter(e.target.value)}
+                className="rounded-xl border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-ink outline-none transition focus:border-moss"
+              >
+                <option value="all">All Niches</option>
+                {allNiches.map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            ) : null}
+          </div>
+
+          {filteredCreators.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-black/15 bg-white px-5 py-8 text-center text-sm text-ink/40">
+              No creators match the current filters.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {filteredCreators.map((creator, i) => (
+                <CreatorCard key={creator.id || i} creator={creator} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -225,7 +351,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
   const [docRemoved, setDocRemoved] = useState(false);
   const docInputRef = useRef<HTMLInputElement>(null);
 
-  // Normalize interested creators (handle Supabase array/object join ambiguity)
+  // Normalize interested creators
   const creators: NormalizedCreator[] = interestedCreators.map((row) => {
     const usersNode = Array.isArray(row.users) ? row.users[0] : row.users;
     const cpNode = usersNode?.creator_profiles;
@@ -249,10 +375,8 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
     };
   });
 
-  // Collect unique niches across all creators
   const allNiches = [...new Set(creators.flatMap((c) => c.brand_categories))].sort();
 
-  // Apply filters and sort
   const filteredCreators = creators
     .filter((c) => {
       if (minFollowers === 0) return true;
@@ -334,7 +458,6 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
     setError(null);
 
     try {
-      // Handle image
       let photoUrls = campaign.photo_urls ?? [];
       const existingImageUrl = campaign.photo_urls?.[0];
 
@@ -361,7 +484,6 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
         }
       }
 
-      // Handle doc
       let referenceDocUrl = campaign.reference_doc_url;
       let referenceDocName = campaign.reference_doc_name;
 
@@ -393,7 +515,6 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
         }
       }
 
-      // Update campaign row
       const { error: updateError } = await supabase
         .from("campaigns")
         .update({
@@ -452,25 +573,19 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
     }
   }
 
-  // ── Derived view values ───────────────────────────────────────────────────────
+  // ── Derived values ────────────────────────────────────────────────────────────
 
   const left = daysLeft(campaign.deadline);
   const isExpired = left === 0 && campaign.status === "live";
+  const isExpiringSoon = left > 0 && left <= 3 && campaign.status === "live";
   const currentImageUrl = campaign.photo_urls?.[0] ?? null;
-
-  // In edit mode, which image to preview?
-  const editImageSrc = imageRemoved
-    ? null
-    : newImagePreview ?? currentImageUrl;
-
-  // In edit mode, which doc to show?
+  const editImageSrc = imageRemoved ? null : newImagePreview ?? currentImageUrl;
   const editDocName = docRemoved ? null : newDocFile?.name ?? campaign.reference_doc_name;
 
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
     <>
-      {/* Close confirmation dialog */}
       {/* Image lightbox */}
       {lightboxOpen && currentImageUrl ? (
         <div
@@ -497,9 +612,10 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
         </div>
       ) : null}
 
+      {/* Close confirmation dialog */}
       {closing ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-card">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-[0_24px_64px_rgba(22,20,18,0.2)]">
             <h2 className="font-display text-lg font-semibold text-ink">Close campaign?</h2>
             <p className="mt-2 text-sm text-ink/55">
               This will stop new creators from seeing it. Existing matches are not affected.
@@ -526,442 +642,424 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
         </div>
       ) : null}
 
-      <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-        {/* Back link */}
-        <Link
-          href="/dashboard"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-ink/50 transition hover:text-ink"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10 12L6 8l4-4" />
-          </svg>
-          All Campaigns
-        </Link>
+      {/* ── Sticky header ────────────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-30 border-b border-black/[0.08] bg-white/95 backdrop-blur">
+        <div className="flex h-14 items-center gap-3 px-4 lg:px-8">
+          {/* Back */}
+          <Link
+            href="/dashboard"
+            className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-ink/50 transition hover:text-ink"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 12L6 8l4-4" />
+            </svg>
+            <span className="hidden sm:inline">All Campaigns</span>
+          </Link>
 
-        {editing ? (
-          /* ── EDIT MODE ─────────────────────────────────────────────────────── */
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h1 className="font-display text-2xl font-semibold text-ink">Edit Campaign</h1>
+          {/* Divider + title + status (desktop) */}
+          <div className="hidden h-5 w-px bg-black/10 lg:block" />
+          <div className="hidden min-w-0 flex-1 items-center gap-2.5 lg:flex">
+            <StatusBadge status={campaign.status} />
+            <h1 className="truncate font-display text-sm font-semibold text-ink">{campaign.title}</h1>
+          </div>
+
+          {/* Spacer on mobile */}
+          <div className="flex-1 lg:hidden" />
+
+          {/* Action buttons */}
+          {!editing ? (
+            <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
-                onClick={() => { setEditing(false); setError(null); }}
-                className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink/60 transition hover:text-ink"
+                onClick={startEditing}
+                className="rounded-xl border border-black/10 px-3 py-1.5 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
               >
-                Cancel
+                Edit
               </button>
+              {campaign.status !== "closed" ? (
+                <button
+                  type="button"
+                  onClick={() => setClosing(true)}
+                  className="rounded-xl border border-coral/20 px-3 py-1.5 text-sm font-semibold text-coral transition hover:bg-coral/[0.05]"
+                >
+                  Close
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </header>
+
+      {/* ── Page body ─────────────────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-7xl px-4 pb-16 pt-6 lg:px-8">
+
+        {editing ? (
+          /* ── EDIT MODE ──────────────────────────────────────────────────────── */
+          <div className="mx-auto max-w-2xl">
+            {/* Sticky edit action bar */}
+            <div className="sticky top-14 z-20 -mx-4 mb-8 flex items-center justify-between bg-paper/95 px-4 py-3 backdrop-blur sm:-mx-0">
+              <h2 className="font-display text-xl font-semibold text-ink">Edit Campaign</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setEditing(false); setError(null); }}
+                  disabled={saving}
+                  className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink/60 transition hover:text-ink disabled:opacity-60"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="rounded-xl bg-moss px-4 py-2 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
+                >
+                  {saving ? "Saving…" : "Save Changes"}
+                </button>
+              </div>
             </div>
 
-            {/* Title */}
-            <label className="block">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-semibold text-ink">Campaign title <span className="text-coral">*</span></span>
-                <span className={`text-xs font-medium ${editForm.title.length > 80 ? "text-coral" : "text-ink/40"}`}>
-                  {editForm.title.length} / 80
-                </span>
-              </div>
-              <input
-                type="text"
-                value={editForm.title}
-                onChange={(e) => setField("title", e.target.value)}
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
-              />
-            </label>
+            <div className="space-y-6">
+              {/* Title */}
+              <label className="block">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-ink">Campaign title <span className="text-coral">*</span></span>
+                  <span className={`text-xs font-medium ${editForm.title.length > 80 ? "text-coral" : "text-ink/40"}`}>
+                    {editForm.title.length} / 80
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={editForm.title}
+                  onChange={(e) => setField("title", e.target.value)}
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                />
+              </label>
 
-            {/* Content types */}
-            <div>
-              <p className="mb-3 text-sm font-semibold text-ink">Content types <span className="text-coral">*</span></p>
-              <div className="flex flex-wrap gap-2">
-                {CONTENT_TYPES.map((type) => {
-                  const selected = selectedContentTypes.has(type);
-                  return (
+              {/* Content types */}
+              <div>
+                <p className="mb-3 text-sm font-semibold text-ink">Content types <span className="text-coral">*</span></p>
+                <div className="flex flex-wrap gap-2">
+                  {CONTENT_TYPES.map((type) => {
+                    const selected = selectedContentTypes.has(type);
+                    return (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => toggleContentType(type)}
+                        className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          selected ? "border-moss bg-moss text-white" : "border-black/10 bg-white text-ink hover:border-moss/40"
+                        }`}
+                      >
+                        {type}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-ink">Description <span className="text-coral">*</span></span>
+                  <span className={`text-xs font-medium ${editForm.description.length > 1000 ? "text-coral" : "text-ink/40"}`}>
+                    {editForm.description.length} / 1000
+                  </span>
+                </div>
+                <textarea
+                  value={editForm.description}
+                  onChange={(e) => setField("description", e.target.value)}
+                  rows={6}
+                  className="w-full resize-none rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm leading-6 text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                />
+              </div>
+
+              {/* Moodboard image */}
+              <div>
+                <p className="mb-2 text-sm font-semibold text-ink">
+                  Moodboard image <span className="font-normal text-ink/35">· Optional</span>
+                </p>
+                <div className="flex items-center gap-4">
+                  {editImageSrc ? (
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-black/10">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={editImageSrc} alt="Moodboard" className="h-full w-full object-cover" />
+                    </div>
+                  ) : (
                     <button
-                      key={type}
                       type="button"
-                      onClick={() => toggleContentType(type)}
-                      className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                        selected ? "border-moss bg-moss text-white" : "border-black/10 bg-white text-ink hover:border-moss/40"
-                      }`}
+                      onClick={() => imageInputRef.current?.click()}
+                      className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-black/15 bg-white transition hover:border-moss/40"
                     >
-                      {type}
+                      <span className="text-2xl">🖼️</span>
                     </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Description */}
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-semibold text-ink">Description <span className="text-coral">*</span></span>
-                <span className={`text-xs font-medium ${editForm.description.length > 1000 ? "text-coral" : "text-ink/40"}`}>
-                  {editForm.description.length} / 1000
-                </span>
-              </div>
-              <textarea
-                value={editForm.description}
-                onChange={(e) => setField("description", e.target.value)}
-                rows={6}
-                className="w-full resize-none rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm leading-6 text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
-              />
-            </div>
-
-            {/* Moodboard image */}
-            <div>
-              <p className="mb-2 text-sm font-semibold text-ink">
-                Moodboard image <span className="font-normal text-ink/35">· Optional</span>
-              </p>
-              <div className="flex items-center gap-4">
-                {editImageSrc ? (
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-black/10">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={editImageSrc} alt="Moodboard" className="h-full w-full object-cover" />
+                  )}
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current?.click()}
+                      className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
+                    >
+                      {editImageSrc ? "Change image" : "Upload image"}
+                    </button>
+                    {editImageSrc ? (
+                      <button
+                        type="button"
+                        onClick={() => { setImageRemoved(true); setNewImageFile(null); setNewImagePreview(null); }}
+                        className="text-xs text-ink/40 transition hover:text-coral"
+                      >
+                        Remove
+                      </button>
+                    ) : null}
                   </div>
-                ) : (
+                </div>
+                <p className="mt-1.5 text-xs text-ink/40">JPG, PNG, WEBP</p>
+                <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+              </div>
+
+              {/* Reference doc */}
+              <div>
+                <p className="mb-2 text-sm font-semibold text-ink">
+                  Reference document <span className="font-normal text-ink/35">· Optional</span>
+                </p>
+                <div className="flex items-center gap-3">
                   <button
                     type="button"
-                    onClick={() => imageInputRef.current?.click()}
-                    className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-black/15 bg-white transition hover:border-moss/40"
-                  >
-                    <span className="text-2xl">🖼️</span>
-                  </button>
-                )}
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => imageInputRef.current?.click()}
+                    onClick={() => docInputRef.current?.click()}
                     className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
                   >
-                    {editImageSrc ? "Change image" : "Upload image"}
+                    {editDocName ?? "Upload document"}
                   </button>
-                  {editImageSrc ? (
+                  {editDocName ? (
                     <button
                       type="button"
-                      onClick={() => { setImageRemoved(true); setNewImageFile(null); setNewImagePreview(null); }}
+                      onClick={() => { setDocRemoved(true); setNewDocFile(null); }}
                       className="text-xs text-ink/40 transition hover:text-coral"
                     >
                       Remove
                     </button>
                   ) : null}
                 </div>
+                <p className="mt-1.5 text-xs text-ink/40">PDF, DOCX, DOC</p>
+                <input ref={docInputRef} type="file" accept=".pdf,.docx,.doc" className="hidden" onChange={handleDocChange} />
               </div>
-              <p className="mt-1.5 text-xs text-ink/40">JPG, PNG, WEBP</p>
-              <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
-            </div>
 
-            {/* Reference doc */}
-            <div>
-              <p className="mb-2 text-sm font-semibold text-ink">
-                Reference document <span className="font-normal text-ink/35">· Optional</span>
-              </p>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => docInputRef.current?.click()}
-                  className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
-                >
-                  {editDocName ?? "Upload document"}
-                </button>
-                {editDocName ? (
-                  <button
-                    type="button"
-                    onClick={() => { setDocRemoved(true); setNewDocFile(null); }}
-                    className="text-xs text-ink/40 transition hover:text-coral"
-                  >
-                    Remove
-                  </button>
-                ) : null}
+              {/* Compensation type */}
+              <div>
+                <p className="mb-3 text-sm font-semibold text-ink">Compensation type <span className="text-coral">*</span></p>
+                <div className="space-y-2">
+                  {COMPENSATION_TYPES.map((ct) => {
+                    const selected = editForm.compensationType === ct.value;
+                    return (
+                      <button
+                        key={ct.value}
+                        type="button"
+                        onClick={() => setField("compensationType", ct.value)}
+                        className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
+                          selected ? "border-moss bg-moss/[0.04]" : "border-black/10 bg-white hover:border-black/20"
+                        }`}
+                      >
+                        <div className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${selected ? "border-moss bg-moss" : "border-black/25"}`} />
+                        <div>
+                          <p className="text-sm font-semibold text-ink">{ct.label}</p>
+                          <p className="text-xs text-ink/45">{ct.description}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <p className="mt-1.5 text-xs text-ink/40">PDF, DOCX, DOC</p>
-              <input ref={docInputRef} type="file" accept=".pdf,.docx,.doc" className="hidden" onChange={handleDocChange} />
+
+              {/* Compensation details */}
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-ink">
+                  Compensation details <span className="font-normal text-ink/35">· Optional</span>
+                </span>
+                <input
+                  type="text"
+                  value={editForm.compensationDetails}
+                  onChange={(e) => setField("compensationDetails", e.target.value)}
+                  placeholder="e.g. Free dinner for 2 + $100 cash"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                />
+              </label>
+
+              {/* Creators needed */}
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-ink">Creators needed <span className="text-coral">*</span></span>
+                <input
+                  type="number"
+                  min={1}
+                  value={editForm.creatorsNeeded}
+                  onChange={(e) => setField("creatorsNeeded", e.target.value)}
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
+                />
+              </label>
+
+              {/* Deadline */}
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-ink">Application deadline <span className="text-coral">*</span></span>
+                <input
+                  type="date"
+                  value={editForm.deadline}
+                  min={addDays(1)}
+                  max={addDays(180)}
+                  onChange={(e) => setField("deadline", e.target.value)}
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
+                />
+              </label>
+
+              {/* Error */}
+              {error ? (
+                <p className="rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3 text-sm text-coral">{error}</p>
+              ) : null}
             </div>
-
-            {/* Compensation type */}
-            <div>
-              <p className="mb-3 text-sm font-semibold text-ink">Compensation type <span className="text-coral">*</span></p>
-              <div className="space-y-2">
-                {COMPENSATION_TYPES.map((ct) => {
-                  const selected = editForm.compensationType === ct.value;
-                  return (
-                    <button
-                      key={ct.value}
-                      type="button"
-                      onClick={() => setField("compensationType", ct.value)}
-                      className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
-                        selected ? "border-moss bg-moss/[0.04]" : "border-black/10 bg-white hover:border-black/20"
-                      }`}
-                    >
-                      <div className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${selected ? "border-moss bg-moss" : "border-black/25"}`} />
-                      <div>
-                        <p className="text-sm font-semibold text-ink">{ct.label}</p>
-                        <p className="text-xs text-ink/45">{ct.description}</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Compensation details */}
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-ink">
-                Compensation details <span className="font-normal text-ink/35">· Optional</span>
-              </span>
-              <input
-                type="text"
-                value={editForm.compensationDetails}
-                onChange={(e) => setField("compensationDetails", e.target.value)}
-                placeholder="e.g. Free dinner for 2 + $100 cash"
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
-              />
-            </label>
-
-            {/* Creators needed */}
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-ink">Creators needed <span className="text-coral">*</span></span>
-              <input
-                type="number"
-                min={1}
-                value={editForm.creatorsNeeded}
-                onChange={(e) => setField("creatorsNeeded", e.target.value)}
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
-              />
-            </label>
-
-            {/* Deadline */}
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-ink">Application deadline <span className="text-coral">*</span></span>
-              <input
-                type="date"
-                value={editForm.deadline}
-                min={addDays(1)}
-                max={addDays(180)}
-                onChange={(e) => setField("deadline", e.target.value)}
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
-              />
-            </label>
-
-            {/* Error */}
-            {error ? (
-              <p className="rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3 text-sm text-coral">{error}</p>
-            ) : null}
-
-            {/* Save */}
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={saving}
-              className="w-full rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
-            >
-              {saving ? "Saving…" : "Save Changes"}
-            </button>
           </div>
+
         ) : (
-          /* ── VIEW MODE ─────────────────────────────────────────────────────── */
-          <div>
-            {/* Header */}
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div className="min-w-0">
+          /* ── VIEW MODE ──────────────────────────────────────────────────────── */
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+
+            {/* ── Left panel — campaign info ─────────────────────────────── */}
+            <div className="min-w-0 flex-1">
+
+              {/* Title + badges (always visible here; header shows title on desktop only) */}
+              <div className="mb-5">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <StatusBadge status={campaign.status} />
+                  <span className="lg:hidden"><StatusBadge status={campaign.status} /></span>
                   {(campaign.content_types ?? []).map((t) => (
                     <span key={t} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs font-medium text-ink/55">
                       {t}
                     </span>
                   ))}
                 </div>
-                <h1 className="font-display text-2xl font-semibold text-ink">{campaign.title}</h1>
+                <h1 className="font-display text-2xl font-semibold text-ink lg:text-3xl">{campaign.title}</h1>
               </div>
-              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+
+              {/* Moodboard image */}
+              {currentImageUrl ? (
                 <button
                   type="button"
-                  onClick={startEditing}
-                  className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
+                  onClick={() => setLightboxOpen(true)}
+                  className="group relative mb-5 block w-full overflow-hidden rounded-2xl border border-black/[0.08]"
+                  aria-label="View full image"
                 >
-                  Edit
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={currentImageUrl} alt="Campaign moodboard" className="h-56 w-full object-cover transition group-hover:scale-[1.01] lg:h-64" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/0 shadow-sm opacity-0 transition group-hover:bg-white/90 group-hover:opacity-100">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                      </svg>
+                    </div>
+                  </div>
                 </button>
-                {campaign.status !== "closed" ? (
-                  <button
-                    type="button"
-                    onClick={() => setClosing(true)}
-                    className="rounded-xl border border-coral/20 px-4 py-2 text-sm font-semibold text-coral transition hover:bg-coral/[0.05]"
-                  >
-                    Close
-                  </button>
-                ) : null}
-              </div>
-            </div>
+              ) : null}
 
-            {/* Moodboard image — click to expand */}
-            {currentImageUrl ? (
-              <button
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                className="group relative mb-6 block w-full overflow-hidden rounded-2xl border border-black/[0.08]"
-                aria-label="View full image"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={currentImageUrl} alt="Campaign moodboard" className="h-56 w-full object-cover transition group-hover:scale-[1.01] sm:h-72" />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/0 shadow-sm opacity-0 transition group-hover:bg-white/90 group-hover:opacity-100">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink">
-                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                    </svg>
+              {/* Stats bar */}
+              <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
+                <div className="flex flex-wrap items-center gap-x-0 gap-y-3 divide-x divide-black/[0.06]">
+                  <div className="flex flex-col pr-5">
+                    <span className="text-xs text-ink/40">Compensation</span>
+                    <span className="mt-0.5 text-sm font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</span>
+                  </div>
+                  <div className="flex flex-col px-5">
+                    <span className="text-xs text-ink/40">Creators needed</span>
+                    <span className="mt-0.5 text-sm font-semibold text-ink">{campaign.creators_needed}</span>
+                  </div>
+                  <div className="flex flex-col px-5">
+                    <span className="text-xs text-ink/40">Deadline</span>
+                    <span className={`mt-0.5 text-sm font-semibold ${isExpired || isExpiringSoon ? "text-coral" : "text-ink"}`}>
+                      {isExpired ? "Expired" : `${left}d left`}
+                    </span>
+                  </div>
+                  <div className="flex flex-col pl-5">
+                    <span className="text-xs text-ink/40">Interested</span>
+                    <span className="mt-0.5 flex items-center gap-1.5 text-sm font-semibold text-ink">
+                      {campaign.interested_count ?? 0}
+                      {(campaign.interested_count ?? 0) > 0 ? (
+                        <span className="h-2 w-2 rounded-full bg-coral" />
+                      ) : null}
+                    </span>
                   </div>
                 </div>
-              </button>
-            ) : null}
+              </div>
 
-            {/* Details grid */}
-            <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-2xl border border-black/[0.08] bg-white px-4 py-3">
-                <p className="text-xs text-ink/40">Compensation</p>
-                <p className="mt-0.5 text-sm font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</p>
+              {/* Description */}
+              <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/40">Description</p>
+                <p className="whitespace-pre-wrap text-sm leading-6 text-ink/80">{campaign.description}</p>
               </div>
-              <div className="rounded-2xl border border-black/[0.08] bg-white px-4 py-3">
-                <p className="text-xs text-ink/40">Creators needed</p>
-                <p className="mt-0.5 text-sm font-semibold text-ink">{campaign.creators_needed}</p>
-              </div>
-              <div className="rounded-2xl border border-black/[0.08] bg-white px-4 py-3">
-                <p className="text-xs text-ink/40">Deadline</p>
-                <p className={`mt-0.5 text-sm font-semibold ${isExpired ? "text-coral" : "text-ink"}`}>
-                  {isExpired ? "Expired" : `${left}d left`}
+
+              {/* Compensation details */}
+              {campaign.compensation_details ? (
+                <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/40">Compensation details</p>
+                  <p className="text-sm text-ink/80">{campaign.compensation_details}</p>
+                </div>
+              ) : null}
+
+              {/* Deadline date */}
+              <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
+                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/40">Application deadline</p>
+                <p className="text-sm text-ink/80">
+                  {new Date(campaign.deadline).toLocaleDateString("en-CA", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                 </p>
               </div>
-              <div className="rounded-2xl border border-black/[0.08] bg-white px-4 py-3">
-                <p className="text-xs text-ink/40">Interested</p>
-                <p className="mt-0.5 text-sm font-semibold text-ink">{campaign.interested_count ?? 0}</p>
-              </div>
-            </div>
 
-            {/* Description */}
-            <div className="mb-6 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/40">Description</p>
-              <p className="whitespace-pre-wrap text-sm leading-6 text-ink/80">{campaign.description}</p>
-            </div>
-
-            {/* Compensation details */}
-            {campaign.compensation_details ? (
-              <div className="mb-6 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/40">Compensation details</p>
-                <p className="text-sm text-ink/80">{campaign.compensation_details}</p>
-              </div>
-            ) : null}
-
-            {/* Deadline date */}
-            <div className="mb-6 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/40">Application deadline</p>
-              <p className="text-sm text-ink/80">
-                {new Date(campaign.deadline).toLocaleDateString("en-CA", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-
-            {/* Reference doc */}
-            {campaign.reference_doc_url ? (
-              <div className="mb-6 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/40">Reference document</p>
-                <a
-                  href={campaign.reference_doc_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-moss underline underline-offset-2 transition hover:text-moss/70"
-                >
-                  📄 {campaign.reference_doc_name ?? "View document"}
-                </a>
-              </div>
-            ) : null}
-
-            {/* Interested creators */}
-            <div className="mt-10">
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-                <h2 className="font-display text-xl font-semibold text-ink">
-                  Interested Creators
-                  {creators.length > 0 ? (
-                    <span className="ml-2 rounded-full bg-moss/10 px-2.5 py-0.5 text-sm font-semibold text-moss">
-                      {filteredCreators.length}{filteredCreators.length !== creators.length ? ` / ${creators.length}` : ""}
-                    </span>
-                  ) : null}
-                </h2>
-              </div>
-
-              {creators.length === 0 ? (
-                <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-black/15 bg-white px-6 py-16 text-center">
-                  <span className="mb-3 text-4xl">👀</span>
-                  <p className="font-semibold text-ink">No creators yet</p>
-                  <p className="mt-1 text-sm text-ink/50">Creators who express interest will appear here.</p>
+              {/* Reference doc */}
+              {campaign.reference_doc_url ? (
+                <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/40">Reference document</p>
+                  <a
+                    href={campaign.reference_doc_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-moss underline underline-offset-2 transition hover:text-moss/70"
+                  >
+                    📄 {campaign.reference_doc_name ?? "View document"}
+                  </a>
                 </div>
-              ) : (
-                <>
-                  {/* Filter bar */}
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {/* Sort */}
-                    <div className="flex overflow-hidden rounded-xl border border-black/10">
-                      {(["followers", "recent"] as const).map((s) => (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => setSortBy(s)}
-                          className={`px-3 py-1.5 text-xs font-semibold transition ${sortBy === s ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
-                        >
-                          {s === "followers" ? "Most Followers" : "Most Recent"}
-                        </button>
-                      ))}
-                    </div>
+              ) : null}
 
-                    {/* Min followers */}
-                    <div className="flex overflow-hidden rounded-xl border border-black/10">
-                      {[
-                        { label: "Any", value: 0 },
-                        { label: "1K+", value: 1_000 },
-                        { label: "5K+", value: 5_000 },
-                        { label: "10K+", value: 10_000 },
-                        { label: "50K+", value: 50_000 },
-                      ].map((f) => (
-                        <button
-                          key={f.value}
-                          type="button"
-                          onClick={() => setMinFollowers(f.value)}
-                          className={`px-3 py-1.5 text-xs font-semibold transition ${minFollowers === f.value ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
-                        >
-                          {f.label}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Niche filter */}
-                    {allNiches.length > 0 ? (
-                      <select
-                        value={nicheFilter}
-                        onChange={(e) => setNicheFilter(e.target.value)}
-                        className="rounded-xl border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-ink outline-none transition focus:border-moss"
-                      >
-                        <option value="all">All Niches</option>
-                        {allNiches.map((n) => (
-                          <option key={n} value={n}>{n}</option>
-                        ))}
-                      </select>
-                    ) : null}
-                  </div>
-
-                  {filteredCreators.length === 0 ? (
-                    <p className="rounded-2xl border border-dashed border-black/15 bg-white px-5 py-8 text-center text-sm text-ink/40">
-                      No creators match the current filters.
-                    </p>
-                  ) : (
-                    <div className="space-y-4">
-                      {filteredCreators.map((creator, i) => (
-                        <CreatorCard key={creator.id || i} creator={creator} />
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
+              {/* Mobile: creator pipeline below left panel */}
+              <div className="mt-8 lg:hidden">
+                <CreatorPipeline
+                  creators={creators}
+                  filteredCreators={filteredCreators}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  minFollowers={minFollowers}
+                  setMinFollowers={setMinFollowers}
+                  nicheFilter={nicheFilter}
+                  setNicheFilter={setNicheFilter}
+                  allNiches={allNiches}
+                  sticky={false}
+                />
+              </div>
             </div>
+
+            {/* ── Right panel — creator pipeline (desktop, sticky) ───────── */}
+            <div className="hidden w-[400px] shrink-0 lg:sticky lg:top-14 lg:block lg:max-h-[calc(100vh-56px)] lg:overflow-y-auto">
+              <CreatorPipeline
+                creators={creators}
+                filteredCreators={filteredCreators}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                minFollowers={minFollowers}
+                setMinFollowers={setMinFollowers}
+                nicheFilter={nicheFilter}
+                setNicheFilter={setNicheFilter}
+                allNiches={allNiches}
+                sticky={true}
+              />
+            </div>
+
           </div>
         )}
       </div>

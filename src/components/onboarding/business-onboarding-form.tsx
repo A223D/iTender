@@ -19,10 +19,20 @@ const INDUSTRIES = [
   "Other",
 ];
 
+type InitialProfile = {
+  brandName: string;
+  industry: string;
+  city: string;
+  websiteUrl: string;
+  brandValues: string;
+  logoUrl: string | null;
+};
+
 type Props = {
   userId: string;
   email: string;
   name: string;
+  initialProfile?: InitialProfile;
 };
 
 type FormData = {
@@ -33,25 +43,27 @@ type FormData = {
   brandValues: string;
 };
 
-export function BusinessOnboardingForm({ userId, email, name }: Props) {
+export function BusinessOnboardingForm({ userId, email, name, initialProfile }: Props) {
   const router = useRouter();
   const supabase = createClient();
+
+  const isEditing = !!initialProfile;
 
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Logo state
+  // Logo state — pre-fill with existing URL when editing
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(initialProfile?.logoUrl ?? null);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState<FormData>({
-    brandName: name,
-    industry: "",
-    city: "",
-    websiteUrl: "",
-    brandValues: "",
+    brandName: initialProfile?.brandName ?? name,
+    industry: initialProfile?.industry ?? "",
+    city: initialProfile?.city ?? "",
+    websiteUrl: initialProfile?.websiteUrl ?? "",
+    brandValues: initialProfile?.brandValues ?? "",
   });
 
   function set(key: keyof FormData, value: string) {
@@ -67,7 +79,7 @@ export function BusinessOnboardingForm({ userId, email, name }: Props) {
 
   // ── Step 1 validation ──────────────────────────────────────────────────────
   function validateStep1(): string | null {
-    if (!logoFile) return "Please add a business logo.";
+    if (!logoFile && !logoPreview) return "Please add a business logo.";
     if (!form.brandName.trim()) return "Please enter your business name.";
     if (!form.industry) return "Please select an industry.";
     if (!form.city.trim()) return "Please enter your city.";
@@ -89,8 +101,8 @@ export function BusinessOnboardingForm({ userId, email, name }: Props) {
     setSaving(true);
 
     try {
-      // 1. Upload logo if one was picked
-      let logoUrl: string | null = null;
+      // 1. Upload logo — keep existing URL if no new file picked
+      let logoUrl: string | null = initialProfile?.logoUrl ?? null;
       if (logoFile) {
         const ext = logoFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
         const path = `${userId}/logo-${Date.now()}.${ext}`;
@@ -155,7 +167,7 @@ export function BusinessOnboardingForm({ userId, email, name }: Props) {
           S
         </div>
         <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight text-ink">
-          {step === 0 ? "Set up your brand" : "About your brand"}
+          {step === 0 ? (isEditing ? "Edit your brand" : "Set up your brand") : "About your brand"}
         </h1>
         <p className="mt-2 text-sm text-ink/55">
           {step === 0
@@ -316,7 +328,7 @@ export function BusinessOnboardingForm({ userId, email, name }: Props) {
           disabled={saving}
           className="flex-1 rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
         >
-          {saving ? "Saving…" : step === 0 ? "Continue →" : "Create your profile"}
+          {saving ? "Saving…" : step === 0 ? "Continue →" : isEditing ? "Save changes" : "Create your profile"}
         </button>
       </div>
 
