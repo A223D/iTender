@@ -36,8 +36,9 @@ export const creatorHomePageContent: HomePageTemplateProps = {
       items: ["🎬 Reels", "📸 Stories", "📱 TikToks", "🖼️ Photos"],
     },
   ],
-  primaryActionLabel: "Edit Profile",
-  secondaryActionLabel: "View My Stats",
+  primaryActionLabel: "Download the App",
+  primaryActionHref: "#",
+  secondaryActionLabel: "Learn More",
   summaryPanel: {
     label: "Profile summary",
     title: "@yourhandle",

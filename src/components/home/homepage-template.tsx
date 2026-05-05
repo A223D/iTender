@@ -23,7 +23,9 @@ export type HomePageTemplateProps = {
   description: string;
   highlightCards: HighlightCard[];
   primaryActionLabel: string;
+  primaryActionHref?: string;
   secondaryActionLabel: string;
+  secondaryActionHref?: string;
   summaryPanel: SummaryPanel;
   howItWorksDescription: string;
   howItWorksCards: LandingStep[];
@@ -51,7 +53,9 @@ export function HomePageTemplate({
   description,
   highlightCards,
   primaryActionLabel,
+  primaryActionHref,
   secondaryActionLabel,
+  secondaryActionHref,
   summaryPanel,
   howItWorksDescription,
   howItWorksCards,
@@ -177,18 +181,36 @@ export function HomePageTemplate({
               </div>
 
               <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-                <button
-                  type="button"
-                  className="hero-cta rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white opacity-0 shadow-glow transition hover:opacity-90 active:scale-95"
-                >
-                  {primaryActionLabel}
-                </button>
-                <button
-                  type="button"
-                  className="hero-cta rounded-full border border-gray-200 bg-white px-7 py-3.5 text-sm font-semibold text-gray-700 opacity-0 transition hover:border-gray-300 hover:bg-gray-50 active:scale-95"
-                >
-                  {secondaryActionLabel}
-                </button>
+                {primaryActionHref ? (
+                  <a
+                    href={primaryActionHref}
+                    className="hero-cta rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white opacity-0 shadow-glow transition hover:opacity-90 active:scale-95"
+                  >
+                    {primaryActionLabel}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="hero-cta rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white opacity-0 shadow-glow transition hover:opacity-90 active:scale-95"
+                  >
+                    {primaryActionLabel}
+                  </button>
+                )}
+                {secondaryActionHref ? (
+                  <a
+                    href={secondaryActionHref}
+                    className="hero-cta rounded-full border border-gray-200 bg-white px-7 py-3.5 text-sm font-semibold text-gray-700 opacity-0 transition hover:border-gray-300 hover:bg-gray-50 active:scale-95"
+                  >
+                    {secondaryActionLabel}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="hero-cta rounded-full border border-gray-200 bg-white px-7 py-3.5 text-sm font-semibold text-gray-700 opacity-0 transition hover:border-gray-300 hover:bg-gray-50 active:scale-95"
+                  >
+                    {secondaryActionLabel}
+                  </button>
+                )}
               </div>
             </div>
 

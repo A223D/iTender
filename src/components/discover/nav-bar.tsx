@@ -108,13 +108,22 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
           ) : null}
 
           {hasHomeNav ? (
-            <button
-              type="button"
-              onClick={() => router.push("/login")}
-              className="rounded-full bg-gradient-to-r from-coral to-violet px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:opacity-90 active:scale-95"
-            >
-              {isCreatorHome ? "Join as Creator ✨" : "Join as a Business 🚀"}
-            </button>
+            isCreatorHome ? (
+              <a
+                href="#"
+                className="rounded-full bg-gradient-to-r from-coral to-violet px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:opacity-90 active:scale-95"
+              >
+                Join as Creator ✨
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => router.push("/login")}
+                className="rounded-full bg-gradient-to-r from-coral to-violet px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:opacity-90 active:scale-95"
+              >
+                Join as a Business 🚀
+              </button>
+            )
           ) : null}
 
           {/* Mobile hamburger */}

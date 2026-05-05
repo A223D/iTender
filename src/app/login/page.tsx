@@ -35,7 +35,7 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="rounded-3xl border border-black/5 bg-white p-8 shadow-card">
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Welcome back</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Welcome</h1>
           <p className="mt-2 text-sm leading-6 text-ink/60">
             Sign in to manage your campaigns and find the right creators for your brand.
           </p>
