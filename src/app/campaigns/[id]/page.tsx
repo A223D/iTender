@@ -21,6 +21,11 @@ export type CampaignDetail = {
   created_at: string;
 };
 
+export type ExistingMatch = {
+  id: string;
+  creator_id: string;
+};
+
 export type InterestedCreator = {
   pitch: string | null;
   created_at: string;
@@ -74,30 +79,43 @@ export default async function CampaignDetailPage({
     redirect("/dashboard");
   }
 
-  // Fetch interested creators (swipes with direction='right') with creator details
-  const { data: swipesData, error: swipesError } = await supabase
-    .from("swipes")
-    .select(
-      `pitch, created_at,
-       users!swipes_creator_id_fkey(
-         id, name, avatar_url, city,
-         creator_profiles(
-           profile_photo_url, bio, brand_categories,
-           instagram_handle, instagram_followers,
-           tiktok_handle, tiktok_followers,
-           youtube_handle, youtube_followers
-         )
-       )`,
-    )
-    .eq("campaign_id", id)
-    .eq("direction", "right")
-    .order("created_at", { ascending: false });
+  // Fetch interested creators and existing matches in parallel
+  const [
+    { data: swipesData, error: swipesError },
+    { data: matchesData },
+  ] = await Promise.all([
+    supabase
+      .from("swipes")
+      .select(
+        `pitch, created_at,
+         users!swipes_creator_id_fkey(
+           id, name, avatar_url, city,
+           creator_profiles(
+             profile_photo_url, bio, brand_categories,
+             instagram_handle, instagram_followers,
+             tiktok_handle, tiktok_followers,
+             youtube_handle, youtube_followers
+           )
+         )`,
+      )
+      .eq("campaign_id", id)
+      .eq("direction", "right")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("matches")
+      .select("id, creator_id")
+      .eq("campaign_id", id)
+      .eq("business_id", user.id),
+  ]);
 
   if (swipesError) {
     console.error("[campaigns/id] swipes query error:", swipesError.code, swipesError.message);
   }
 
   const interestedCreators = (swipesData ?? []) as unknown as InterestedCreator[];
+  const existingMatches = new Map<string, string>(
+    (matchesData ?? []).map((m) => [m.creator_id, m.id]),
+  );
 
   return (
     <main className="min-h-screen bg-paper">
@@ -105,6 +123,7 @@ export default async function CampaignDetailPage({
         campaign={campaign as CampaignDetail}
         interestedCreators={interestedCreators}
         userId={user.id}
+        existingMatches={existingMatches}
       />
     </main>
   );

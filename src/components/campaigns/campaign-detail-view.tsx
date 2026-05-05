@@ -298,6 +298,7 @@ type Props = {
   campaign: CampaignDetail;
   interestedCreators: InterestedCreator[];
   userId: string;
+  existingMatches?: Map<string, string>;
 };
 
 type EditForm = {
