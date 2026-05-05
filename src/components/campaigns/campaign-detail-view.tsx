@@ -111,19 +111,16 @@ function CreatorCard({ creator }: { creator: NormalizedCreator }) {
   const totalFollowers = creator.instagram_followers + creator.tiktok_followers + creator.youtube_followers;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-sm">
-      {/* Left accent bar */}
-      <div className="absolute inset-y-0 left-0 w-[3px] bg-moss/30" />
-
+    <div className="overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-moss/30 bg-white shadow-sm">
       <div className="p-5">
         <div className="flex items-start gap-3">
           {/* Avatar */}
           <div className="shrink-0">
             {photo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={photo} alt={creator.name} className="h-11 w-11 rounded-xl object-cover" />
+              <img src={photo} alt={creator.name} className="h-12 w-12 rounded-xl object-cover" />
             ) : (
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-coral/20 to-violet/20 text-sm font-bold text-ink/60">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-coral/20 to-violet/20 text-sm font-bold text-ink/60">
                 {creator.name.charAt(0).toUpperCase()}
               </div>
             )}
@@ -137,7 +134,7 @@ function CreatorCard({ creator }: { creator: NormalizedCreator }) {
                 {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
               </div>
               {totalFollowers > 0 ? (
-                <span className="shrink-0 text-sm font-bold text-ink">{formatFollowers(totalFollowers)}</span>
+                <span className="shrink-0 text-sm font-bold text-ink">Total: {formatFollowers(totalFollowers)}</span>
               ) : null}
             </div>
 
@@ -145,7 +142,7 @@ function CreatorCard({ creator }: { creator: NormalizedCreator }) {
             {platforms.length > 0 ? (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {platforms.map((p) => (
-                  <span key={p.label} className="rounded-full bg-black/[0.05] px-2 py-0.5 text-xs font-semibold text-ink/60">
+                  <span key={p.label} className="rounded-full bg-black/[0.05] px-2.5 py-1 text-xs font-bold text-ink/65">
                     {p.label} {formatFollowers(p.count)}
                   </span>
                 ))}
@@ -644,7 +641,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
 
       {/* ── Sticky header ────────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-30 border-b border-black/[0.08] bg-white/95 backdrop-blur">
-        <div className="flex h-14 items-center gap-3 px-4 lg:px-8">
+        <div className="mx-auto flex h-[57px] max-w-7xl items-center gap-3 px-4 lg:px-8">
           {/* Back */}
           <Link
             href="/dashboard"
@@ -653,14 +650,14 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 12L6 8l4-4" />
             </svg>
-            <span className="hidden sm:inline">All Campaigns</span>
+            <span>All Campaigns</span>
           </Link>
 
           {/* Divider + title + status (desktop) */}
           <div className="hidden h-5 w-px bg-black/10 lg:block" />
           <div className="hidden min-w-0 flex-1 items-center gap-2.5 lg:flex">
-            <StatusBadge status={campaign.status} />
             <h1 className="truncate font-display text-sm font-semibold text-ink">{campaign.title}</h1>
+            <StatusBadge status={campaign.status} />
           </div>
 
           {/* Spacer on mobile */}
@@ -691,13 +688,13 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
       </header>
 
       {/* ── Page body ─────────────────────────────────────────────────────────────── */}
-      <div className="mx-auto max-w-7xl px-4 pb-16 pt-6 lg:px-8">
+      <div className={`${editing ? "mx-auto max-w-2xl px-4 pb-16 sm:px-6" : "mx-auto max-w-7xl px-4 py-6 lg:px-8"}`}>
 
         {editing ? (
           /* ── EDIT MODE ──────────────────────────────────────────────────────── */
-          <div className="mx-auto max-w-2xl">
+          <div>
             {/* Sticky edit action bar */}
-            <div className="sticky top-14 z-20 -mx-4 mb-8 flex items-center justify-between bg-paper/95 px-4 py-3 backdrop-blur sm:-mx-0">
+            <div className="sticky top-[57px] z-20 -mx-4 mb-6 flex items-center justify-between bg-paper/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
               <h2 className="font-display text-xl font-semibold text-ink">Edit Campaign</h2>
               <div className="flex items-center gap-2">
                 <button
@@ -918,15 +915,15 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
 
         ) : (
           /* ── VIEW MODE ──────────────────────────────────────────────────────── */
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-0">
 
             {/* ── Left panel — campaign info ─────────────────────────────── */}
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 lg:pr-8">
 
-              {/* Title + badges (always visible here; header shows title on desktop only) */}
-              <div className="mb-5">
+              {/* Mobile title + badges */}
+              <div className="mb-5 lg:hidden">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <span className="lg:hidden"><StatusBadge status={campaign.status} /></span>
+                  <StatusBadge status={campaign.status} />
                   {(campaign.content_types ?? []).map((t) => (
                     <span key={t} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs font-medium text-ink/55">
                       {t}
@@ -958,28 +955,33 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
 
               {/* Stats bar */}
               <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                <div className="flex flex-wrap items-center gap-x-0 gap-y-3 divide-x divide-black/[0.06]">
-                  <div className="flex flex-col pr-5">
-                    <span className="text-xs text-ink/40">Compensation</span>
-                    <span className="mt-0.5 text-sm font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</span>
+                <div className="flex flex-wrap items-center gap-y-3 divide-x divide-black/[0.06]">
+                  <div className="pr-4">
+                    <span className="text-sm font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</span>
                   </div>
-                  <div className="flex flex-col px-5">
-                    <span className="text-xs text-ink/40">Creators needed</span>
-                    <span className="mt-0.5 text-sm font-semibold text-ink">{campaign.creators_needed}</span>
-                  </div>
-                  <div className="flex flex-col px-5">
-                    <span className="text-xs text-ink/40">Deadline</span>
-                    <span className={`mt-0.5 text-sm font-semibold ${isExpired || isExpiringSoon ? "text-coral" : "text-ink"}`}>
-                      {isExpired ? "Expired" : `${left}d left`}
+                  <div className="px-4">
+                    <span className="text-sm font-semibold text-ink">
+                      {campaign.creators_needed} needed
                     </span>
                   </div>
-                  <div className="flex flex-col pl-5">
-                    <span className="text-xs text-ink/40">Interested</span>
-                    <span className="mt-0.5 flex items-center gap-1.5 text-sm font-semibold text-ink">
-                      {campaign.interested_count ?? 0}
+                  <div className="px-4">
+                    <span className={`text-sm font-semibold ${isExpired || isExpiringSoon ? "text-coral" : "text-ink"}`}>
+                      {isExpired ? "Expired" : `${left}d left`}
+                    </span>
+                    <span className="ml-2 text-xs text-ink/40">
+                      {new Date(campaign.deadline).toLocaleDateString("en-CA", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <div className="pl-4">
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
                       {(campaign.interested_count ?? 0) > 0 ? (
                         <span className="h-2 w-2 rounded-full bg-coral" />
                       ) : null}
+                      {campaign.interested_count ?? 0} interested
                     </span>
                   </div>
                 </div>
@@ -998,19 +1000,6 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
                   <p className="text-sm text-ink/80">{campaign.compensation_details}</p>
                 </div>
               ) : null}
-
-              {/* Deadline date */}
-              <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/40">Application deadline</p>
-                <p className="text-sm text-ink/80">
-                  {new Date(campaign.deadline).toLocaleDateString("en-CA", {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </p>
-              </div>
 
               {/* Reference doc */}
               {campaign.reference_doc_url ? (
@@ -1045,7 +1034,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId }: Pro
             </div>
 
             {/* ── Right panel — creator pipeline (desktop, sticky) ───────── */}
-            <div className="hidden w-[400px] shrink-0 lg:sticky lg:top-14 lg:block lg:max-h-[calc(100vh-56px)] lg:overflow-y-auto">
+            <div className="hidden w-full shrink-0 lg:sticky lg:top-[57px] lg:block lg:max-h-[calc(100vh-57px)] lg:w-[420px] lg:overflow-y-auto lg:border-l lg:border-black/[0.08] lg:pl-8">
               <CreatorPipeline
                 creators={creators}
                 filteredCreators={filteredCreators}

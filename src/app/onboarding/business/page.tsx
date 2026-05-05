@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { BusinessOnboardingForm } from "@/components/onboarding/business-onboarding-form";
 import { createClient } from "@/utils/supabase/server";
