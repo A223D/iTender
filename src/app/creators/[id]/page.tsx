@@ -56,7 +56,7 @@ export default async function CreatorProfilePage({
 
   return (
     <main className="min-h-screen bg-paper">
-      <CreatorProfileView profile={profile as CreatorProfile} />
+      <CreatorProfileView profile={profile as unknown as CreatorProfile} />
     </main>
   );
 }
