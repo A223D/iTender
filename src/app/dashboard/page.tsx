@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { CampaignCard } from "@/components/dashboard/campaign-card";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
+import { NotificationListener } from "@/components/notifications/notification-listener";
 import { createClient } from "@/utils/supabase/server";
 
 const STATUS_STYLES: Record<string, string> = {
@@ -328,6 +329,10 @@ export default async function DashboardPage({
           </div>
         </main>
       </div>
+      <NotificationListener
+        userId={user.id}
+        campaignIds={active.map((c) => c.id)}
+      />
     </div>
   );
 }
