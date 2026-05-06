@@ -44,6 +44,12 @@ type FormData = {
   deadline: string;
 };
 
+type CouponState =
+  | { status: "idle" }
+  | { status: "validating" }
+  | { status: "valid"; discount: number }
+  | { status: "invalid"; message: string };
+
 export function CampaignBuilderForm({ userId }: Props) {
   const router = useRouter();
   const supabase = createClient();
@@ -51,6 +57,9 @@ export function CampaignBuilderForm({ userId }: Props) {
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState<CouponState>({ status: "idle" });
 
   const [selectedContentTypes, setSelectedContentTypes] = useState<Set<string>>(new Set());
 
@@ -116,6 +125,27 @@ export function CampaignBuilderForm({ userId }: Props) {
     setStep((s) => s + 1);
   }
 
+  async function handleApplyCoupon() {
+    const code = couponInput.trim().toUpperCase();
+    if (!code) return;
+    setCoupon({ status: "validating" });
+    try {
+      const res = await fetch("/api/validate-coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const json = await res.json();
+      if (json.valid) {
+        setCoupon({ status: "valid", discount: json.discount });
+      } else {
+        setCoupon({ status: "invalid", message: json.error ?? "Invalid code" });
+      }
+    } catch {
+      setCoupon({ status: "invalid", message: "Could not validate code. Try again." });
+    }
+  }
+
   async function handleSubmit() {
     setError(null);
     setSaving(true);
@@ -156,26 +186,42 @@ export function CampaignBuilderForm({ userId }: Props) {
         }
       }
 
-      // Insert campaign
-      const { error: insertError } = await supabase.from("campaigns").insert({
-        business_id: userId,
-        title: form.title.trim(),
-        content_types: [...selectedContentTypes],
-        description: form.description.trim(),
-        compensation_type: form.compensationType,
-        compensation_details: form.compensationDetails.trim() || null,
-        creators_needed: Math.max(1, parseInt(form.creatorsNeeded, 10) || 1),
-        deadline: form.deadline,
-        photo_urls: photoUrls,
-        reference_doc_url: referenceDocUrl,
-        reference_doc_name: referenceDocName,
-      });
+      const appliedCode = coupon.status === "valid" ? couponInput.trim().toUpperCase() : null;
 
-      if (insertError) {
-        console.error("[campaigns/new] insert error:", insertError.code, insertError.message);
+      // Insert campaign
+      const { data: inserted, error: insertError } = await supabase
+        .from("campaigns")
+        .insert({
+          business_id: userId,
+          title: form.title.trim(),
+          content_types: [...selectedContentTypes],
+          description: form.description.trim(),
+          compensation_type: form.compensationType,
+          compensation_details: form.compensationDetails.trim() || null,
+          creators_needed: Math.max(1, parseInt(form.creatorsNeeded, 10) || 1),
+          deadline: form.deadline,
+          photo_urls: photoUrls,
+          reference_doc_url: referenceDocUrl,
+          reference_doc_name: referenceDocName,
+          coupon_code: appliedCode,
+        })
+        .select("id")
+        .single();
+
+      if (insertError || !inserted) {
+        console.error("[campaigns/new] insert error:", insertError?.code, insertError?.message);
         setError("Something went wrong creating your campaign. Please try again.");
         setSaving(false);
         return;
+      }
+
+      // Redeem coupon (increments uses_count atomically)
+      if (appliedCode) {
+        await fetch("/api/redeem-coupon", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code: appliedCode, campaignId: inserted.id }),
+        });
       }
 
       router.push("/dashboard");
@@ -431,6 +477,44 @@ export function CampaignBuilderForm({ userId }: Props) {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
             />
           </label>
+
+          {/* Coupon code */}
+          <div>
+            <p className="mb-2 text-sm font-semibold text-ink">
+              Coupon code{" "}
+              <span className="font-normal text-ink/35">· Optional</span>
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponInput}
+                onChange={(e) => {
+                  setCouponInput(e.target.value);
+                  if (coupon.status !== "idle") setCoupon({ status: "idle" });
+                }}
+                placeholder="e.g. LAUNCH100"
+                className="flex-1 rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm uppercase tracking-wider text-ink outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/35 focus:border-moss"
+              />
+              <button
+                type="button"
+                onClick={handleApplyCoupon}
+                disabled={coupon.status === "validating" || !couponInput.trim()}
+                className="rounded-2xl border border-black/10 px-4 py-3 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03] disabled:opacity-40"
+              >
+                {coupon.status === "validating" ? "Checking…" : "Apply"}
+              </button>
+            </div>
+            {coupon.status === "valid" && (
+              <p className="mt-2 text-sm font-semibold text-moss">
+                {coupon.discount === 100
+                  ? "100% off — campaign will go live for free"
+                  : `${coupon.discount}% off — discount applied at checkout`}
+              </p>
+            )}
+            {coupon.status === "invalid" && (
+              <p className="mt-2 text-sm text-coral">{coupon.message}</p>
+            )}
+          </div>
         </div>
       ) : null}
 
@@ -452,14 +536,37 @@ export function CampaignBuilderForm({ userId }: Props) {
             Back
           </button>
         ) : null}
-        <button
-          type="button"
-          onClick={step < 2 ? handleNext : handleSubmit}
-          disabled={saving}
-          className="flex-1 rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
-        >
-          {saving ? "Publishing…" : step < 2 ? "Continue →" : "Publish Campaign"}
-        </button>
+        {step < 2 ? (
+          <button
+            type="button"
+            onClick={handleNext}
+            className="flex-1 rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98]"
+          >
+            Continue →
+          </button>
+        ) : coupon.status === "valid" && coupon.discount === 100 ? (
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={saving}
+            className="flex-1 rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
+          >
+            {saving ? "Publishing…" : "Publish Campaign"}
+          </button>
+        ) : (
+          <div className="flex flex-1 flex-col items-stretch gap-1.5">
+            <button
+              type="button"
+              disabled
+              className="flex-1 cursor-not-allowed rounded-2xl bg-black/10 px-5 py-3 text-sm font-bold text-ink/30"
+            >
+              Complete Payment
+            </button>
+            <p className="text-center text-xs text-ink/40">
+              Payment integration coming soon — apply a 100% coupon to publish now
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
