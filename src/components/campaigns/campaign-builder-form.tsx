@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const CONTENT_TYPES = [
   "Post",
@@ -285,6 +286,7 @@ export function CampaignBuilderForm({ userId }: Props) {
               type="text"
               value={form.title}
               onChange={(e) => set("title", e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleNext(); }}
               placeholder="e.g. Summer launch — sunglasses"
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
             />
@@ -472,23 +474,23 @@ export function CampaignBuilderForm({ userId }: Props) {
               min={1}
               value={form.creatorsNeeded}
               onChange={(e) => set("creatorsNeeded", e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
             />
           </label>
 
-          <label className="block">
+          <div>
             <span className="mb-2 block text-sm font-semibold text-ink">
               Application deadline <span className="text-coral">*</span>
             </span>
-            <input
-              type="date"
+            <DatePicker
               value={form.deadline}
+              onChange={(v) => set("deadline", v)}
               min={addDays(1)}
               max={addDays(180)}
-              onChange={(e) => set("deadline", e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
+              placeholder="Select a deadline"
             />
-          </label>
+          </div>
 
           {/* Coupon code */}
           <div>

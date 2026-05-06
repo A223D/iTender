@@ -87,6 +87,10 @@ export default function LoginPage() {
   }
 
   function handleDigitKeyDown(index: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      if (digits.every((d) => d !== "")) handleVerify();
+      return;
+    }
     if (e.key === "Backspace") {
       if (digits[index]) {
         const next = [...digits];

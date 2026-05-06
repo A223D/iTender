@@ -1,30 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { createClient } from "@/utils/supabase/client";
 
 const MAX_TOASTS = 4;
-
-type Toast = {
-  id: string;
-  message: string;
-  type: "application" | "message";
-  href?: string;
-};
 
 // ── Audio ──────────────────────────────────────────────────────────────────────
 
 function useNotificationAudio() {
   const ctxRef = useRef<AudioContext | null>(null);
 
-  // Create context on mount — starts suspended but ready to resume on gesture
   useEffect(() => {
     try { ctxRef.current = new AudioContext(); } catch { /* unavailable */ }
   }, []);
 
-  // Resume on any user gesture (required by browser autoplay policy)
   useEffect(() => {
     function resume() { ctxRef.current?.resume().catch(() => {}); }
     document.addEventListener("click", resume);
@@ -35,8 +27,6 @@ function useNotificationAudio() {
     };
   }, []);
 
-  // Keep-alive: play a silent 1-sample buffer every 20s so the browser
-  // doesn't auto-suspend an idle AudioContext
   useEffect(() => {
     const id = setInterval(() => {
       const ctx = ctxRef.current;
@@ -53,7 +43,6 @@ function useNotificationAudio() {
   function play() {
     const ctx = ctxRef.current;
     if (!ctx) return;
-
     function beep() {
       const osc = ctx!.createOscillator();
       const gain = ctx!.createGain();
@@ -66,15 +55,82 @@ function useNotificationAudio() {
       osc.start(ctx!.currentTime);
       osc.stop(ctx!.currentTime + 0.3);
     }
-
-    if (ctx.state === "running") {
-      beep();
-    } else {
-      ctx.resume().then(beep).catch(() => {});
-    }
+    if (ctx.state === "running") beep();
+    else ctx.resume().then(beep).catch(() => {});
   }
 
   return play;
+}
+
+// ── Toast UI ───────────────────────────────────────────────────────────────────
+
+function NotificationToast({
+  id,
+  message,
+  type,
+  href,
+  onNavigate,
+}: {
+  id: string | number;
+  message: string;
+  type: "application" | "message";
+  href?: string;
+  onNavigate?: () => void;
+}) {
+  const isApplication = type === "application";
+
+  return (
+    <div className="relative flex w-[340px] overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.10),0_1px_4px_rgba(0,0,0,0.06)]">
+      {/* Left accent bar */}
+      <div className={`absolute left-0 top-0 h-full w-[3px] ${isApplication ? "bg-coral" : "bg-moss"}`} />
+
+      {/* Body */}
+      <div className="flex min-w-0 flex-1 items-start gap-3 py-4 pl-5 pr-4">
+        {/* Icon badge */}
+        <div
+          className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-base ${
+            isApplication ? "bg-coral/10" : "bg-moss/10"
+          }`}
+        >
+          {isApplication ? "💌" : "💬"}
+        </div>
+
+        {/* Text */}
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-semibold leading-snug text-ink">
+            {isApplication ? "New application" : "New message"}
+          </p>
+          <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink/55">{message}</p>
+          {href ? (
+            <button
+              type="button"
+              onClick={() => {
+                onNavigate?.();
+                toast.dismiss(id);
+              }}
+              className={`mt-2 text-xs font-semibold transition-opacity hover:opacity-70 ${
+                isApplication ? "text-coral" : "text-moss"
+              }`}
+            >
+              {isApplication ? "View applicants →" : "Open chat →"}
+            </button>
+          ) : null}
+        </div>
+      </div>
+
+      {/* Dismiss */}
+      <button
+        type="button"
+        onClick={() => toast.dismiss(id)}
+        aria-label="Dismiss"
+        className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full text-ink/25 transition-colors hover:bg-black/[0.05] hover:text-ink/50"
+      >
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <path d="M1 1l8 8M9 1L1 9" />
+        </svg>
+      </button>
+    </div>
+  );
 }
 
 // ── Component ──────────────────────────────────────────────────────────────────
@@ -87,30 +143,60 @@ export function NotificationListener({
   campaignIds: string[];
 }) {
   const supabase = createClient();
-  const [toasts, setToasts] = useState<Toast[]>([]);
   const play = useNotificationAudio();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  // Keep a ref so Realtime callbacks always see the latest campaignIds
-  // without needing to re-subscribe every time the array changes
   const campaignIdsRef = useRef(campaignIds);
   useEffect(() => { campaignIdsRef.current = campaignIds; }, [campaignIds]);
 
-  function addToast(toast: Omit<Toast, "id">) {
-    play();
-    setToasts((prev) => {
-      const next = [...prev, { id: `${Date.now()}-${Math.random()}`, ...toast }];
-      return next.slice(-MAX_TOASTS); // keep only the 4 most recent
-    });
-  }
+  const pathnameRef = useRef(pathname);
+  useEffect(() => { pathnameRef.current = pathname; }, [pathname]);
 
-  function dismiss(id: string) {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+  // Track active toast IDs so we can enforce the MAX_TOASTS cap
+  const toastIdsRef = useRef<(string | number)[]>([]);
+
+  function showToast({
+    message,
+    type,
+    href,
+  }: {
+    message: string;
+    type: "application" | "message";
+    href?: string;
+  }) {
+    play();
+
+    // Dismiss oldest if at cap
+    if (toastIdsRef.current.length >= MAX_TOASTS) {
+      toast.dismiss(toastIdsRef.current[0]);
+      toastIdsRef.current = toastIdsRef.current.slice(1);
+    }
+
+    const id = `notif-${Date.now()}-${Math.random()}`;
+    toastIdsRef.current.push(id);
+
+    toast.custom(
+      (t) => (
+        <NotificationToast
+          id={t}
+          message={message}
+          type={type}
+          href={href}
+          onNavigate={href ? () => router.push(href) : undefined}
+        />
+      ),
+      {
+        id,
+        duration: Infinity,
+        onDismiss: () => {
+          toastIdsRef.current = toastIdsRef.current.filter((i) => i !== id);
+        },
+      },
+    );
   }
 
   // ── Swipes — new creator applications ─────────────────────────────────────
-  // Subscribe to ALL swipe inserts and filter client-side.
-  // Supabase Realtime's `in` filter for postgres_changes is unreliable;
-  // client-side is simpler and always correct.
   useEffect(() => {
     const channel = supabase
       .channel(`business-swipes:${userId}`)
@@ -141,7 +227,7 @@ export function NotificationListener({
           if (creator?.name) message = `${creator.name} applied to your campaign`;
           if (campaign?.title) message += ` "${campaign.title}"`;
 
-          addToast({
+          showToast({
             message,
             type: "application",
             href: row.campaign_id ? `/campaigns/${row.campaign_id}` : undefined,
@@ -167,7 +253,7 @@ export function NotificationListener({
             match_id?: string;
           };
 
-          if (row.sender_id === userId) return; // ignore own messages
+          if (row.sender_id === userId) return;
           if (!row.match_id) return;
 
           const { data: match } = await supabase
@@ -181,11 +267,15 @@ export function NotificationListener({
           const creatorName =
             (match as { creator?: { name?: string } }).creator?.name ?? "A creator";
 
-          addToast({
-            message: `${creatorName} sent you a message`,
-            type: "message",
-            href: `/matches/${row.match_id}`,
-          });
+          if (pathnameRef.current.startsWith("/matches")) {
+            play();
+          } else {
+            showToast({
+              message: `${creatorName} sent you a message`,
+              type: "message",
+              href: `/matches/${row.match_id}`,
+            });
+          }
         },
       )
       .subscribe();
@@ -194,63 +284,5 @@ export function NotificationListener({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  if (toasts.length === 0) return null;
-
-  return (
-    <div
-      className="fixed bottom-4 right-4 z-50 flex flex-col-reverse gap-2.5"
-      role="status"
-      aria-live="polite"
-    >
-      {toasts.map((toast) => {
-        const inner = (
-          <div
-            className={`flex items-start gap-3 rounded-2xl px-4 py-3.5 shadow-xl ${
-              toast.type === "application"
-                ? "bg-coral"
-                : "bg-moss"
-            }`}
-          >
-            <span className="mt-px text-base leading-none shrink-0">
-              {toast.type === "application" ? "💌" : "💬"}
-            </span>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white leading-snug">
-                {toast.message}
-              </p>
-              {toast.href ? (
-                <p className="mt-0.5 text-xs text-white/65">
-                  {toast.type === "application" ? "View applicants →" : "Open chat →"}
-                </p>
-              ) : null}
-            </div>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dismiss(toast.id);
-              }}
-              className="shrink-0 mt-0.5 text-lg leading-none text-white/50 hover:text-white transition-colors"
-              aria-label="Dismiss"
-            >
-              ×
-            </button>
-          </div>
-        );
-
-        return toast.href ? (
-          <Link
-            key={toast.id}
-            href={toast.href}
-            className="block transition-opacity hover:opacity-90 active:scale-[0.98]"
-          >
-            {inner}
-          </Link>
-        ) : (
-          <div key={toast.id}>{inner}</div>
-        );
-      })}
-    </div>
-  );
+  return null;
 }

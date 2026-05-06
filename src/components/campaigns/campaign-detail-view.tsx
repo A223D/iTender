@@ -118,8 +118,6 @@ function CreatorCard({
     { label: "TK", count: creator.tiktok_followers },
     { label: "YT", count: creator.youtube_followers },
   ].filter((p) => p.count > 0);
-  const totalFollowers = creator.instagram_followers + creator.tiktok_followers + creator.youtube_followers;
-
   return (
     <div className="overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-moss/30 bg-white shadow-sm">
       <div className="p-5">
@@ -136,23 +134,18 @@ function CreatorCard({
             )}
           </div>
 
-          {/* Name / handle / total followers */}
+          {/* Name / handle */}
           <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="truncate font-semibold text-ink">{creator.name}</p>
-                {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
-                <Link
-                  href={`/creators/${creator.id}`}
-                  target="_blank"
-                  className="text-xs font-medium text-moss/70 transition hover:text-moss"
-                >
-                  View profile ↗
-                </Link>
-              </div>
-              {totalFollowers > 0 ? (
-                <span className="shrink-0 text-sm font-bold text-ink">Total: {formatFollowers(totalFollowers)}</span>
-              ) : null}
+            <div className="min-w-0">
+              <p className="truncate font-semibold text-ink">{creator.name}</p>
+              {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
+              <Link
+                href={`/creators/${creator.id}`}
+                target="_blank"
+                className="text-xs font-medium text-moss/70 transition hover:text-moss"
+              >
+                View profile ↗
+              </Link>
             </div>
 
             {/* Platform pills */}

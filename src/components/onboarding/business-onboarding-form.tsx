@@ -236,6 +236,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
               type="text"
               value={form.brandName}
               onChange={(e) => set("brandName", e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleNextStep(); }}
               placeholder="e.g. Bloom Cafe"
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
             />
@@ -267,6 +268,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
               type="text"
               value={form.city}
               onChange={(e) => set("city", e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleNextStep(); }}
               placeholder="e.g. Toronto"
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
             />
@@ -279,6 +281,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
               type="url"
               value={form.websiteUrl}
               onChange={(e) => set("websiteUrl", e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleNextStep(); }}
               placeholder="https://yourbrand.com"
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
             />
