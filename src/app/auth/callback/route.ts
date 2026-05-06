@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+import { sendWelcomeEmail } from "@/lib/email";
 import { createClient } from "@/utils/supabase/server";
 
 export async function GET(request: Request) {
@@ -49,6 +50,13 @@ export async function GET(request: Request) {
 
   if (profile) {
     return NextResponse.redirect(`${origin}/dashboard`);
+  }
+
+  // New user — send welcome email (fire-and-forget, never block the redirect)
+  if (user.email) {
+    sendWelcomeEmail(user.email).catch((e) =>
+      console.error("[auth/callback] welcome email failed:", e),
+    );
   }
 
   return NextResponse.redirect(`${origin}/onboarding/business`);
