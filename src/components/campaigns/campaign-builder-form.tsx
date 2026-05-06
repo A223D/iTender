@@ -95,6 +95,12 @@ export function CampaignBuilderForm({ userId }: Props) {
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Moodboard image must be under 5 MB.");
+      e.target.value = "";
+      return;
+    }
+    setError(null);
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   }
@@ -102,6 +108,12 @@ export function CampaignBuilderForm({ userId }: Props) {
   function handleDocChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 15 * 1024 * 1024) {
+      setError("Reference document must be under 15 MB.");
+      e.target.value = "";
+      return;
+    }
+    setError(null);
     setDocFile(file);
   }
 

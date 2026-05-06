@@ -73,6 +73,12 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
   function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Logo must be under 5 MB.");
+      e.target.value = "";
+      return;
+    }
+    setError(null);
     setLogoFile(file);
     setLogoPreview(URL.createObjectURL(file));
   }

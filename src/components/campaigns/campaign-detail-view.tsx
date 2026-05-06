@@ -505,6 +505,11 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Moodboard image must be under 5 MB.");
+      e.target.value = "";
+      return;
+    }
     setNewImageFile(file);
     setNewImagePreview(URL.createObjectURL(file));
     setImageRemoved(false);
@@ -513,6 +518,11 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   function handleDocChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 15 * 1024 * 1024) {
+      setError("Reference document must be under 15 MB.");
+      e.target.value = "";
+      return;
+    }
     setNewDocFile(file);
     setDocRemoved(false);
   }
