@@ -236,13 +236,13 @@ export function ChatView({
   const photo = match.creator?.profile_photo_url ?? match.creator?.avatar_url;
 
   return (
-    <div className="flex h-dvh flex-col bg-paper">
+    <div className="flex h-full flex-col bg-paper">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="flex items-center gap-3 border-b border-black/[0.08] bg-white px-4 py-3">
         <Link
           href="/matches"
-          className="flex items-center gap-1 text-sm text-ink/50 transition hover:text-ink"
+          className="flex items-center gap-1 text-sm text-ink/50 transition hover:text-ink lg:hidden"
           aria-label="Back to messages"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

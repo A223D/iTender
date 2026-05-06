@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export type MatchItem = {
   id: string;
@@ -47,6 +48,8 @@ function CreatorAvatar({ creator }: { creator: MatchItem["creator"] }) {
 }
 
 export function MatchesList({ groups }: { groups: MatchGroup[] }) {
+  const pathname = usePathname();
+
   if (groups.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-black/15 bg-white px-6 py-20 text-center">
@@ -84,11 +87,15 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
 
           {/* Match tiles */}
           <div className="overflow-hidden rounded-2xl bg-white shadow-sm divide-y divide-black/[0.06]">
-            {group.matches.map((match) => (
+            {group.matches.map((match) => {
+              const isActive = pathname === `/matches/${match.id}`;
+              return (
               <Link
                 key={match.id}
                 href={`/matches/${match.id}`}
-                className="flex items-center gap-3 px-4 py-3.5 transition hover:bg-black/[0.025]"
+                className={`flex items-center gap-3 px-4 py-3.5 transition ${
+                  isActive ? "bg-moss/[0.07]" : "hover:bg-black/[0.025]"
+                }`}
               >
                 <CreatorAvatar creator={match.creator} />
 
@@ -121,7 +128,8 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
                   </span>
                 ) : null}
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))}
