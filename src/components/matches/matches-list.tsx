@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { relativeTime } from "@/lib/formatters";
+
 export type MatchItem = {
   id: string;
   campaign_id: string;
@@ -21,18 +23,6 @@ export type MatchGroup = {
   campaign: { id: string; title: string | null };
   matches: MatchItem[];
 };
-
-function relativeTime(iso: string): string {
-  const diffMs = Date.now() - new Date(iso).getTime();
-  const diffMin = Math.floor(diffMs / 60_000);
-  if (diffMin < 1) return "now";
-  if (diffMin < 60) return `${diffMin}m ago`;
-  const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `${diffH}h ago`;
-  const diffD = Math.floor(diffH / 24);
-  if (diffD < 7) return `${diffD}d ago`;
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
 
 function CreatorAvatar({ creator }: { creator: MatchItem["creator"] }) {
   const photo = creator?.profile_photo_url ?? creator?.avatar_url ?? null;

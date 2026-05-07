@@ -5,14 +5,7 @@ import Link from "next/link";
 
 import type { ChatMatch, ChatMessage } from "@/app/matches/[id]/page";
 import { createClient } from "@/utils/supabase/client";
-
-const COMP_LABELS: Record<string, string> = {
-  paid: "Paid",
-  product: "Product or Service",
-  paid_product: "Paid + Product",
-  affiliate: "Affiliate",
-  negotiable: "Negotiable",
-};
+import { COMP_LABELS } from "@/lib/campaign-constants";
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 

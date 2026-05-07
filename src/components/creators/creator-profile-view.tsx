@@ -4,14 +4,9 @@ import { useState } from "react";
 
 import type { CreatorProfile } from "@/app/creators/[id]/page";
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
+import { formatFollowers } from "@/lib/formatters";
 
-function formatFollowers(n: number | null): string {
-  if (!n || n === 0) return "0";
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
-  return String(n);
-}
+// ── Helpers ────────────────────────────────────────────────────────────────────
 
 function normalizeHandle(raw: string): string {
   return raw.trim().replace(/^@+/, "");

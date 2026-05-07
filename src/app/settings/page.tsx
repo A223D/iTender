@@ -6,6 +6,7 @@ import { SignOutButton } from "@/components/dashboard/sign-out-button";
 import { DeleteAccountForm } from "@/components/settings/delete-account-form";
 import { NotificationListener } from "@/components/notifications/notification-listener";
 import { createClient } from "@/utils/supabase/server";
+import { logoInitial } from "@/lib/formatters";
 
 const GearIcon = ({ size = 16 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -32,7 +33,7 @@ export default async function SettingsPage() {
   const totalUnread = ((unreadData ?? []) as { unread_count: number }[])
     .reduce((sum, r) => sum + Number(r.unread_count), 0);
 
-  const logoInitial = profile.brand_name[0]?.toUpperCase() ?? "B";
+  const brandInitial = logoInitial(profile.brand_name);
   const memberSince = userRow?.created_at
     ? new Date(userRow.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" })
     : null;
@@ -52,7 +53,7 @@ export default async function SettingsPage() {
             <img src={profile.logo_url} alt="Brand logo" className="h-12 w-12 rounded-2xl object-cover" />
           ) : (
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-sm font-bold text-white">
-              {logoInitial}
+              {brandInitial}
             </div>
           )}
           <p className="mt-3 text-sm font-bold leading-tight text-ink">{profile.brand_name}</p>
@@ -119,7 +120,7 @@ export default async function SettingsPage() {
               <img src={profile.logo_url} alt="Brand logo" className="h-8 w-8 rounded-xl object-cover" />
             ) : (
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-coral to-violet text-xs font-bold text-white">
-                {logoInitial}
+                {brandInitial}
               </div>
             )}
             <p className="text-sm font-bold text-ink">{profile.brand_name}</p>
@@ -161,7 +162,7 @@ export default async function SettingsPage() {
                     <img src={profile.logo_url} alt="Logo" className="h-14 w-14 rounded-2xl object-cover" />
                   ) : (
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-base font-bold text-white">
-                      {logoInitial}
+                      {brandInitial}
                     </div>
                   )}
                   <div>

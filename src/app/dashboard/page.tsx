@@ -6,21 +6,9 @@ import { CampaignCard } from "@/components/dashboard/campaign-card";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
 import { NotificationListener } from "@/components/notifications/notification-listener";
 import { createClient } from "@/utils/supabase/server";
-
-const STATUS_STYLES: Record<string, string> = {
-  live: "bg-moss/10 text-moss",
-  draft: "bg-black/[0.06] text-ink/50",
-  closed: "bg-coral/10 text-coral",
-  pending: "bg-yellow-100 text-yellow-700",
-  completed: "bg-teal/10 text-teal",
-};
-const STATUS_LABELS: Record<string, string> = {
-  live: "Live",
-  draft: "Draft",
-  closed: "Closed",
-  pending: "Pending",
-  completed: "Completed",
-};
+import { STATUS_STYLES, STATUS_LABELS } from "@/lib/campaign-constants";
+import { UNREAD_BADGE_MAX } from "@/lib/app-config";
+import { logoInitial } from "@/lib/formatters";
 
 function StatusBadge({ status }: { status: string }) {
   return (
@@ -74,7 +62,7 @@ export default async function DashboardPage({
   const showActive = statusFilter === "all" || statusFilter === "active";
   const showPast = statusFilter === "all" || statusFilter === "past";
 
-  const logoInitial = profile.brand_name[0]?.toUpperCase() ?? "B";
+  const brandInitial = logoInitial(profile.brand_name);
 
   return (
     <div className="flex h-screen bg-paper">
@@ -93,7 +81,7 @@ export default async function DashboardPage({
             <img src={profile.logo_url} alt="Brand logo" className="h-12 w-12 rounded-2xl object-cover" />
           ) : (
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-sm font-bold text-white">
-              {logoInitial}
+              {brandInitial}
             </div>
           )}
           <p className="mt-3 text-sm font-bold leading-tight text-ink">{profile.brand_name}</p>
@@ -122,7 +110,7 @@ export default async function DashboardPage({
             Messages
             {totalUnread > 0 ? (
               <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-coral text-[10px] font-bold text-white">
-                {totalUnread > 9 ? "9+" : totalUnread}
+                {totalUnread > UNREAD_BADGE_MAX ? `${UNREAD_BADGE_MAX}+` : totalUnread}
               </span>
             ) : null}
           </Link>
@@ -185,7 +173,7 @@ export default async function DashboardPage({
               <img src={profile.logo_url} alt="Brand logo" className="h-8 w-8 rounded-xl object-cover" />
             ) : (
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-coral to-violet text-xs font-bold text-white">
-                {logoInitial}
+                {brandInitial}
               </div>
             )}
             <p className="text-sm font-bold text-ink">{profile.brand_name}</p>
@@ -200,7 +188,7 @@ export default async function DashboardPage({
             </svg>
             {totalUnread > 0 ? (
               <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[9px] font-bold text-white">
-                {totalUnread > 9 ? "9+" : totalUnread}
+                {totalUnread > UNREAD_BADGE_MAX ? `${UNREAD_BADGE_MAX}+` : totalUnread}
               </span>
             ) : null}
           </Link>

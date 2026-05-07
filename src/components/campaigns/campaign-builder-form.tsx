@@ -5,34 +5,9 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
 import { DatePicker } from "@/components/ui/date-picker";
-
-const CONTENT_TYPES = [
-  "Post",
-  "Short-form Video",
-  "Long-form Video",
-  "Story",
-  "Blog / Article",
-];
-
-const COMPENSATION_TYPES = [
-  { value: "paid", label: "Paid", description: "Cash payment to the creator" },
-  { value: "product", label: "Product or Service", description: "Free product, service, or experience" },
-  { value: "paid_product", label: "Paid + Product", description: "Cash plus free product or service" },
-  { value: "affiliate", label: "Affiliate", description: "% of sales the creator drives" },
-  { value: "negotiable", label: "Negotiable", description: "Discuss details in chat" },
-];
-
-const DOC_MIME_TYPES: Record<string, string> = {
-  pdf: "application/pdf",
-  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  doc: "application/msword",
-};
-
-function addDays(n: number) {
-  const d = new Date();
-  d.setDate(d.getDate() + n);
-  return d.toISOString().split("T")[0];
-}
+import { CONTENT_TYPES, COMPENSATION_TYPES, DOC_MIME_TYPES } from "@/lib/campaign-constants";
+import { FILE_SIZE_LIMITS } from "@/lib/app-config";
+import { addDays } from "@/lib/dates";
 
 type Props = { userId: string };
 
@@ -96,7 +71,7 @@ export function CampaignBuilderForm({ userId }: Props) {
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > FILE_SIZE_LIMITS.image) {
       setError("Moodboard image must be under 5 MB.");
       e.target.value = "";
       return;
@@ -109,7 +84,7 @@ export function CampaignBuilderForm({ userId }: Props) {
   function handleDocChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 15 * 1024 * 1024) {
+    if (file.size > FILE_SIZE_LIMITS.doc) {
       setError("Reference document must be under 15 MB.");
       e.target.value = "";
       return;

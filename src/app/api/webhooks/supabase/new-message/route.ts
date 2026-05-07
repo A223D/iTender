@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 
 import { sendMessageEmail } from "@/lib/email";
 import { createServiceClient } from "@/utils/supabase/service";
-
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://itender.app";
-const PREVIEW_MAX = 120;
+import { APP_URL, MESSAGE_PREVIEW_MAX } from "@/lib/app-config";
 
 export async function POST(request: Request) {
   const secret = request.headers.get("x-webhook-secret");
@@ -53,7 +51,7 @@ export async function POST(request: Request) {
 
   const creatorName = creatorResult.data?.name ?? "A creator";
   const preview = typeof content === "string"
-    ? content.slice(0, PREVIEW_MAX) + (content.length > PREVIEW_MAX ? "…" : "")
+    ? content.slice(0, MESSAGE_PREVIEW_MAX) + (content.length > MESSAGE_PREVIEW_MAX ? "…" : "")
     : "";
 
   await sendMessageEmail({

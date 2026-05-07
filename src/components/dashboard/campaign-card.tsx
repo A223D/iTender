@@ -5,16 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
+import { COMP_LABELS } from "@/lib/campaign-constants";
+import { MS_PER_DAY, STALE_CAMPAIGN_DAYS } from "@/lib/app-config";
+import { daysLeft } from "@/lib/dates";
 
-const COMP_LABELS: Record<string, string> = {
-  paid: "Paid",
-  product: "Product",
-  paid_product: "Paid + Product",
-  affiliate: "Affiliate",
-  negotiable: "Negotiable",
-};
-
-const msPerDay = 1000 * 60 * 60 * 24;
 
 export type DashboardCampaign = {
   id: string;
@@ -52,11 +46,11 @@ export function CampaignCard({ campaign }: { campaign: DashboardCampaign }) {
   }, [menuOpen]);
 
   const now = Date.now();
-  const left = Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - now) / msPerDay));
+  const left = daysLeft(campaign.deadline);
   const isExpiringSoon = left > 0 && left <= 3;
   const isExpired = left === 0;
-  const ageInDays = Math.floor((now - new Date(campaign.created_at).getTime()) / msPerDay);
-  const isStale = (campaign.interested_count ?? 0) === 0 && ageInDays >= 7;
+  const ageInDays = Math.floor((now - new Date(campaign.created_at).getTime()) / MS_PER_DAY);
+  const isStale = (campaign.interested_count ?? 0) === 0 && ageInDays >= STALE_CAMPAIGN_DAYS;
   const compLabel = COMP_LABELS[campaign.compensation_type ?? ""] ?? campaign.compensation_type ?? "";
   const heroUrl = (campaign.photo_urls as string[] | null)?.[0] ?? null;
   const initial = (campaign.title ?? "C")[0].toUpperCase();

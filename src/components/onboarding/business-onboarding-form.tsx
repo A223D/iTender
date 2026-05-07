@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 import { createClient } from "@/utils/supabase/client";
+import { FILE_SIZE_LIMITS } from "@/lib/app-config";
 
 const INDUSTRIES = [
   "UGC",
@@ -73,7 +74,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
   function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > FILE_SIZE_LIMITS.logo) {
       setError("Logo must be under 5 MB.");
       e.target.value = "";
       return;
@@ -215,7 +216,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 >
                   {logoPreview ? "Change logo" : "Upload logo"}
                 </button>
-                <p className="mt-1.5 text-xs text-ink/40">Optional · JPG, PNG, WEBP</p>
+                <p className="mt-1.5 text-xs text-ink/40">Required · JPG, PNG, WEBP</p>
               </div>
             </div>
             <input

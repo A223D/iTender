@@ -6,71 +6,17 @@ import { useRouter } from "next/navigation";
 
 import type { CampaignDetail, InterestedCreator } from "@/app/campaigns/[id]/page";
 import { createClient } from "@/utils/supabase/client";
-
-// ── Constants ──────────────────────────────────────────────────────────────────
-
-const CONTENT_TYPES = ["Post", "Short-form Video", "Long-form Video", "Story", "Blog / Article"];
-
-const COMPENSATION_TYPES = [
-  { value: "paid", label: "Paid", description: "Cash payment to the creator" },
-  { value: "product", label: "Product or Service", description: "Free product, service, or experience" },
-  { value: "paid_product", label: "Paid + Product", description: "Cash plus free product or service" },
-  { value: "affiliate", label: "Affiliate", description: "% of sales the creator drives" },
-  { value: "negotiable", label: "Negotiable", description: "Discuss details in chat" },
-];
-
-const COMP_LABELS: Record<string, string> = {
-  paid: "Paid",
-  product: "Product or Service",
-  paid_product: "Paid + Product",
-  affiliate: "Affiliate",
-  negotiable: "Negotiable",
-};
-
-const DOC_MIME_TYPES: Record<string, string> = {
-  pdf: "application/pdf",
-  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  doc: "application/msword",
-};
-
-const STATUS_STYLES: Record<string, string> = {
-  live: "bg-moss/10 text-moss",
-  draft: "bg-black/[0.06] text-ink/50",
-  closed: "bg-coral/10 text-coral",
-  pending: "bg-yellow-100 text-yellow-700",
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  live: "Live",
-  draft: "Draft",
-  closed: "Closed",
-  pending: "Pending",
-};
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-function formatFollowers(n: number | null): string {
-  if (!n || n === 0) return "0";
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
-  return String(n);
-}
-
-function extractStoragePath(url: string, bucket: string): string | null {
-  const marker = `/storage/v1/object/public/${bucket}/`;
-  const idx = url.indexOf(marker);
-  return idx !== -1 ? url.slice(idx + marker.length) : null;
-}
-
-function addDays(n: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + n);
-  return d.toISOString().split("T")[0];
-}
-
-function daysLeft(deadline: string): number {
-  return Math.max(0, Math.ceil((new Date(deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-}
+import {
+  CONTENT_TYPES,
+  COMPENSATION_TYPES,
+  COMP_LABELS,
+  DOC_MIME_TYPES,
+  STATUS_STYLES,
+  STATUS_LABELS,
+} from "@/lib/campaign-constants";
+import { formatFollowers } from "@/lib/formatters";
+import { addDays, daysLeft } from "@/lib/dates";
+import { extractStoragePath } from "@/lib/storage-utils";
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 

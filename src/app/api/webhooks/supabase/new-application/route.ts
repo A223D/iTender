@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 
 import { sendApplicationEmail } from "@/lib/email";
 import { createServiceClient } from "@/utils/supabase/service";
-
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://itender.app";
+import { APP_URL } from "@/lib/app-config";
 
 export async function POST(request: Request) {
   const secret = request.headers.get("x-webhook-secret");
