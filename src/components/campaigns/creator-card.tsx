@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import { formatFollowers } from "@/lib/formatters";
+import { ConfettiBurst } from "@/components/ui/confetti-burst";
 
 export type NormalizedCreator = {
   pitch: string | null;
@@ -41,8 +43,16 @@ export function CreatorCard({
     { label: "YT", count: creator.youtube_followers },
   ].filter((p) => p.count > 0);
 
+  const prevMatchId = useRef(matchId);
+  const [celebrateKey, setCelebrateKey] = useState(0);
+  useEffect(() => {
+    if (matchId && !prevMatchId.current) setCelebrateKey((k) => k + 1);
+    prevMatchId.current = matchId;
+  }, [matchId]);
+
   return (
-    <div className="overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-coral/30 bg-white shadow-sm">
+    <div className="relative overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-coral/30 bg-white shadow-sm">
+      <ConfettiBurst trigger={celebrateKey} count={40} />
       <div className="p-5">
         <div className="flex items-start gap-3">
           {/* Avatar */}
@@ -110,7 +120,7 @@ export function CreatorCard({
         <div className="mt-4 flex items-center justify-end gap-2">
           {matchId ? (
             <>
-              <span className="rounded-full bg-coral/10 px-3 py-1.5 text-xs font-semibold text-coral">
+              <span className="scout-pop-in rounded-full bg-coral/10 px-3 py-1.5 text-xs font-semibold text-coral">
                 Accepted ✓
               </span>
               <Link

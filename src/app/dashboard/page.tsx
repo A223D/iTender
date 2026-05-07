@@ -76,7 +76,7 @@ export default async function DashboardPage({
             <h1 className="font-display text-xl font-bold text-[#07070E]">Campaigns</h1>
             <Link
               href="/campaigns/new"
-              className="rounded-full bg-gradient-to-r from-coral to-violet px-4 py-2 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-95"
+              className="scout-glow-pulse rounded-full bg-gradient-to-r from-coral to-violet px-4 py-2 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-95"
             >
               + New Campaign
             </Link>

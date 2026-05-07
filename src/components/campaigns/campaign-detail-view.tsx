@@ -769,19 +769,19 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
 
               {/* Stat cards */}
               <div className="grid grid-cols-2 gap-3 py-6 lg:grid-cols-4">
-                <div className="rounded-2xl border border-coral/15 bg-gradient-to-br from-coral/[0.08] to-white p-4 shadow-sm">
+                <div className="scout-slide-up rounded-2xl border border-coral/15 bg-gradient-to-br from-coral/[0.08] to-white p-4 shadow-sm" style={{ animationDelay: "0ms" }}>
                   <p className="text-[10px] font-bold uppercase tracking-wide text-coral/70">Compensation</p>
                   <p className="mt-1 font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</p>
                 </div>
-                <div className="rounded-2xl border border-violet/15 bg-gradient-to-br from-violet/[0.06] to-white p-4 shadow-sm">
+                <div className="scout-slide-up rounded-2xl border border-violet/15 bg-gradient-to-br from-violet/[0.06] to-white p-4 shadow-sm" style={{ animationDelay: "60ms" }}>
                   <p className="text-[10px] font-bold uppercase tracking-wide text-violet/70">Spots</p>
                   <p className="mt-1 font-semibold text-ink">{campaign.creators_needed} needed</p>
                 </div>
-                <div className={`rounded-2xl border p-4 shadow-sm ${
+                <div className={`scout-slide-up rounded-2xl border p-4 shadow-sm ${
                   isExpired || isExpiringSoon
                     ? "border-coral/20 bg-gradient-to-br from-coral/[0.08] to-white"
                     : "border-black/[0.07] bg-white"
-                }`}>
+                }`} style={{ animationDelay: "120ms" }}>
                   <p className={`text-[10px] font-bold uppercase tracking-wide ${isExpired || isExpiringSoon ? "text-coral/70" : "text-ink/40"}`}>
                     Deadline
                   </p>
@@ -792,7 +792,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                     {new Date(campaign.deadline).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" })}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-black/[0.07] bg-white p-4 shadow-sm">
+                <div className="scout-slide-up rounded-2xl border border-black/[0.07] bg-white p-4 shadow-sm" style={{ animationDelay: "180ms" }}>
                   <p className="text-[10px] font-bold uppercase tracking-wide text-ink/40">Interested</p>
                   <div className="mt-1 flex items-center gap-1.5">
                     {(campaign.interested_count ?? 0) > 0 ? (

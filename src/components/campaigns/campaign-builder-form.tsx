@@ -10,6 +10,7 @@ import { addDays } from "@/lib/dates";
 import { Step1Fields } from "./steps/step-1-fields";
 import { Step2Fields } from "./steps/step-2-fields";
 import { Step3Fields, type CouponState } from "./steps/step-3-fields";
+import { ConfettiBurst } from "@/components/ui/confetti-burst";
 
 type FormData = {
   title: string;
@@ -45,6 +46,8 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [published, setPublished] = useState(false);
+  const [confettiKey, setConfettiKey] = useState(0);
 
   const [couponInput, setCouponInput] = useState("");
   const [coupon, setCoupon] = useState<CouponState>({ status: "idle" });
@@ -216,7 +219,9 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
         });
       }
 
-      router.push("/dashboard");
+      setPublished(true);
+      setConfettiKey((k) => k + 1);
+      setTimeout(() => router.push("/dashboard"), 2600);
     } catch (e) {
       console.error("[campaigns/new] unexpected error:", e);
       setError("An unexpected error occurred. Please try again.");
@@ -232,6 +237,23 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
       <CampaignPanel currentStep={step} campaignTitle={form.title} />
 
       <section className="relative flex flex-1 flex-col bg-white">
+        {/* ── Published success overlay ───────────────────────────────────────── */}
+        {published ? (
+          <div className="scout-onboarding-step-in absolute inset-0 z-20 flex flex-col items-center justify-center bg-white px-8 text-center">
+            <ConfettiBurst trigger={confettiKey} />
+            <div className="relative z-10">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-4xl shadow-glow">
+                🎉
+              </div>
+              <h2 className="font-display text-3xl font-bold text-[#07070E]">Campaign is live!</h2>
+              <p className="mt-3 max-w-xs text-base text-black/50">
+                <span className="font-semibold text-[#07070E]">{form.title}</span> is now visible to creators on iTender.
+              </p>
+              <p className="mt-6 text-sm text-black/30">Redirecting to dashboard…</p>
+            </div>
+          </div>
+        ) : null}
+
         {/* Step counter header */}
         <div className="flex h-14 items-center justify-between border-b border-black/[0.08] px-5 sm:px-9">
           <div className="font-mono text-[11px] font-semibold uppercase text-black/40">

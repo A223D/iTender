@@ -75,6 +75,52 @@ html {
   will-change: transform, opacity;
 }
 
+@keyframes scout-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+  65% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scout-pop-in {
+  animation: scout-pop-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes scout-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scout-slide-up {
+  animation: scout-slide-up 440ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes scout-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 18px rgba(255, 69, 102, 0.35), 0 4px 12px rgba(123, 95, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 34px rgba(255, 69, 102, 0.58), 0 4px 22px rgba(123, 95, 255, 0.4);
+  }
+}
+
+.scout-glow-pulse {
+  animation: scout-glow-pulse 2.4s ease-in-out infinite;
+}
+
 body {
   min-height: 100vh;
   background: #ffffff;
@@ -203,7 +249,10 @@ body {
   }
 
   .scout-onboarding-step-in,
-  .scout-confetti-piece {
+  .scout-confetti-piece,
+  .scout-pop-in,
+  .scout-slide-up,
+  .scout-glow-pulse {
     animation: none;
   }
 }
