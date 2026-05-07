@@ -4,20 +4,7 @@ import { redirect } from "next/navigation";
 import { MatchesPanelShell } from "@/components/matches/matches-panel-shell";
 import type { MatchGroup, MatchItem } from "@/components/matches/matches-list";
 import { createClient } from "@/utils/supabase/server";
-
-type RawMatch = {
-  id: string;
-  campaign_id: string;
-  created_at: string;
-  campaigns: { id: string; title: string | null } | null;
-  creator: {
-    id: string;
-    name: string;
-    avatar_url: string | null;
-    creator_profiles: { profile_photo_url: string | null } | null;
-  } | null;
-  messages: { content: string; sender_id: string; created_at: string }[] | null;
-};
+import { type RawMatchRow, extractProfilePhoto } from "@/types/models";
 
 export default async function MatchesLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
@@ -52,12 +39,9 @@ export default async function MatchesLayout({ children }: { children: React.Reac
     ]),
   );
 
-  const matches: MatchItem[] = ((matchesRaw ?? []) as unknown as RawMatch[]).map((m) => {
+  const matches: MatchItem[] = ((matchesRaw ?? []) as unknown as RawMatchRow[]).map((m) => {
     const msgs = (m.messages ?? []).slice().sort((a, b) => b.created_at.localeCompare(a.created_at));
     const lastMsg = msgs[0] ?? null;
-    const cp = Array.isArray(m.creator?.creator_profiles)
-      ? (m.creator?.creator_profiles as { profile_photo_url: string | null }[])[0] ?? null
-      : m.creator?.creator_profiles ?? null;
 
     return {
       id: m.id,
@@ -68,7 +52,7 @@ export default async function MatchesLayout({ children }: { children: React.Reac
             id: m.creator.id,
             name: m.creator.name,
             avatar_url: m.creator.avatar_url,
-            profile_photo_url: cp?.profile_photo_url ?? null,
+            profile_photo_url: extractProfilePhoto(m.creator),
           }
         : null,
       lastMessage: lastMsg
@@ -81,7 +65,7 @@ export default async function MatchesLayout({ children }: { children: React.Reac
   const groupMap = new Map<string, MatchGroup>();
   for (const m of matches) {
     const key = m.campaign_id;
-    const rawCampaign = ((matchesRaw ?? []) as unknown as RawMatch[]).find(
+    const rawCampaign = ((matchesRaw ?? []) as unknown as RawMatchRow[]).find(
       (r) => r.campaign_id === key,
     )?.campaigns ?? { id: key, title: null };
     if (!groupMap.has(key)) {
