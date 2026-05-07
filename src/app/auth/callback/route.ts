@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { sendWelcomeEmail } from "@/lib/email";
 import { createClient } from "@/utils/supabase/server";
+import { upsertBusinessUser, postAuthRedirect } from "@/lib/user-auth";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -30,34 +31,14 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/login?error=no_user`);
   }
 
-  // Upsert users row — all iTender sign-ups are businesses
-  await supabase.from("users").upsert(
-    {
-      id: user.id,
-      role: "business",
-      name: user.user_metadata?.full_name ?? user.email?.split("@")[0] ?? "",
-      email: user.email ?? "",
-    },
-    { onConflict: "id" },
-  );
-
-  // Check if this user has already completed business onboarding
-  const { data: profile } = await supabase
-    .from("business_profiles")
-    .select("user_id")
-    .eq("user_id", user.id)
-    .single();
-
-  if (profile) {
-    return NextResponse.redirect(`${origin}/dashboard`);
-  }
+  const { hasProfile } = await upsertBusinessUser(supabase, user);
 
   // New user — send welcome email (fire-and-forget, never block the redirect)
-  if (user.email) {
+  if (!hasProfile && user.email) {
     sendWelcomeEmail(user.email).catch((e) =>
       console.error("[auth/callback] welcome email failed:", e),
     );
   }
 
-  return NextResponse.redirect(`${origin}/onboarding/business`);
+  return NextResponse.redirect(`${origin}${postAuthRedirect(hasProfile)}`);
 }

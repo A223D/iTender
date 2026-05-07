@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
+import { upsertBusinessUser, postAuthRedirect } from "@/lib/user-auth";
 
 type Step = "method" | "otp";
 
@@ -129,30 +130,14 @@ export default function LoginPage() {
 
     const user = data.user;
 
-    // Mirror the upsert that OAuth does in /auth/callback
-    await supabase.from("users").upsert(
-      {
-        id: user.id,
-        role: "business",
-        name: user.user_metadata?.full_name ?? user.email?.split("@")[0] ?? "",
-        email: user.email ?? "",
-      },
-      { onConflict: "id" },
-    );
-
-    // Same routing logic as /auth/callback
-    const { data: profile } = await supabase
-      .from("business_profiles")
-      .select("user_id")
-      .eq("user_id", user.id)
-      .single();
+    const { hasProfile } = await upsertBusinessUser(supabase, user);
 
     // New user — fire welcome email via server route (keeps API key server-side)
-    if (!profile) {
+    if (!hasProfile) {
       fetch("/api/send-welcome", { method: "POST" }).catch(() => {});
     }
 
-    router.push(profile ? "/dashboard" : "/onboarding/business");
+    router.push(postAuthRedirect(hasProfile));
   }
 
   // ── Resend ────────────────────────────────────────────────────────────────
