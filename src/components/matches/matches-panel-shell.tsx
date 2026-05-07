@@ -47,12 +47,10 @@ export function MatchesPanelShell({
   const [groups, setGroups] = useState(initialGroups);
   const supabase = useMemo(() => createClient(), []);
 
-  // Keep ref current so Realtime callback sees latest pathname without re-subscribing
   useEffect(() => {
     pathnameRef.current = pathname;
   }, [pathname]);
 
-  // Zero out unread count when navigating into a chat
   useEffect(() => {
     const matchId = pathname.startsWith("/matches/") ? pathname.slice("/matches/".length) : null;
     if (!matchId) return;
@@ -66,7 +64,6 @@ export function MatchesPanelShell({
     );
   }, [pathname]);
 
-  // Realtime subscription for live last-message + unread updates
   useEffect(() => {
     const channel = supabase
       .channel("sidebar-messages")
@@ -78,7 +75,6 @@ export function MatchesPanelShell({
           const isActiveChat = pathnameRef.current === `/matches/${msg.match_id}`;
 
           setGroups((prev) => {
-            // Check if this message belongs to any of our matches
             const inOurMatches = prev.some((g) => g.matches.some((m) => m.id === msg.match_id));
             if (!inOurMatches) return prev;
 
@@ -117,40 +113,49 @@ export function MatchesPanelShell({
   const isInChat = pathname !== "/matches";
 
   return (
-    <div className="flex h-screen bg-paper">
-      {/* ── Left panel: conversation list ──────────────────────────────── */}
+    <div className="flex h-screen bg-white">
+      {/* ── Left panel: dark conversation list ─────────────────────────── */}
       <div
-        className={`flex flex-col border-r border-black/[0.08] bg-white ${
+        className={`relative flex flex-col overflow-hidden ${
           isInChat ? "hidden lg:flex lg:w-72 lg:shrink-0" : "w-full lg:w-72 lg:shrink-0"
         }`}
+        style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)" }}
       >
-        {/* Sidebar header */}
-        <header className="flex shrink-0 items-center justify-between border-b border-black/[0.08] px-4 py-3.5">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-1 text-sm text-ink/50 transition hover:text-ink"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 11L5 7l4-4" />
-            </svg>
-            Dashboard
-          </Link>
-          <div className="flex items-center gap-2">
-            <h1 className="font-display text-base font-semibold text-ink">Messages</h1>
-            <UnreadBadge count={totalUnread} />
-          </div>
-        </header>
+        {/* Ambient blobs */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -left-16 -top-8 h-[240px] w-[240px] rounded-full bg-violet/[0.12] blur-[70px]" />
+          <div className="absolute bottom-1/3 right-0 h-[180px] w-[180px] rounded-full bg-coral/[0.09] blur-[60px]" />
+        </div>
 
-        {/* Scrollable list */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="px-3 pb-6 pt-3">
-            <MatchesList groups={groups} />
+        <div className="relative z-10 flex h-full flex-col">
+          {/* Header */}
+          <header className="flex shrink-0 items-center justify-between border-b border-white/[0.08] px-4 py-3.5">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-1 text-sm text-white/45 transition hover:text-white/80"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 11L5 7l4-4" />
+              </svg>
+              Dashboard
+            </Link>
+            <div className="flex items-center gap-2">
+              <h1 className="font-display text-base font-semibold text-white">Messages</h1>
+              <UnreadBadge count={totalUnread} />
+            </div>
+          </header>
+
+          {/* Scrollable list */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="px-3 pb-6 pt-3">
+              <MatchesList groups={groups} />
+            </div>
           </div>
         </div>
       </div>
 
       {/* ── Right panel: chat or empty state ───────────────────────────── */}
-      <div className={`flex flex-1 flex-col ${isInChat ? "flex" : "hidden lg:flex"}`}>
+      <div className={`flex flex-1 flex-col bg-[#F7F6FF] ${isInChat ? "flex" : "hidden lg:flex"}`}>
         {children}
       </div>
     </div>

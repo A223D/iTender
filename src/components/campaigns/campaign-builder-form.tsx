@@ -20,7 +20,18 @@ type FormData = {
   deadline: string;
 };
 
-const STEP_TITLES = ["Campaign basics", "Description & materials", "Compensation & timing"];
+const CAMPAIGN_STEPS = [
+  { label: "Campaign basics", sub: "Title & content types" },
+  { label: "Brief & materials", sub: "Description & uploads" },
+  { label: "Compensation", sub: "Budget, timing & launch" },
+];
+
+const STEP_HEADINGS = [
+  <>Campaign <em className="text-coral">basics</em>.</>,
+  <>Brief & <em className="text-coral">materials</em>.</>,
+  <>Compensation & <em className="text-coral">launch</em>.</>,
+];
+
 const STEP_SUBTITLES = [
   "Give your campaign a title and tell us what content you need.",
   "Describe what creators should make and share any reference materials.",
@@ -213,116 +224,293 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
     }
   }
 
+  const isLastStep = step === 2;
+  const canPublish = coupon.status === "valid" && coupon.discount === 100;
+
   return (
-    <div className="mx-auto flex min-h-screen max-w-xl flex-col px-4 py-12 sm:px-6">
-      {/* Header */}
-      <div className="mb-10">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-sm font-bold text-white shadow-glow">
-          S
-        </div>
-        <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight text-ink">
-          {STEP_TITLES[step]}
-        </h1>
-        <p className="mt-2 text-sm text-ink/55">{STEP_SUBTITLES[step]}</p>
-        <div className="mt-6 flex items-center gap-2">
-          <div className="h-1.5 w-8 rounded-full bg-moss" />
-          <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 1 ? "bg-moss" : "bg-black/10"}`} />
-          <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 2 ? "bg-moss" : "bg-black/10"}`} />
-        </div>
-      </div>
+    <div className="flex min-h-screen w-full flex-col md:flex-row">
+      <CampaignPanel currentStep={step} campaignTitle={form.title} />
 
-      {/* Step content */}
-      {step === 0 ? (
-        <Step1Fields
-          title={form.title}
-          selectedContentTypes={selectedContentTypes}
-          onTitleChange={(v) => setField("title", v)}
-          onTitleKeyDown={(e) => { if (e.key === "Enter") handleNext(); }}
-          onToggleContentType={toggleContentType}
-        />
-      ) : null}
-
-      {step === 1 ? (
-        <Step2Fields
-          description={form.description}
-          imagePreview={imagePreview}
-          docFile={docFile}
-          onDescriptionChange={(v) => setField("description", v)}
-          onImageChange={handleImageChange}
-          onDocChange={handleDocChange}
-          onRemoveDoc={() => setDocFile(null)}
-        />
-      ) : null}
-
-      {step === 2 ? (
-        <Step3Fields
-          compensationType={form.compensationType}
-          compensationDetails={form.compensationDetails}
-          creatorsNeeded={form.creatorsNeeded}
-          deadline={form.deadline}
-          couponInput={couponInput}
-          coupon={coupon}
-          setField={setField}
-          onCouponInputChange={(v) => {
-            setCouponInput(v);
-            if (coupon.status !== "idle") setCoupon({ status: "idle" });
-          }}
-          onApplyCoupon={handleApplyCoupon}
-          onCreatorsNeededKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
-        />
-      ) : null}
-
-      {/* Error */}
-      {error ? (
-        <p className="mt-4 rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3 text-sm text-coral">
-          {error}
-        </p>
-      ) : null}
-
-      {/* Navigation */}
-      <div className="mt-8 flex items-center gap-3">
-        {step > 0 ? (
-          <button
-            type="button"
-            onClick={() => { setError(null); setStep((s) => s - 1); }}
-            className="rounded-2xl border border-black/10 px-5 py-3 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
-          >
-            Back
-          </button>
-        ) : null}
-
-        {step < 2 ? (
-          <button
-            type="button"
-            onClick={handleNext}
-            className="flex-1 rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98]"
-          >
-            Continue →
-          </button>
-        ) : coupon.status === "valid" && coupon.discount === 100 ? (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={saving}
-            className="flex-1 rounded-2xl bg-moss px-5 py-3 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
-          >
-            {saving ? "Publishing…" : "Publish Campaign"}
-          </button>
-        ) : (
-          <div className="flex flex-1 flex-col items-stretch gap-1.5">
+      <section className="relative flex flex-1 flex-col bg-white">
+        {/* Step counter header */}
+        <div className="flex h-14 items-center justify-between border-b border-black/[0.08] px-5 sm:px-9">
+          <div className="font-mono text-[11px] font-semibold uppercase text-black/40">
+            Step{" "}
+            <span className="text-[#07070E]">{String(step + 1).padStart(2, "0")}</span>
+            <span className="text-black/35"> / {String(CAMPAIGN_STEPS.length).padStart(2, "0")}</span>
+          </div>
+          <div className="flex items-center gap-4">
             <button
               type="button"
-              disabled
-              className="flex-1 cursor-not-allowed rounded-2xl bg-black/10 px-5 py-3 text-sm font-bold text-ink/30"
+              onClick={() => router.push("/dashboard")}
+              className="text-xs font-semibold text-black/55 transition hover:text-[#07070E] sm:text-sm"
             >
-              Complete Payment
+              Save & exit
             </button>
-            <p className="text-center text-xs text-ink/40">
-              Payment integration coming soon — apply a 100% coupon to publish now
+            <div className="hidden h-4 w-px bg-black/10 sm:block" />
+            <a
+              href="mailto:support@itender.com?subject=Campaign%20help"
+              className="hidden text-sm font-semibold text-black/55 transition hover:text-[#07070E] sm:inline"
+            >
+              Need help?
+            </a>
+          </div>
+        </div>
+
+        {/* Step content */}
+        <div className="relative flex-1 overflow-auto">
+          <div
+            key={step}
+            className="scout-onboarding-step-in mx-auto max-w-[620px] px-5 py-10 sm:px-10 md:mx-0 lg:px-12 lg:py-12"
+          >
+            <h1 className="font-display text-3xl font-bold leading-tight text-[#07070E] sm:text-[34px]">
+              {STEP_HEADINGS[step]}
+            </h1>
+            <p className="mt-3 max-w-[460px] text-[15px] leading-7 text-black/55">
+              {STEP_SUBTITLES[step]}
             </p>
+
+            <div className="mt-8">
+              {step === 0 ? (
+                <Step1Fields
+                  title={form.title}
+                  selectedContentTypes={selectedContentTypes}
+                  onTitleChange={(v) => setField("title", v)}
+                  onTitleKeyDown={(e) => { if (e.key === "Enter") handleNext(); }}
+                  onToggleContentType={toggleContentType}
+                />
+              ) : null}
+
+              {step === 1 ? (
+                <Step2Fields
+                  description={form.description}
+                  imagePreview={imagePreview}
+                  docFile={docFile}
+                  onDescriptionChange={(v) => setField("description", v)}
+                  onImageChange={handleImageChange}
+                  onDocChange={handleDocChange}
+                  onRemoveDoc={() => setDocFile(null)}
+                />
+              ) : null}
+
+              {step === 2 ? (
+                <Step3Fields
+                  compensationType={form.compensationType}
+                  compensationDetails={form.compensationDetails}
+                  creatorsNeeded={form.creatorsNeeded}
+                  deadline={form.deadline}
+                  couponInput={couponInput}
+                  coupon={coupon}
+                  setField={setField}
+                  onCouponInputChange={(v) => {
+                    setCouponInput(v);
+                    if (coupon.status !== "idle") setCoupon({ status: "idle" });
+                  }}
+                  onApplyCoupon={handleApplyCoupon}
+                  onCreatorsNeededKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
+                />
+              ) : null}
+            </div>
+
+            {error ? (
+              <p className="mt-5 rounded-xl border border-coral/25 bg-coral/10 px-4 py-3 text-sm font-medium text-coral">
+                {error}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Footer navigation */}
+        <div className="flex items-center gap-3 border-t border-black/10 bg-white px-5 py-5 sm:px-10 lg:px-12">
+          {step > 0 ? (
+            <button
+              type="button"
+              onClick={() => { setError(null); setStep((s) => s - 1); }}
+              className="rounded-xl border border-black/10 bg-white px-5 py-3 text-sm font-semibold transition hover:border-black/30 hover:bg-black/[0.03] active:scale-[0.98]"
+            >
+              Back
+            </button>
+          ) : null}
+          <div className="flex-1" />
+
+          {!isLastStep ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              className="min-h-12 min-w-[160px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98]"
+            >
+              Continue -&gt;
+            </button>
+          ) : canPublish ? (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={saving}
+              className="min-h-12 min-w-[160px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
+            >
+              {saving ? "Publishing…" : "Publish Campaign ->"}
+            </button>
+          ) : (
+            <div className="flex flex-col items-end gap-1.5">
+              <button
+                type="button"
+                disabled
+                className="min-h-12 cursor-not-allowed rounded-xl bg-black/10 px-6 py-3 text-sm font-bold text-ink/30"
+              >
+                Complete Payment
+              </button>
+              <p className="text-right text-xs text-ink/40">
+                Apply a 100% coupon to publish now
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+const PANEL_STEPS = [
+  { label: "Campaign basics", sub: "Title & content types" },
+  { label: "Brief & materials", sub: "Description & uploads" },
+  { label: "Compensation", sub: "Budget, timing & launch" },
+];
+
+function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; campaignTitle: string }) {
+  return (
+    <aside
+      className="relative flex min-h-[360px] overflow-hidden px-6 py-8 text-white sm:px-10 md:min-h-screen md:w-[340px] md:shrink-0 md:flex-col md:px-8 md:py-10 lg:w-[420px] lg:px-11"
+      style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)" }}
+    >
+      {/* Ambient gradient blobs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-24 top-1/4 h-[380px] w-[380px] rounded-full bg-violet/[0.14] blur-[100px]" />
+        <div className="absolute right-0 top-1/2 h-[300px] w-[300px] rounded-full bg-coral/[0.10] blur-[90px]" />
+        <div className="absolute bottom-0 left-1/3 h-[240px] w-[240px] rounded-full bg-teal/[0.07] blur-[80px]" />
+      </div>
+
+      <div className="relative z-10 flex w-full flex-col">
+        {/* Logo */}
+        <div>
+          <PanelLogo />
+          <div className="ml-[38px] mt-1 font-mono text-[11px] font-medium uppercase text-white/35">
+            Campaign Creator
+          </div>
+        </div>
+
+        {/* Heading */}
+        <div className="mt-9 lg:mt-16">
+          <div className="mb-3 font-mono text-[11px] font-semibold uppercase text-coral">
+            -&gt; New campaign
+          </div>
+          <h2 className="font-display text-[36px] font-bold leading-none text-white">
+            Launch a campaign
+            <br />
+            creators <em className="text-coral">want</em>
+            <br />
+            to join.
+          </h2>
+          <p className="mt-5 max-w-[300px] text-sm leading-6 text-white/65">
+            Set your brief once. iTender matches you with creators in your city who are ready to apply.
+          </p>
+        </div>
+
+        {/* Step list */}
+        <ol className="mt-8 grid gap-3 p-0 lg:flex lg:flex-col lg:gap-1">
+          {PANEL_STEPS.map((item, index) => {
+            const active = index === currentStep;
+            const done = index < currentStep;
+            return (
+              <li key={item.label} className="flex items-start gap-3">
+                <div className="flex flex-col items-center">
+                  <span
+                    className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition ${
+                      done
+                        ? "bg-coral text-white"
+                        : active
+                          ? "bg-white text-[#07070E]"
+                          : "border border-white/15 text-white/35"
+                    }`}
+                  >
+                    {done ? <PanelCheckIcon /> : index + 1}
+                  </span>
+                  {index < PANEL_STEPS.length - 1 ? (
+                    <span
+                      className={`mt-1 hidden h-6 w-px lg:block ${done ? "bg-coral" : "bg-white/10"}`}
+                    />
+                  ) : null}
+                </div>
+                <div className="pt-1">
+                  <div className={`text-sm font-semibold ${active || done ? "text-white" : "text-white/35"}`}>
+                    {item.label}
+                  </div>
+                  <div className="mt-0.5 text-xs text-white/35">{item.sub}</div>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+
+        <div className="hidden flex-1 lg:block" />
+
+        {/* Live preview or stats */}
+        {campaignTitle.trim() ? (
+          <div className="mt-8 hidden rounded-[14px] border border-white/10 bg-white/[0.04] p-4 backdrop-blur sm:block">
+            <div className="mb-1.5 font-mono text-[10px] font-semibold uppercase text-white/40">
+              Campaign preview
+            </div>
+            <div className="text-sm font-semibold leading-snug text-white">
+              {campaignTitle.trim()}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-8 hidden flex-wrap gap-2 sm:flex">
+            {[["12k+", "creators"], ["140+", "cities"], ["48hr", "avg match"]].map(([value, label]) => (
+              <div
+                key={label}
+                className="inline-flex items-baseline gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2"
+              >
+                <span className="font-mono text-[13px] font-semibold text-white">{value}</span>
+                <span className="text-[11px] text-white/65">{label}</span>
+              </div>
+            ))}
           </div>
         )}
       </div>
+    </aside>
+  );
+}
+
+function PanelLogo() {
+  return (
+    <div className="inline-flex items-center gap-2.5">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" />
+          <path
+            d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
+            fill="#FF4566"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+      <span className="font-display text-2xl italic leading-none text-white">iTender</span>
     </div>
+  );
+}
+
+function PanelCheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path
+        d="M2.5 6L4.75 8.25L9.5 3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

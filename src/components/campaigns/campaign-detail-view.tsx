@@ -407,58 +407,32 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
         </div>
       ) : null}
 
-      {/* ── Sticky header ─────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30 border-b border-black/[0.08] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex h-[57px] max-w-7xl items-center gap-3 px-4 lg:px-8">
-          <Link
-            href="/dashboard"
-            className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-ink/50 transition hover:text-ink"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10 12L6 8l4-4" />
-            </svg>
-            <span>All Campaigns</span>
-          </Link>
-
-          <div className="hidden h-5 w-px bg-black/10 lg:block" />
-          <div className="hidden min-w-0 flex-1 items-center gap-2.5 lg:flex">
-            <h1 className="truncate font-display text-sm font-semibold text-ink">{campaign.title}</h1>
-            <StatusBadge status={campaign.status} />
-          </div>
-
-          <div className="flex-1 lg:hidden" />
-
-          {!editing ? (
-            <div className="flex shrink-0 items-center gap-2">
-              <button
-                type="button"
-                onClick={startEditing}
-                className="rounded-xl border border-black/10 px-3 py-1.5 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
+      {editing ? (
+        /* ── EDIT MODE ────────────────────────────────────────────────────────── */
+        <>
+          <header className="sticky top-0 z-30 border-b border-black/[0.08] bg-white/95 backdrop-blur">
+            <div className="mx-auto flex h-[57px] max-w-7xl items-center gap-3 px-4 lg:px-8">
+              <Link
+                href="/dashboard"
+                className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-ink/50 transition hover:text-ink"
               >
-                Edit
-              </button>
-              {campaign.status !== "closed" ? (
-                <button
-                  type="button"
-                  onClick={() => setClosing(true)}
-                  className="rounded-xl border border-coral/20 px-3 py-1.5 text-sm font-semibold text-coral transition hover:bg-coral/[0.05]"
-                >
-                  Close
-                </button>
-              ) : null}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10 12L6 8l4-4" />
+                </svg>
+                <span>All Campaigns</span>
+              </Link>
+              <div className="hidden h-5 w-px bg-black/10 lg:block" />
+              <div className="hidden min-w-0 flex-1 items-center gap-2.5 lg:flex">
+                <h1 className="truncate font-display text-sm font-semibold text-ink">{campaign.title}</h1>
+                <StatusBadge status={campaign.status} />
+              </div>
+              <div className="flex-1 lg:hidden" />
             </div>
-          ) : null}
-        </div>
-      </header>
+          </header>
 
-      {/* ── Page body ─────────────────────────────────────────────────────────── */}
-      <div className={editing ? "mx-auto max-w-2xl px-4 pb-16 sm:px-6" : "mx-auto max-w-7xl px-4 py-6 lg:px-8"}>
-
-        {editing ? (
-          /* ── EDIT MODE ──────────────────────────────────────────────────────── */
-          <div>
+          <div className="mx-auto max-w-2xl px-4 pb-16 sm:px-6">
             {/* Sticky edit action bar */}
-            <div className="sticky top-[57px] z-20 -mx-4 mb-6 flex items-center justify-between bg-paper/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+            <div className="sticky top-[57px] z-20 -mx-4 mb-6 flex items-center justify-between bg-[#F7F6FF]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
               <h2 className="font-display text-xl font-semibold text-ink">Edit Campaign</h2>
               <div className="flex items-center gap-2">
                 <button
@@ -473,7 +447,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                   type="button"
                   onClick={handleSave}
                   disabled={saving}
-                  className="rounded-xl bg-moss px-4 py-2 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-60"
+                  className="rounded-xl bg-gradient-to-r from-coral to-violet px-4 py-2 text-sm font-bold text-white shadow-glow transition active:scale-[0.98] disabled:opacity-60"
                 >
                   {saving ? "Saving…" : "Save Changes"}
                 </button>
@@ -484,7 +458,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
               {/* Title */}
               <label className="block">
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-ink">Campaign title <span className="text-coral">*</span></span>
+                  <span className="text-[11px] font-bold uppercase tracking-wide text-[#07070E]">Campaign title <span className="text-coral">*</span></span>
                   <span className={`text-xs font-medium ${editForm.title.length > 80 ? "text-coral" : "text-ink/40"}`}>
                     {editForm.title.length} / 80
                   </span>
@@ -493,13 +467,13 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                   type="text"
                   value={editForm.title}
                   onChange={(e) => setField("title", e.target.value)}
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]"
                 />
               </label>
 
               {/* Content types */}
               <div>
-                <p className="mb-3 text-sm font-semibold text-ink">Content types <span className="text-coral">*</span></p>
+                <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">Content types <span className="text-coral">*</span></p>
                 <div className="flex flex-wrap gap-2">
                   {CONTENT_TYPES.map((type) => {
                     const selected = selectedContentTypes.has(type);
@@ -509,7 +483,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                         type="button"
                         onClick={() => toggleContentType(type)}
                         className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                          selected ? "border-moss bg-moss text-white" : "border-black/10 bg-white text-ink hover:border-moss/40"
+                          selected ? "border-[#07070E] bg-[#07070E] text-coral" : "border-black/10 bg-white text-ink hover:border-black/30"
                         }`}
                       >
                         {type}
@@ -522,7 +496,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
               {/* Description */}
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-ink">Description <span className="text-coral">*</span></span>
+                  <span className="text-[11px] font-bold uppercase tracking-wide text-[#07070E]">Description <span className="text-coral">*</span></span>
                   <span className={`text-xs font-medium ${editForm.description.length > 1000 ? "text-coral" : "text-ink/40"}`}>
                     {editForm.description.length} / 1000
                   </span>
@@ -531,14 +505,14 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                   value={editForm.description}
                   onChange={(e) => setField("description", e.target.value)}
                   rows={6}
-                  className="w-full resize-none rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm leading-6 text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                  className="w-full resize-none rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm leading-6 text-ink outline-none transition placeholder:text-ink/35 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]"
                 />
               </div>
 
               {/* Moodboard image */}
               <div>
-                <p className="mb-2 text-sm font-semibold text-ink">
-                  Moodboard image <span className="font-normal text-ink/35">· Optional</span>
+                <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+                  Moodboard image <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
                 </p>
                 <div className="flex items-center gap-4">
                   {editImageSrc ? (
@@ -550,7 +524,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                     <button
                       type="button"
                       onClick={() => imageInputRef.current?.click()}
-                      className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-black/15 bg-white transition hover:border-moss/40"
+                      className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-black/15 bg-white transition hover:border-coral/40"
                     >
                       <span className="text-2xl">🖼️</span>
                     </button>
@@ -580,8 +554,8 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
 
               {/* Reference doc */}
               <div>
-                <p className="mb-2 text-sm font-semibold text-ink">
-                  Reference document <span className="font-normal text-ink/35">· Optional</span>
+                <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+                  Reference document <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
                 </p>
                 <div className="flex items-center gap-3">
                   <button
@@ -607,7 +581,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
 
               {/* Compensation type */}
               <div>
-                <p className="mb-3 text-sm font-semibold text-ink">Compensation type <span className="text-coral">*</span></p>
+                <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">Compensation type <span className="text-coral">*</span></p>
                 <div className="space-y-2">
                   {COMPENSATION_TYPES.map((ct) => {
                     const selected = editForm.compensationType === ct.value;
@@ -617,10 +591,10 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                         type="button"
                         onClick={() => setField("compensationType", ct.value)}
                         className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
-                          selected ? "border-moss bg-moss/[0.04]" : "border-black/10 bg-white hover:border-black/20"
+                          selected ? "border-coral/40 bg-coral/[0.05]" : "border-black/10 bg-white hover:border-black/20"
                         }`}
                       >
-                        <div className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${selected ? "border-moss bg-moss" : "border-black/25"}`} />
+                        <div className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${selected ? "border-coral bg-coral" : "border-black/25"}`} />
                         <div>
                           <p className="text-sm font-semibold text-ink">{ct.label}</p>
                           <p className="text-xs text-ink/45">{ct.description}</p>
@@ -633,40 +607,40 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
 
               {/* Compensation details */}
               <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-ink">
-                  Compensation details <span className="font-normal text-ink/35">· Optional</span>
+                <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+                  Compensation details <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
                 </span>
                 <input
                   type="text"
                   value={editForm.compensationDetails}
                   onChange={(e) => setField("compensationDetails", e.target.value)}
                   placeholder="e.g. Free dinner for 2 + $100 cash"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]"
                 />
               </label>
 
               {/* Creators needed */}
               <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-ink">Creators needed <span className="text-coral">*</span></span>
+                <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">Creators needed <span className="text-coral">*</span></span>
                 <input
                   type="number"
                   min={1}
                   value={editForm.creatorsNeeded}
                   onChange={(e) => setField("creatorsNeeded", e.target.value)}
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]"
                 />
               </label>
 
               {/* Deadline */}
               <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-ink">Application deadline <span className="text-coral">*</span></span>
+                <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">Application deadline <span className="text-coral">*</span></span>
                 <input
                   type="date"
                   value={editForm.deadline}
                   min={addDays(1)}
                   max={addDays(180)}
                   onChange={(e) => setField("deadline", e.target.value)}
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]"
                 />
               </label>
 
@@ -675,118 +649,231 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
               ) : null}
             </div>
           </div>
+        </>
 
-        ) : (
-          /* ── VIEW MODE ──────────────────────────────────────────────────────── */
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-0">
+      ) : (
+        /* ── VIEW MODE ────────────────────────────────────────────────────────── */
+        <>
+          {/* ── Dark hero band ────────────────────────────────────────────────── */}
+          <div
+            className="relative overflow-hidden"
+            style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)" }}
+          >
+            {/* Ambient blobs */}
+            <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-violet/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-coral/15 blur-3xl" />
+            <div className="pointer-events-none absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 rounded-full bg-teal/10 blur-3xl" />
 
-            {/* ── Left panel — campaign info ─────────────────────────────── */}
-            <div className="min-w-0 flex-1 lg:pr-8">
+            {/* Moodboard as cinematic blurred background */}
+            {currentImageUrl ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={currentImageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full scale-110 object-cover opacity-[0.18] blur-xl"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07070E]/95 via-[#07070E]/60 to-[#07070E]/30" />
+              </>
+            ) : null}
 
-              {/* Mobile title + badges */}
-              <div className="mb-5 lg:hidden">
-                <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <StatusBadge status={campaign.status} />
-                  {(campaign.content_types ?? []).map((t) => (
-                    <span key={t} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs font-medium text-ink/55">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <h1 className="font-display text-2xl font-semibold text-ink lg:text-3xl">{campaign.title}</h1>
-              </div>
-
-              {/* Moodboard image */}
-              {currentImageUrl ? (
+            {/* Navigation row */}
+            <div className="relative mx-auto flex max-w-7xl items-center justify-between px-4 pt-5 lg:px-8">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-white/45 transition hover:text-white"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10 12L6 8l4-4" />
+                </svg>
+                All Campaigns
+              </Link>
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setLightboxOpen(true)}
-                  className="group relative mb-5 block w-full overflow-hidden rounded-2xl border border-black/[0.08]"
-                  aria-label="View full image"
+                  onClick={startEditing}
+                  className="rounded-xl border border-white/15 bg-white/[0.07] px-3 py-1.5 text-sm font-semibold text-white/70 transition hover:border-white/30 hover:text-white"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={currentImageUrl} alt="Campaign moodboard" className="h-56 w-full object-cover transition group-hover:scale-[1.01] lg:h-64" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/0 shadow-sm opacity-0 transition group-hover:bg-white/90 group-hover:opacity-100">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink">
+                  Edit
+                </button>
+                {campaign.status !== "closed" ? (
+                  <button
+                    type="button"
+                    onClick={() => setClosing(true)}
+                    className="rounded-xl border border-coral/30 px-3 py-1.5 text-sm font-semibold text-coral transition hover:bg-coral/[0.08]"
+                  >
+                    Close
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
+            {/* Hero content */}
+            <div className="relative mx-auto max-w-7xl px-4 pb-12 pt-8 lg:px-8">
+              <div className="flex items-start gap-6">
+                <div className="min-w-0 flex-1">
+                  {/* Status + content type chips */}
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                      campaign.status === "live"
+                        ? "bg-teal/20 text-teal"
+                        : campaign.status === "closed"
+                        ? "bg-white/10 text-white/50"
+                        : "bg-coral/20 text-coral"
+                    }`}>
+                      {campaign.status === "live" ? (
+                        <span className="h-1.5 w-1.5 rounded-full bg-teal" />
+                      ) : null}
+                      {campaign.status === "live" ? "Live" : campaign.status === "closed" ? "Closed" : campaign.status}
+                    </span>
+                    {(campaign.content_types ?? []).map((t) => (
+                      <span key={t} className="rounded-full border border-white/15 bg-white/[0.07] px-2.5 py-0.5 text-xs font-medium text-white/55">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Title */}
+                  <h1 className="font-display text-3xl font-bold text-white lg:text-4xl">{campaign.title}</h1>
+
+                  {campaign.compensation_details ? (
+                    <p className="mt-2 max-w-xl text-sm text-white/40">{campaign.compensation_details}</p>
+                  ) : null}
+                </div>
+
+                {/* Moodboard thumbnail (desktop only — clickable to lightbox) */}
+                {currentImageUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => setLightboxOpen(true)}
+                    className="group relative hidden h-28 w-28 shrink-0 overflow-hidden rounded-2xl border border-white/20 shadow-2xl transition hover:border-white/40 lg:block"
+                    aria-label="View full moodboard"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={currentImageUrl} alt="Moodboard" className="h-full w-full object-cover transition group-hover:scale-105" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/40">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-0 transition group-hover:opacity-100">
                         <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
                       </svg>
                     </div>
-                  </div>
-                </button>
-              ) : null}
-
-              {/* Stats bar */}
-              <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                <div className="flex flex-wrap items-center gap-y-3 divide-x divide-black/[0.06]">
-                  <div className="pr-4">
-                    <span className="text-sm font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</span>
-                  </div>
-                  <div className="px-4">
-                    <span className="text-sm font-semibold text-ink">{campaign.creators_needed} needed</span>
-                  </div>
-                  <div className="px-4">
-                    <span className={`text-sm font-semibold ${isExpired || isExpiringSoon ? "text-coral" : "text-ink"}`}>
-                      {isExpired ? "Expired" : `${left}d left`}
-                    </span>
-                    <span className="ml-2 text-xs text-ink/40">
-                      {new Date(campaign.deadline).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" })}
-                    </span>
-                  </div>
-                  <div className="pl-4">
-                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
-                      {(campaign.interested_count ?? 0) > 0 ? (
-                        <span className="h-2 w-2 rounded-full bg-coral" />
-                      ) : null}
-                      {campaign.interested_count ?? 0} interested
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/40">Description</p>
-                <p className="whitespace-pre-wrap text-sm leading-6 text-ink/80">{campaign.description}</p>
-              </div>
-
-              {/* Compensation details */}
-              {campaign.compensation_details ? (
-                <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/40">Compensation details</p>
-                  <p className="text-sm text-ink/80">{campaign.compensation_details}</p>
-                </div>
-              ) : null}
-
-              {/* Reference doc */}
-              {campaign.reference_doc_url ? (
-                <div className="mb-5 rounded-2xl border border-black/[0.08] bg-white px-5 py-4">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/40">Reference document</p>
-                  <a
-                    href={campaign.reference_doc_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-moss underline underline-offset-2 transition hover:text-moss/70"
-                  >
-                    📄 {campaign.reference_doc_name ?? "View document"}
-                  </a>
-                </div>
-              ) : null}
-
-              {/* Mobile: pipeline below info */}
-              <div className="mt-8 lg:hidden">
-                <CreatorPipeline {...pipelineProps} sticky={false} />
+                  </button>
+                ) : null}
               </div>
             </div>
-
-            {/* ── Right panel — pipeline (desktop sticky) ────────────────── */}
-            <div className="hidden w-full shrink-0 lg:sticky lg:top-[57px] lg:block lg:max-h-[calc(100vh-57px)] lg:w-[420px] lg:overflow-y-auto lg:border-l lg:border-black/[0.08] lg:pl-8">
-              <CreatorPipeline {...pipelineProps} sticky={true} />
-            </div>
-
           </div>
-        )}
-      </div>
+
+          {/* ── Body ──────────────────────────────────────────────────────────── */}
+          <div className="bg-[#F7F6FF] pb-16">
+            <div className="mx-auto max-w-7xl px-4 lg:px-8">
+
+              {/* Stat cards */}
+              <div className="grid grid-cols-2 gap-3 py-6 lg:grid-cols-4">
+                <div className="rounded-2xl border border-coral/15 bg-gradient-to-br from-coral/[0.08] to-white p-4 shadow-sm">
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-coral/70">Compensation</p>
+                  <p className="mt-1 font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</p>
+                </div>
+                <div className="rounded-2xl border border-violet/15 bg-gradient-to-br from-violet/[0.06] to-white p-4 shadow-sm">
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-violet/70">Spots</p>
+                  <p className="mt-1 font-semibold text-ink">{campaign.creators_needed} needed</p>
+                </div>
+                <div className={`rounded-2xl border p-4 shadow-sm ${
+                  isExpired || isExpiringSoon
+                    ? "border-coral/20 bg-gradient-to-br from-coral/[0.08] to-white"
+                    : "border-black/[0.07] bg-white"
+                }`}>
+                  <p className={`text-[10px] font-bold uppercase tracking-wide ${isExpired || isExpiringSoon ? "text-coral/70" : "text-ink/40"}`}>
+                    Deadline
+                  </p>
+                  <p className={`mt-1 font-semibold ${isExpired || isExpiringSoon ? "text-coral" : "text-ink"}`}>
+                    {isExpired ? "Expired" : `${left}d left`}
+                  </p>
+                  <p className="text-xs text-ink/40">
+                    {new Date(campaign.deadline).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" })}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-black/[0.07] bg-white p-4 shadow-sm">
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-ink/40">Interested</p>
+                  <div className="mt-1 flex items-center gap-1.5">
+                    {(campaign.interested_count ?? 0) > 0 ? (
+                      <span className="h-2 w-2 rounded-full bg-coral" />
+                    ) : null}
+                    <p className="font-semibold text-ink">{campaign.interested_count ?? 0} creators</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content + pipeline */}
+              <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+
+                {/* Left: info cards */}
+                <div className="min-w-0 flex-1 space-y-4 lg:pb-16">
+
+                  {/* Mobile moodboard */}
+                  {currentImageUrl ? (
+                    <button
+                      type="button"
+                      onClick={() => setLightboxOpen(true)}
+                      className="group relative block w-full overflow-hidden rounded-2xl border border-black/[0.08] lg:hidden"
+                      aria-label="View full image"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={currentImageUrl} alt="Campaign moodboard" className="h-48 w-full object-cover transition group-hover:scale-[1.01]" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/0 opacity-0 transition group-hover:bg-white/90 group-hover:opacity-100">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink">
+                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </button>
+                  ) : null}
+
+                  {/* Description */}
+                  <div className="rounded-2xl border border-black/[0.07] bg-white px-5 py-4 shadow-sm">
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-ink/40">Description</p>
+                    <p className="whitespace-pre-wrap text-sm leading-6 text-ink/80">{campaign.description}</p>
+                  </div>
+
+                  {/* Compensation details */}
+                  {campaign.compensation_details ? (
+                    <div className="rounded-2xl border border-black/[0.07] bg-white px-5 py-4 shadow-sm">
+                      <p className="mb-1 text-[10px] font-bold uppercase tracking-wide text-ink/40">Compensation details</p>
+                      <p className="text-sm text-ink/80">{campaign.compensation_details}</p>
+                    </div>
+                  ) : null}
+
+                  {/* Reference doc */}
+                  {campaign.reference_doc_url ? (
+                    <div className="rounded-2xl border border-black/[0.07] bg-white px-5 py-4 shadow-sm">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-ink/40">Reference document</p>
+                      <a
+                        href={campaign.reference_doc_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm font-medium text-coral underline underline-offset-2 transition hover:text-coral/70"
+                      >
+                        📄 {campaign.reference_doc_name ?? "View document"}
+                      </a>
+                    </div>
+                  ) : null}
+
+                  {/* Mobile: pipeline */}
+                  <div className="lg:hidden">
+                    <CreatorPipeline {...pipelineProps} sticky={false} />
+                  </div>
+                </div>
+
+                {/* Right: pipeline (desktop sticky) */}
+                <div className="hidden w-full shrink-0 lg:sticky lg:top-6 lg:block lg:max-h-[calc(100vh-6rem)] lg:w-[420px] lg:overflow-y-auto">
+                  <CreatorPipeline {...pipelineProps} sticky={true} />
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

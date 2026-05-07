@@ -76,7 +76,7 @@ export function CampaignCard({ campaign }: { campaign: DashboardCampaign }) {
       {/* Clickable top section */}
       <Link href={`/campaigns/${campaign.id}`} className="block">
         {/* Hero */}
-        <div className="relative h-40 overflow-hidden bg-gradient-to-br from-moss/15 to-blush">
+        <div className="relative h-40 overflow-hidden bg-gradient-to-br from-coral/10 via-violet/5 to-teal/5">
           {heroUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={heroUrl} alt="" className="h-full w-full object-cover" />
@@ -101,7 +101,7 @@ export function CampaignCard({ campaign }: { campaign: DashboardCampaign }) {
         <div className="px-4 pb-0 pt-3.5">
           <h3 className="truncate font-bold text-ink">{campaign.title ?? "Untitled Campaign"}</h3>
           {(campaign.content_types as string[] | null)?.length ? (
-            <p className="mt-0.5 text-xs font-semibold text-moss">
+            <p className="mt-0.5 text-xs font-semibold text-coral">
               {(campaign.content_types as string[]).join(" · ")}
             </p>
           ) : null}

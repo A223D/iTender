@@ -2,6 +2,9 @@
 
 import { useRef } from "react";
 
+const inputClass =
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[#07070E] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
+
 export function Step2Fields({
   description,
   imagePreview,
@@ -23,13 +26,13 @@ export function Step2Fields({
   const docInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div>
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm font-semibold text-ink">
+          <span className="text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
             Description <span className="text-coral">*</span>
           </span>
-          <span className={`text-xs font-medium ${description.length > 1000 ? "text-coral" : "text-ink/40"}`}>
+          <span className={`text-xs font-medium ${description.length > 1000 ? "text-coral" : "text-black/40"}`}>
             {description.length} / 1000
           </span>
         </div>
@@ -38,18 +41,18 @@ export function Step2Fields({
           onChange={(e) => onDescriptionChange(e.target.value)}
           rows={7}
           placeholder={"What's the campaign about? What should creators highlight, and is there anything to avoid mentioning?\n\ne.g. Launching our spring collection — show how the pieces work for everyday wear. Casual tone. No competitor brands in frame."}
-          className="w-full resize-none rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm leading-6 text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+          className={`${inputClass} min-h-[180px] resize-none leading-7`}
         />
       </div>
 
       {/* Moodboard image */}
       <div>
-        <p className="mb-2 text-sm font-semibold text-ink">
-          Moodboard image <span className="font-normal text-ink/35">· Optional</span>
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+          Moodboard image <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
         </p>
         <div className="flex items-center gap-4">
           {imagePreview ? (
-            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-black/10">
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-black/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={imagePreview} alt="Moodboard preview" className="h-full w-full object-cover" />
             </div>
@@ -57,7 +60,7 @@ export function Step2Fields({
             <button
               type="button"
               onClick={() => imageInputRef.current?.click()}
-              className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-black/15 bg-white transition hover:border-moss/40"
+              className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-black/15 bg-white transition hover:border-coral/40"
             >
               <span className="text-2xl">🖼️</span>
             </button>
@@ -66,32 +69,26 @@ export function Step2Fields({
             <button
               type="button"
               onClick={() => imageInputRef.current?.click()}
-              className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
+              className="rounded-xl border border-black/10 px-4 py-2.5 text-sm font-semibold text-[#07070E] transition hover:border-black/30 hover:bg-black/[0.03] active:scale-[0.98]"
             >
               {imagePreview ? "Change image" : "Upload image"}
             </button>
-            <p className="mt-1.5 text-xs text-ink/40">JPG, PNG, WEBP</p>
+            <p className="mt-1.5 text-xs text-black/40">JPG, PNG, WEBP · max 5 MB</p>
           </div>
         </div>
-        <input
-          ref={imageInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={onImageChange}
-        />
+        <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={onImageChange} />
       </div>
 
       {/* Reference document */}
       <div>
-        <p className="mb-2 text-sm font-semibold text-ink">
-          Reference document <span className="font-normal text-ink/35">· Optional</span>
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+          Reference document <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
         </p>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => docInputRef.current?.click()}
-            className="rounded-xl border border-black/10 px-4 py-2 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03]"
+            className="rounded-xl border border-black/10 px-4 py-2.5 text-sm font-semibold text-[#07070E] transition hover:border-black/30 hover:bg-black/[0.03] active:scale-[0.98]"
           >
             {docFile ? docFile.name : "Upload document"}
           </button>
@@ -99,20 +96,14 @@ export function Step2Fields({
             <button
               type="button"
               onClick={onRemoveDoc}
-              className="text-xs text-ink/40 transition hover:text-coral"
+              className="text-xs text-black/40 transition hover:text-coral"
             >
               Remove
             </button>
           ) : null}
         </div>
-        <p className="mt-1.5 text-xs text-ink/40">PDF, DOCX, DOC</p>
-        <input
-          ref={docInputRef}
-          type="file"
-          accept=".pdf,.docx,.doc"
-          className="hidden"
-          onChange={onDocChange}
-        />
+        <p className="mt-1.5 text-xs text-black/40">PDF, DOCX, DOC · max 15 MB</p>
+        <input ref={docInputRef} type="file" accept=".pdf,.docx,.doc" className="hidden" onChange={onDocChange} />
       </div>
     </div>
   );

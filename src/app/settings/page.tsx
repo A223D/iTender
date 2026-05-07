@@ -33,7 +33,7 @@ export default async function SettingsPage() {
     : null;
 
   return (
-    <div className="flex h-screen bg-paper">
+    <div className="flex h-screen bg-white">
 
       {/* ── Sidebar (desktop only) ──────────────────────────────────── */}
       <BusinessSidebar activePath="/settings" totalUnread={totalUnread} profile={profile} />
@@ -51,8 +51,8 @@ export default async function SettingsPage() {
         />
 
         {/* Scrollable main */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="sticky top-0 z-10 border-b border-black/[0.08] bg-paper/95 px-6 py-4 backdrop-blur">
+        <main className="flex-1 overflow-y-auto bg-[#F7F6FF]">
+          <div className="sticky top-0 z-10 border-b border-black/[0.08] bg-[#F7F6FF]/95 px-6 py-4 backdrop-blur">
             <h1 className="font-display text-xl font-semibold text-ink">Settings</h1>
           </div>
 

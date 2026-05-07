@@ -37,7 +37,7 @@ export function CreatorPipeline({
       <div className="mb-4 flex items-center gap-3">
         <h2 className="font-display text-lg font-semibold text-ink">Creator Pipeline</h2>
         {creators.length > 0 ? (
-          <span className="rounded-full bg-moss/10 px-2.5 py-0.5 text-sm font-semibold text-moss">
+          <span className="rounded-full bg-coral/10 px-2.5 py-0.5 text-sm font-semibold text-coral">
             {filteredCreators.length}
             {filteredCreators.length !== creators.length ? ` / ${creators.length}` : ""}
           </span>
@@ -53,7 +53,7 @@ export function CreatorPipeline({
       ) : (
         <>
           {/* Sticky filter bar */}
-          <div className={`mb-4 flex flex-wrap gap-2 ${sticky ? "sticky top-0 z-10 bg-paper/95 pb-3 pt-1 backdrop-blur" : ""}`}>
+          <div className={`mb-4 flex flex-wrap gap-2 ${sticky ? "sticky top-0 z-10 bg-[#F7F6FF]/95 pb-3 pt-1 backdrop-blur" : ""}`}>
             {/* Sort toggle */}
             <div className="flex overflow-hidden rounded-xl border border-black/10">
               {(["followers", "recent"] as const).map((s) => (
@@ -61,7 +61,7 @@ export function CreatorPipeline({
                   key={s}
                   type="button"
                   onClick={() => setSortBy(s)}
-                  className={`px-3 py-1.5 text-xs font-semibold transition ${sortBy === s ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
+                  className={`px-3 py-1.5 text-xs font-semibold transition ${sortBy === s ? "bg-[#07070E] text-coral" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
                 >
                   {s === "followers" ? "Most Followers" : "Most Recent"}
                 </button>
@@ -81,7 +81,7 @@ export function CreatorPipeline({
                   key={f.value}
                   type="button"
                   onClick={() => setMinFollowers(f.value)}
-                  className={`px-3 py-1.5 text-xs font-semibold transition ${minFollowers === f.value ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
+                  className={`px-3 py-1.5 text-xs font-semibold transition ${minFollowers === f.value ? "bg-[#07070E] text-coral" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
                 >
                   {f.label}
                 </button>
@@ -93,7 +93,7 @@ export function CreatorPipeline({
               <select
                 value={nicheFilter}
                 onChange={(e) => setNicheFilter(e.target.value)}
-                className="rounded-xl border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-ink outline-none transition focus:border-moss"
+                className="rounded-xl border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-ink outline-none transition focus:border-coral"
               >
                 <option value="all">All Niches</option>
                 {allNiches.map((n) => (

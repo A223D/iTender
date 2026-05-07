@@ -4,6 +4,9 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { COMPENSATION_TYPES } from "@/lib/campaign-constants";
 import { addDays } from "@/lib/dates";
 
+const inputClass =
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[#07070E] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
+
 export type CouponState =
   | { status: "idle" }
   | { status: "validating" }
@@ -34,10 +37,10 @@ export function Step3Fields({
   onCreatorsNeededKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       {/* Compensation type */}
       <div>
-        <p className="mb-3 text-sm font-semibold text-ink">
+        <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
           Compensation type <span className="text-coral">*</span>
         </p>
         <div className="space-y-2">
@@ -48,14 +51,20 @@ export function Step3Fields({
                 key={ct.value}
                 type="button"
                 onClick={() => setField("compensationType", ct.value)}
-                className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
-                  selected ? "border-moss bg-moss/[0.04]" : "border-black/10 bg-white hover:border-black/20"
+                className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${
+                  selected
+                    ? "border-coral/40 bg-coral/[0.05]"
+                    : "border-black/10 bg-white hover:border-black/20"
                 }`}
               >
-                <div className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${selected ? "border-moss bg-moss" : "border-black/25"}`} />
+                <div
+                  className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${
+                    selected ? "border-coral bg-coral" : "border-black/25"
+                  }`}
+                />
                 <div>
-                  <p className="text-sm font-semibold text-ink">{ct.label}</p>
-                  <p className="text-xs text-ink/45">{ct.description}</p>
+                  <p className="text-sm font-semibold text-[#07070E]">{ct.label}</p>
+                  <p className="text-xs text-black/45">{ct.description}</p>
                 </div>
               </button>
             );
@@ -65,21 +74,22 @@ export function Step3Fields({
 
       {/* Compensation details */}
       <label className="block">
-        <span className="mb-2 block text-sm font-semibold text-ink">
-          Compensation details <span className="font-normal text-ink/35">· Optional</span>
+        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+          Compensation details{" "}
+          <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
         </span>
         <input
           type="text"
           value={compensationDetails}
           onChange={(e) => setField("compensationDetails", e.target.value)}
           placeholder="e.g. Free dinner for 2 + $100 cash"
-          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+          className={inputClass}
         />
       </label>
 
       {/* Creators needed */}
       <label className="block">
-        <span className="mb-2 block text-sm font-semibold text-ink">
+        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
           Creators needed <span className="text-coral">*</span>
         </span>
         <input
@@ -88,13 +98,13 @@ export function Step3Fields({
           value={creatorsNeeded}
           onChange={(e) => setField("creatorsNeeded", e.target.value)}
           onKeyDown={onCreatorsNeededKeyDown}
-          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-moss"
+          className={inputClass}
         />
       </label>
 
       {/* Deadline */}
       <div>
-        <span className="mb-2 block text-sm font-semibold text-ink">
+        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
           Application deadline <span className="text-coral">*</span>
         </span>
         <DatePicker
@@ -108,8 +118,9 @@ export function Step3Fields({
 
       {/* Coupon code */}
       <div>
-        <p className="mb-2 text-sm font-semibold text-ink">
-          Coupon code <span className="font-normal text-ink/35">· Optional</span>
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+          Coupon code{" "}
+          <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
         </p>
         <div className="flex gap-2">
           <input
@@ -117,19 +128,19 @@ export function Step3Fields({
             value={couponInput}
             onChange={(e) => onCouponInputChange(e.target.value)}
             placeholder="e.g. LAUNCH100"
-            className="flex-1 rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm uppercase tracking-wider text-ink outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/35 focus:border-moss"
+            className={`flex-1 ${inputClass} uppercase tracking-wider placeholder:normal-case placeholder:tracking-normal`}
           />
           <button
             type="button"
             onClick={onApplyCoupon}
             disabled={coupon.status === "validating" || !couponInput.trim()}
-            className="rounded-2xl border border-black/10 px-4 py-3 text-sm font-semibold text-ink transition hover:border-black/20 hover:bg-black/[0.03] disabled:opacity-40"
+            className="rounded-xl border border-black/10 px-4 py-3 text-sm font-semibold text-[#07070E] transition hover:border-black/30 hover:bg-black/[0.03] disabled:opacity-40"
           >
             {coupon.status === "validating" ? "Checking…" : "Apply"}
           </button>
         </div>
         {coupon.status === "valid" ? (
-          <p className="mt-2 text-sm font-semibold text-moss">
+          <p className="mt-2 text-sm font-semibold text-coral">
             {coupon.discount === 100
               ? "100% off — campaign will go live for free"
               : `${coupon.discount}% off — discount applied at checkout`}

@@ -28,15 +28,15 @@ const STEPS = [
 ];
 
 const THEME_STYLE = {
-  "--scout-ink": "#0E0E0C",
-  "--scout-ink-soft": "#1A1A17",
-  "--scout-cream": "#FBF7EE",
-  "--scout-paper": "#F4EFE6",
-  "--scout-lime": "#D4FF3F",
-  "--scout-lime-deep": "#B8E028",
-  "--scout-coral": "#FF5A4D",
+  "--scout-ink": "#07070E",
+  "--scout-ink-soft": "#161628",
+  "--scout-cream": "#FFFFFF",
+  "--scout-paper": "#F2F2FF",
+  "--scout-lime": "#FF4566",
+  "--scout-lime-deep": "#E63059",
+  "--scout-coral": "#FF4566",
   "--scout-violet": "#7B5FFF",
-  "--scout-sky": "#B8D4FF",
+  "--scout-sky": "#00E5CC",
 } as CSSProperties;
 
 type InitialProfile = {
@@ -289,16 +289,16 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 style={{ "--dir": direction } as CSSProperties}
                 className="scout-onboarding-step-in mx-auto max-w-[680px] px-5 py-10 sm:px-10 md:mx-0 lg:px-14 lg:py-12"
               >
-                <h1 className="m-0 font-serif text-4xl font-normal leading-tight text-[var(--scout-ink)] sm:text-[38px]">
+                <h1 className="m-0 font-display text-4xl font-bold leading-tight text-[var(--scout-ink)] sm:text-[38px]">
                   {step === 0 ? (
                     <>
                       Tell us about{" "}
-                      <em className="font-serif text-[var(--scout-coral)]">your brand</em>.
+                      <em className="text-coral">your brand</em>.
                     </>
                   ) : (
                     <>
                       What is your brand{" "}
-                      <em className="font-serif text-[var(--scout-coral)]">about</em>?
+                      <em className="text-coral">about</em>?
                     </>
                   )}
                 </h1>
@@ -352,7 +352,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 type="button"
                 onClick={step === 0 ? handleNextStep : handleSubmit}
                 disabled={saving}
-                className="min-h-12 min-w-[180px] rounded-xl border-2 border-[var(--scout-ink)] bg-[var(--scout-lime)] px-6 py-3 text-sm font-bold text-[var(--scout-ink)] shadow-[4px_4px_0_var(--scout-ink)] transition hover:bg-[var(--scout-lime-deep)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_var(--scout-ink)] disabled:pointer-events-none disabled:opacity-60"
+                className="min-h-12 min-w-[180px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
               >
                 {saving
                   ? "Saving..."
@@ -508,7 +508,7 @@ function BrandStoryStep({ form, set }: { form: FormData; set: (key: keyof FormDa
 
 function BrandPanel({ current, isEditing }: { current: number; isEditing: boolean }) {
   return (
-    <aside className="relative flex min-h-[430px] overflow-hidden bg-[var(--scout-ink)] px-6 py-8 text-white sm:px-10 md:min-h-screen md:w-[360px] md:shrink-0 md:flex-col md:px-8 md:py-10 lg:w-[460px] lg:px-11">
+    <aside className="relative flex min-h-[430px] overflow-hidden bg-[#07070E] px-6 py-8 text-white sm:px-10 md:min-h-screen md:w-[360px] md:shrink-0 md:flex-col md:px-8 md:py-10 lg:w-[460px] lg:px-11" style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)" }}>
       <ParticleShowlight />
 
       <div className="relative z-10 flex w-full flex-col">
@@ -521,10 +521,10 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
           <div className="mb-3 font-mono text-[11px] font-semibold uppercase text-[var(--scout-lime)]">
             -&gt; {isEditing ? "Brand profile" : "New brand setup"}
           </div>
-          <h2 className="m-0 font-serif text-[42px] font-normal leading-none text-white">
+          <h2 className="m-0 font-display text-[42px] font-bold leading-none text-white">
             Make creators
             <br />
-            <em className="font-serif text-[var(--scout-lime)]">fall</em> for
+            <em className="text-coral">fall</em> for
             <br />
             your brand.
           </h2>
@@ -582,7 +582,7 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
 
         <div className="mt-5 hidden rounded-[14px] border border-white/10 bg-white/[0.04] p-4 backdrop-blur sm:block">
           <div className="mb-3 flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full border-2 border-white bg-[linear-gradient(135deg,#FF5A4D,#D4FF3F)]" />
+            <div className="h-8 w-8 rounded-full border-2 border-white bg-[linear-gradient(135deg,#FF4566,#7B5FFF)]" />
             <div>
               <div className="text-xs font-semibold text-white">Maya Okafor</div>
               <div className="text-[11px] text-white/35">Founder, Bloom Cafe - Toronto</div>
@@ -614,15 +614,15 @@ function CompletionScreen({
 }) {
   return (
     <div className="scout-onboarding-step-in flex max-w-[560px] flex-col items-start px-5 py-16 sm:px-10 lg:px-14 lg:py-20">
-      <div className="mb-8 flex h-[72px] w-[72px] items-center justify-center rounded-full border-2 border-[var(--scout-ink)] bg-[var(--scout-lime)] shadow-[6px_6px_0_var(--scout-ink)]">
+      <div className="mb-8 flex h-[72px] w-[72px] items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet shadow-glow-violet">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-          <path d="M9 18.5L15 24.5L27 12.5" stroke="#0E0E0C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M9 18.5L15 24.5L27 12.5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
-      <h1 className="m-0 font-serif text-[38px] font-normal leading-tight text-[var(--scout-ink)]">
+      <h1 className="m-0 font-display text-[38px] font-bold leading-tight text-[var(--scout-ink)]">
         {brandName} is {isEditing ? "updated" : "ready"}
         <br />
-        to meet <em className="font-serif text-[var(--scout-coral)]">creators</em>.
+        to meet <em className="text-coral">creators</em>.
       </h1>
       <p className="mt-4 max-w-[440px] text-[15px] leading-7 text-black/55">
         Your profile is live. Browse creators in your city or post your first brief, and iTender will surface
@@ -631,7 +631,7 @@ function CompletionScreen({
       <button
         type="button"
         onClick={onDashboard}
-        className="mt-8 rounded-xl border-2 border-[var(--scout-ink)] bg-[var(--scout-lime)] px-6 py-3 text-sm font-bold text-[var(--scout-ink)] shadow-[4px_4px_0_var(--scout-ink)] transition hover:bg-[var(--scout-lime-deep)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_var(--scout-ink)]"
+        className="mt-8 rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98]"
       >
         Go to dashboard -&gt;
       </button>
@@ -642,7 +642,7 @@ function CompletionScreen({
 function ConfettiBurst({ trigger }: { trigger: number }) {
   const pieces = useMemo(() => {
     if (!trigger) return [];
-    const colors = ["#D4FF3F", "#FF5A4D", "#7B5FFF", "#B8D4FF", "#FFB800", "#0E0E0C"];
+    const colors = ["#FF4566", "#7B5FFF", "#00E5CC", "#FFB800", "#FFFFFF", "#FF4566"];
     return Array.from({ length: 70 }, (_, index) => ({
       id: `${trigger}-${index}`,
       color: colors[index % colors.length],
@@ -747,11 +747,11 @@ function ParticleShowlight() {
       };
 
       const palettes = [
-        { hex: "#D4FF3F", weight: 4 },
-        { hex: "#FF5A4D", weight: 1 },
-        { hex: "#7B5FFF", weight: 2 },
-        { hex: "#B8D4FF", weight: 2 },
-        { hex: "#00E5CC", weight: 1 },
+        { hex: "#FF4566", weight: 3 },
+        { hex: "#7B5FFF", weight: 3 },
+        { hex: "#00E5CC", weight: 2 },
+        { hex: "#FFB800", weight: 1 },
+        { hex: "#F2F2FF", weight: 1 },
       ];
       const weighted = palettes.flatMap((palette) => Array(palette.weight).fill(palette.hex));
 
@@ -786,7 +786,7 @@ function ParticleShowlight() {
       for (let i = 0; i < 40; i += 1) {
         const g = new PIXI.Graphics();
         const isAccent = Math.random() < 0.15;
-        g.beginFill(isAccent ? 0xd4ff3f : 0xffffff, 1);
+        g.beginFill(isAccent ? 0xFF4566 : 0xffffff, 1);
         g.drawCircle(0, 0, isAccent ? 1.6 : 1);
         g.endFill();
         g.x = Math.random() * sceneWidth;
@@ -871,7 +871,7 @@ function FormField({ label, required, children }: { label: string; required?: bo
 }
 
 const fieldClassName =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[var(--scout-ink)] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-[var(--scout-ink)] focus:shadow-[0_0_0_4px_rgba(212,255,63,0.45)]";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[var(--scout-ink)] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
 
 function ITenderLogo() {
   return (
@@ -888,7 +888,7 @@ function ITenderLogo() {
           />
         </svg>
       </span>
-      <span className="font-serif text-2xl italic leading-none text-white">iTender</span>
+      <span className="font-display text-2xl italic leading-none text-white">iTender</span>
     </div>
   );
 }
@@ -922,7 +922,7 @@ function StarIcon() {
     <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden="true">
       <path
         d="M6.5 1L8.18 4.4L12 4.95L9.25 7.6L9.86 11.4L6.5 9.6L3.14 11.4L3.75 7.6L1 4.95L4.82 4.4L6.5 1Z"
-        fill="var(--scout-lime)"
+        fill="#FFB800"
       />
     </svg>
   );

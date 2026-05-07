@@ -24,7 +24,7 @@ function MessageBubble({ msg, isMe }: { msg: ChatMessage; isMe: boolean }) {
         onClick={() => setShowTime((v) => !v)}
         className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-left text-sm leading-relaxed focus:outline-none ${
           isMe
-            ? "rounded-br-sm bg-moss text-white"
+            ? "bg-gradient-to-br from-coral to-violet text-white"
             : "rounded-bl-sm bg-white text-ink shadow-sm"
         } ${msg.id.startsWith("temp-") ? "opacity-60" : ""}`}
       >
@@ -76,7 +76,7 @@ function CampaignBrief({ match }: { match: ChatMatch }) {
             <p className="text-xs leading-relaxed text-ink/60 line-clamp-3">{camp.description}</p>
           ) : null}
           {camp.compensation_type ? (
-            <p className="mt-1.5 text-xs font-semibold text-moss">
+            <p className="mt-1.5 text-xs font-semibold text-coral">
               {COMP_LABELS[camp.compensation_type] ?? camp.compensation_type}
               {camp.compensation_details ? ` · ${camp.compensation_details}` : ""}
             </p>
@@ -214,7 +214,7 @@ export function ChatView({
   }
 
   return (
-    <div className="flex h-full flex-col bg-paper">
+    <div className="flex h-full flex-col bg-[#F7F6FF]">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="flex items-center gap-3 border-b border-black/[0.08] bg-white px-4 py-3">
@@ -271,7 +271,7 @@ export function ChatView({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Message…"
-            className="flex-1 resize-none rounded-2xl border border-black/[0.1] bg-black/[0.03] px-4 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-moss/40 focus:bg-white focus:outline-none"
+            className="flex-1 resize-none rounded-2xl border border-black/[0.1] bg-black/[0.03] px-4 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-coral/40 focus:bg-white focus:outline-none"
             style={{ maxHeight: 96 }}
           />
           <button
@@ -279,7 +279,7 @@ export function ChatView({
             onClick={handleSend}
             disabled={!input.trim() || sending}
             aria-label="Send"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-moss text-white shadow-sm transition hover:bg-moss/90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-coral to-violet shadow-glow text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2L2 8l5 2 2 5 5-13z" />

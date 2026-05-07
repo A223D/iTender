@@ -118,7 +118,7 @@ export default async function CampaignDetailPage({
   );
 
   return (
-    <main className="min-h-screen bg-paper">
+    <main className="min-h-screen bg-[#F7F6FF]">
       <CampaignDetailView
         campaign={campaign as CampaignDetail}
         interestedCreators={interestedCreators}

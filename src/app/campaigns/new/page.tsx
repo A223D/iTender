@@ -22,7 +22,7 @@ export default async function NewCampaignPage() {
   if (!profile) redirect("/onboarding/business");
 
   return (
-    <main className="min-h-screen bg-paper">
+    <main className="min-h-screen bg-white">
       <CampaignBuilderForm userId={user.id} />
     </main>
   );

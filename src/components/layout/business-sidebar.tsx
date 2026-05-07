@@ -15,8 +15,8 @@ type NavLinkProps = {
 function NavLink({ href, active, icon, children }: NavLinkProps) {
   const base = "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition";
   const styles = active
-    ? `${base} bg-moss/[0.08] text-moss`
-    : `${base} text-ink/50 hover:bg-black/[0.04] hover:text-ink`;
+    ? `${base} bg-white/[0.10] text-white`
+    : `${base} text-white/45 hover:bg-white/[0.05] hover:text-white/80`;
   return (
     <Link href={href} className={styles}>
       {icon}
@@ -60,54 +60,78 @@ export function BusinessSidebar({
   const initial = logoInitial(profile.brand_name);
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col border-r border-black/[0.07] bg-white lg:flex">
-      {/* Wordmark */}
-      <div className="px-6 pb-5 pt-6">
-        <span className="font-display text-base font-bold tracking-tight text-ink">iTender</span>
+    <aside
+      className="relative hidden w-[240px] shrink-0 flex-col overflow-hidden lg:flex"
+      style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)" }}
+    >
+      {/* Ambient blobs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-16 -top-8 h-[280px] w-[280px] rounded-full bg-violet/[0.12] blur-[80px]" />
+        <div className="absolute bottom-1/4 right-0 h-[200px] w-[200px] rounded-full bg-coral/[0.09] blur-[70px]" />
       </div>
 
-      {/* Brand identity card */}
-      <div className="mx-4 rounded-2xl bg-black/[0.03] px-4 py-4">
-        {profile.logo_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={profile.logo_url} alt="Brand logo" className="h-12 w-12 rounded-2xl object-cover" />
-        ) : (
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-sm font-bold text-white">
-            {initial}
+      <div className="relative z-10 flex h-full flex-col">
+        {/* Wordmark */}
+        <div className="px-5 pb-4 pt-6">
+          <div className="inline-flex items-center gap-2">
+            <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <circle cx="14" cy="14" r="13" stroke="white" strokeWidth="1.5" strokeOpacity="0.6" />
+              <path
+                d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
+                fill="#FF4566"
+                stroke="white"
+                strokeWidth="1.2"
+                strokeOpacity="0.6"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="font-display text-base italic font-bold tracking-tight text-white">iTender</span>
           </div>
-        )}
-        <p className="mt-3 text-sm font-bold leading-tight text-ink">{profile.brand_name}</p>
-        <p className="text-xs text-ink/40">Business Account</p>
-      </div>
+        </div>
 
-      {/* Nav */}
-      <nav className="mt-4 flex-1 space-y-1 px-3">
-        <NavLink href="/dashboard" active={activePath === "/dashboard"} icon={icons.campaigns}>
-          Campaigns
-        </NavLink>
-        <NavLink href="/matches" active={activePath === "/matches"} icon={icons.messages}>
-          Messages
-          <UnreadBadge count={totalUnread} className="ml-auto" />
-        </NavLink>
-        <NavLink href="/settings" active={activePath === "/settings"} icon={icons.settings}>
-          Settings
-        </NavLink>
-      </nav>
+        {/* Brand identity card */}
+        <div className="mx-3 rounded-[14px] border border-white/10 bg-white/[0.05] p-4 backdrop-blur">
+          {profile.logo_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={profile.logo_url} alt="Brand logo" className="h-11 w-11 rounded-xl object-cover" />
+          ) : (
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-coral to-violet text-sm font-bold text-white">
+              {initial}
+            </div>
+          )}
+          <p className="mt-3 text-sm font-bold leading-tight text-white">{profile.brand_name}</p>
+          <p className="text-xs text-white/40">Business Account</p>
+        </div>
 
-      {/* Incomplete profile nudge */}
-      {incomplete ? (
-        <Link
-          href="/onboarding/business"
-          className="mx-4 mb-4 block rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 transition hover:bg-amber-100"
-        >
-          <p className="text-xs font-semibold text-amber-700">Complete your profile</p>
-          <p className="mt-0.5 text-xs text-amber-600/80">{profileNudgeText(profile)}</p>
-        </Link>
-      ) : null}
+        {/* Nav */}
+        <nav className="mt-4 flex-1 space-y-0.5 px-3">
+          <NavLink href="/dashboard" active={activePath === "/dashboard"} icon={icons.campaigns}>
+            Campaigns
+          </NavLink>
+          <NavLink href="/matches" active={activePath === "/matches"} icon={icons.messages}>
+            Messages
+            <UnreadBadge count={totalUnread} className="ml-auto" />
+          </NavLink>
+          <NavLink href="/settings" active={activePath === "/settings"} icon={icons.settings}>
+            Settings
+          </NavLink>
+        </nav>
 
-      {/* Sign out */}
-      <div className="px-5 pb-6">
-        <SignOutButton />
+        {/* Incomplete profile nudge */}
+        {incomplete ? (
+          <Link
+            href="/onboarding/business"
+            className="mx-3 mb-3 block rounded-[14px] border border-coral/30 bg-coral/[0.08] px-4 py-3 transition hover:bg-coral/[0.12]"
+          >
+            <p className="text-xs font-semibold text-coral">Complete your profile</p>
+            <p className="mt-0.5 text-xs text-coral/65">{profileNudgeText(profile)}</p>
+          </Link>
+        ) : null}
+
+        {/* Sign out */}
+        <div className="px-4 pb-6">
+          <SignOutButton className="w-full rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white/45 transition hover:border-white/20 hover:text-white/75" />
+        </div>
       </div>
     </aside>
   );

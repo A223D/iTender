@@ -42,7 +42,7 @@ export function CreatorCard({
   ].filter((p) => p.count > 0);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-moss/30 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-coral/30 bg-white shadow-sm">
       <div className="p-5">
         <div className="flex items-start gap-3">
           {/* Avatar */}
@@ -64,7 +64,7 @@ export function CreatorCard({
             <Link
               href={`/creators/${creator.id}`}
               target="_blank"
-              className="text-xs font-medium text-moss/70 transition hover:text-moss"
+              className="text-xs font-medium text-coral/70 transition hover:text-coral"
             >
               View profile ↗
             </Link>
@@ -100,8 +100,8 @@ export function CreatorCard({
 
         {/* Pitch */}
         {creator.pitch ? (
-          <div className="mt-4 rounded-xl border border-moss/20 bg-moss/[0.04] px-4 py-3">
-            <p className="mb-1 text-xs font-semibold text-moss">Why they&apos;re a fit</p>
+          <div className="mt-4 rounded-xl border border-coral/20 bg-coral/[0.04] px-4 py-3">
+            <p className="mb-1 text-xs font-semibold text-coral">Why they&apos;re a fit</p>
             <p className="text-sm leading-5 text-ink/70">{creator.pitch}</p>
           </div>
         ) : null}
@@ -110,12 +110,12 @@ export function CreatorCard({
         <div className="mt-4 flex items-center justify-end gap-2">
           {matchId ? (
             <>
-              <span className="rounded-full bg-moss/10 px-3 py-1.5 text-xs font-semibold text-moss">
+              <span className="rounded-full bg-coral/10 px-3 py-1.5 text-xs font-semibold text-coral">
                 Accepted ✓
               </span>
               <Link
                 href={`/matches/${matchId}`}
-                className="rounded-xl bg-moss px-3 py-1.5 text-xs font-bold text-white transition hover:bg-moss/90"
+                className="rounded-xl bg-gradient-to-r from-coral to-violet px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90"
               >
                 Message →
               </Link>
@@ -125,7 +125,7 @@ export function CreatorCard({
               type="button"
               onClick={onAccept}
               disabled={accepting}
-              className="rounded-xl bg-moss px-3 py-1.5 text-xs font-bold text-white transition hover:bg-moss/90 disabled:opacity-60"
+              className="rounded-xl bg-gradient-to-r from-coral to-violet px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90 disabled:opacity-60"
             >
               {accepting ? "Accepting…" : "Accept"}
             </button>
