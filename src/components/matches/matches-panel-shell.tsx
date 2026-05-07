@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
 import { MatchesList, type MatchGroup } from "./matches-list";
+import { UnreadBadge } from "@/components/ui/unread-badge";
 
 type RealtimeMsg = {
   id: string;
@@ -136,11 +137,7 @@ export function MatchesPanelShell({
           </Link>
           <div className="flex items-center gap-2">
             <h1 className="font-display text-base font-semibold text-ink">Messages</h1>
-            {totalUnread > 0 ? (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-coral px-1 text-[10px] font-bold text-white">
-                {totalUnread > 9 ? "9+" : totalUnread}
-              </span>
-            ) : null}
+            <UnreadBadge count={totalUnread} />
           </div>
         </header>
 

@@ -6,17 +6,10 @@ import { CampaignCard } from "@/components/dashboard/campaign-card";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
 import { NotificationListener } from "@/components/notifications/notification-listener";
 import { createClient } from "@/utils/supabase/server";
-import { STATUS_STYLES, STATUS_LABELS } from "@/lib/campaign-constants";
-import { UNREAD_BADGE_MAX } from "@/lib/app-config";
 import { logoInitial } from "@/lib/formatters";
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLES[status] ?? "bg-black/[0.06] text-ink/50"}`}>
-      {STATUS_LABELS[status] ?? status}
-    </span>
-  );
-}
+import { UNREAD_BADGE_MAX } from "@/lib/app-config";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { UnreadBadge } from "@/components/ui/unread-badge";
 
 export default async function DashboardPage({
   searchParams,
@@ -108,11 +101,7 @@ export default async function DashboardPage({
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
             Messages
-            {totalUnread > 0 ? (
-              <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-coral text-[10px] font-bold text-white">
-                {totalUnread > UNREAD_BADGE_MAX ? `${UNREAD_BADGE_MAX}+` : totalUnread}
-              </span>
-            ) : null}
+            <UnreadBadge count={totalUnread} className="ml-auto" />
           </Link>
           <Link
             href="/onboarding/business"

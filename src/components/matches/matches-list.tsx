@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { relativeTime } from "@/lib/formatters";
+import { CreatorAvatar } from "@/components/ui/creator-avatar";
+import { UnreadBadge } from "@/components/ui/unread-badge";
 
 export type MatchItem = {
   id: string;
@@ -24,18 +26,6 @@ export type MatchGroup = {
   matches: MatchItem[];
 };
 
-function CreatorAvatar({ creator }: { creator: MatchItem["creator"] }) {
-  const photo = creator?.profile_photo_url ?? creator?.avatar_url ?? null;
-  const initial = creator?.name?.[0]?.toUpperCase() ?? "?";
-  return photo ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={photo} alt={creator?.name ?? ""} className="h-11 w-11 rounded-full object-cover" />
-  ) : (
-    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-sm font-bold text-white">
-      {initial}
-    </div>
-  );
-}
 
 export function MatchesList({ groups }: { groups: MatchGroup[] }) {
   const pathname = usePathname();
@@ -87,7 +77,10 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
                   isActive ? "bg-moss/[0.07]" : "hover:bg-black/[0.025]"
                 }`}
               >
-                <CreatorAvatar creator={match.creator} />
+                <CreatorAvatar
+                  name={match.creator?.name}
+                  photoUrl={match.creator?.profile_photo_url ?? match.creator?.avatar_url}
+                />
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline justify-between gap-2">
@@ -112,11 +105,7 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
                   )}
                 </div>
 
-                {match.unreadCount > 0 ? (
-                  <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-coral px-1 text-[10px] font-bold text-white">
-                    {match.unreadCount > 9 ? "9+" : match.unreadCount}
-                  </span>
-                ) : null}
+                <UnreadBadge count={match.unreadCount} className="ml-auto shrink-0" />
               </Link>
               );
             })}

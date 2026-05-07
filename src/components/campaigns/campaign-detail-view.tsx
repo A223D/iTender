@@ -11,22 +11,13 @@ import {
   COMPENSATION_TYPES,
   COMP_LABELS,
   DOC_MIME_TYPES,
-  STATUS_STYLES,
-  STATUS_LABELS,
 } from "@/lib/campaign-constants";
 import { formatFollowers } from "@/lib/formatters";
 import { addDays, daysLeft } from "@/lib/dates";
 import { extractStoragePath } from "@/lib/storage-utils";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLES[status] ?? "bg-black/[0.06] text-ink/50"}`}>
-      {STATUS_LABELS[status] ?? status}
-    </span>
-  );
-}
 
 type NormalizedCreator = {
   pitch: string | null;

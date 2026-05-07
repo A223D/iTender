@@ -6,22 +6,9 @@ import Link from "next/link";
 import type { ChatMatch, ChatMessage } from "@/app/matches/[id]/page";
 import { createClient } from "@/utils/supabase/client";
 import { COMP_LABELS } from "@/lib/campaign-constants";
+import { CreatorAvatar } from "@/components/ui/creator-avatar";
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
-
-function CreatorAvatar({ match, size = "sm" }: { match: ChatMatch; size?: "sm" | "lg" }) {
-  const photo = match.creator?.profile_photo_url ?? match.creator?.avatar_url ?? null;
-  const initial = match.creator?.name?.[0]?.toUpperCase() ?? "?";
-  const cls = size === "lg" ? "h-10 w-10" : "h-8 w-8";
-  return photo ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={photo} alt={match.creator?.name ?? ""} className={`${cls} rounded-full object-cover`} />
-  ) : (
-    <div className={`flex ${cls} items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-xs font-bold text-white`}>
-      {initial}
-    </div>
-  );
-}
 
 function MessageBubble({ msg, isMe }: { msg: ChatMessage; isMe: boolean }) {
   const [showTime, setShowTime] = useState(false);
@@ -226,8 +213,6 @@ export function ChatView({
     }
   }
 
-  const photo = match.creator?.profile_photo_url ?? match.creator?.avatar_url;
-
   return (
     <div className="flex h-full flex-col bg-paper">
 
@@ -248,14 +233,11 @@ export function ChatView({
           target="_blank"
           className="flex items-center gap-2.5 flex-1 min-w-0 transition hover:opacity-80"
         >
-          {photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={photo} alt={match.creator?.name ?? ""} className="h-9 w-9 shrink-0 rounded-full object-cover" />
-          ) : (
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-xs font-bold text-white">
-              {match.creator?.name?.[0]?.toUpperCase() ?? "?"}
-            </div>
-          )}
+          <CreatorAvatar
+            name={match.creator?.name}
+            photoUrl={match.creator?.profile_photo_url ?? match.creator?.avatar_url}
+            size="sm"
+          />
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-ink">{match.creator?.name ?? "Creator"}</p>
             <p className="text-xs text-ink/40">View profile ↗</p>
