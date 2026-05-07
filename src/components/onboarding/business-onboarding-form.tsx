@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Graphics, Sprite } from "pixi.js";
 
 import { createClient } from "@/utils/supabase/client";
+import { FILE_SIZE_LIMITS } from "@/lib/app-config";
 
 const INDUSTRIES = [
   "UGC",
@@ -129,6 +130,12 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
   function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > FILE_SIZE_LIMITS.logo) {
+      setError("Logo must be under 5 MB.");
+      e.target.value = "";
+      return;
+    }
+    setError(null);
     if (logoPreview?.startsWith("blob:")) URL.revokeObjectURL(logoPreview);
     setLogoFile(file);
     setLogoPreview(URL.createObjectURL(file));

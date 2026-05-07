@@ -5,30 +5,10 @@ import Link from "next/link";
 
 import type { ChatMatch, ChatMessage } from "@/app/matches/[id]/page";
 import { createClient } from "@/utils/supabase/client";
-
-const COMP_LABELS: Record<string, string> = {
-  paid: "Paid",
-  product: "Product or Service",
-  paid_product: "Paid + Product",
-  affiliate: "Affiliate",
-  negotiable: "Negotiable",
-};
+import { COMP_LABELS } from "@/lib/campaign-constants";
+import { CreatorAvatar } from "@/components/ui/creator-avatar";
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
-
-function CreatorAvatar({ match, size = "sm" }: { match: ChatMatch; size?: "sm" | "lg" }) {
-  const photo = match.creator?.profile_photo_url ?? match.creator?.avatar_url ?? null;
-  const initial = match.creator?.name?.[0]?.toUpperCase() ?? "?";
-  const cls = size === "lg" ? "h-10 w-10" : "h-8 w-8";
-  return photo ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={photo} alt={match.creator?.name ?? ""} className={`${cls} rounded-full object-cover`} />
-  ) : (
-    <div className={`flex ${cls} items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-xs font-bold text-white`}>
-      {initial}
-    </div>
-  );
-}
 
 function MessageBubble({ msg, isMe }: { msg: ChatMessage; isMe: boolean }) {
   const [showTime, setShowTime] = useState(false);
@@ -233,16 +213,14 @@ export function ChatView({
     }
   }
 
-  const photo = match.creator?.profile_photo_url ?? match.creator?.avatar_url;
-
   return (
-    <div className="flex h-dvh flex-col bg-paper">
+    <div className="flex h-full flex-col bg-paper">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="flex items-center gap-3 border-b border-black/[0.08] bg-white px-4 py-3">
         <Link
           href="/matches"
-          className="flex items-center gap-1 text-sm text-ink/50 transition hover:text-ink"
+          className="flex items-center gap-1 text-sm text-ink/50 transition hover:text-ink lg:hidden"
           aria-label="Back to messages"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -255,14 +233,11 @@ export function ChatView({
           target="_blank"
           className="flex items-center gap-2.5 flex-1 min-w-0 transition hover:opacity-80"
         >
-          {photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={photo} alt={match.creator?.name ?? ""} className="h-9 w-9 shrink-0 rounded-full object-cover" />
-          ) : (
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-xs font-bold text-white">
-              {match.creator?.name?.[0]?.toUpperCase() ?? "?"}
-            </div>
-          )}
+          <CreatorAvatar
+            name={match.creator?.name}
+            photoUrl={match.creator?.profile_photo_url ?? match.creator?.avatar_url}
+            size="sm"
+          />
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-ink">{match.creator?.name ?? "Creator"}</p>
             <p className="text-xs text-ink/40">View profile ↗</p>

@@ -3,32 +3,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { CampaignCard } from "@/components/dashboard/campaign-card";
-import { SignOutButton } from "@/components/dashboard/sign-out-button";
 import { NotificationListener } from "@/components/notifications/notification-listener";
+import { BusinessSidebar } from "@/components/layout/business-sidebar";
+import { MobileHeader } from "@/components/layout/mobile-header";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { createClient } from "@/utils/supabase/server";
-
-const STATUS_STYLES: Record<string, string> = {
-  live: "bg-moss/10 text-moss",
-  draft: "bg-black/[0.06] text-ink/50",
-  closed: "bg-coral/10 text-coral",
-  pending: "bg-yellow-100 text-yellow-700",
-  completed: "bg-teal/10 text-teal",
-};
-const STATUS_LABELS: Record<string, string> = {
-  live: "Live",
-  draft: "Draft",
-  closed: "Closed",
-  pending: "Pending",
-  completed: "Completed",
-};
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLES[status] ?? "bg-black/[0.06] text-ink/50"}`}>
-      {STATUS_LABELS[status] ?? status}
-    </span>
-  );
-}
+import { logoInitial } from "@/lib/formatters";
 
 export default async function DashboardPage({
   searchParams,
@@ -69,133 +49,28 @@ export default async function DashboardPage({
   const active = (campaigns ?? []).filter((c) => c.status === "live");
   const past = (campaigns ?? []).filter((c) => c.status !== "live");
   const totalInterested = (campaigns ?? []).reduce((sum, c) => sum + (c.interested_count ?? 0), 0);
-  const profileIncomplete = !profile.logo_url || !profile.website_url;
-
   const showActive = statusFilter === "all" || statusFilter === "active";
   const showPast = statusFilter === "all" || statusFilter === "past";
 
-  const logoInitial = profile.brand_name[0]?.toUpperCase() ?? "B";
+  const brandInitial = logoInitial(profile.brand_name);
 
   return (
     <div className="flex h-screen bg-paper">
 
       {/* ── Sidebar (desktop only) ──────────────────────────────────── */}
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-black/[0.07] bg-white lg:flex">
-        {/* Wordmark */}
-        <div className="px-6 pb-5 pt-6">
-          <span className="font-display text-base font-bold tracking-tight text-ink">iTender</span>
-        </div>
-
-        {/* Brand identity card */}
-        <div className="mx-4 rounded-2xl bg-black/[0.03] px-4 py-4">
-          {profile.logo_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={profile.logo_url} alt="Brand logo" className="h-12 w-12 rounded-2xl object-cover" />
-          ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-sm font-bold text-white">
-              {logoInitial}
-            </div>
-          )}
-          <p className="mt-3 text-sm font-bold leading-tight text-ink">{profile.brand_name}</p>
-          <p className="text-xs text-ink/40">Business Account</p>
-        </div>
-
-        {/* Nav */}
-        <nav className="mt-4 flex-1 space-y-1 px-3">
-          <div className="flex items-center gap-2.5 rounded-xl bg-moss/[0.08] px-3 py-2.5 text-sm font-semibold text-moss">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-            </svg>
-            Campaigns
-          </div>
-          <Link
-            href="/matches"
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/50 transition hover:bg-black/[0.04] hover:text-ink"
-          >
-            {/* Chat bubble icon */}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            Messages
-            {totalUnread > 0 ? (
-              <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-coral text-[10px] font-bold text-white">
-                {totalUnread > 9 ? "9+" : totalUnread}
-              </span>
-            ) : null}
-          </Link>
-          <Link
-            href="/onboarding/business"
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/50 transition hover:bg-black/[0.04] hover:text-ink"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-            </svg>
-            Profile
-            {profileIncomplete ? (
-              <span className="ml-auto h-2 w-2 rounded-full bg-amber-400" />
-            ) : null}
-          </Link>
-        </nav>
-
-        {/* Incomplete profile nudge */}
-        {profileIncomplete ? (
-          <Link
-            href="/onboarding/business"
-            className="mx-4 mb-4 block rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 transition hover:bg-amber-100"
-          >
-            <p className="text-xs font-semibold text-amber-700">Complete your profile</p>
-            <p className="mt-0.5 text-xs text-amber-600/80">
-              {!profile.logo_url && !profile.website_url
-                ? "Add a logo and website so creators trust your brand."
-                : !profile.logo_url
-                ? "Add a logo so creators recognise your brand."
-                : "Add your website so creators can learn more."}
-            </p>
-          </Link>
-        ) : null}
-
-        {/* Sign out */}
-        <div className="px-5 pb-6">
-          <SignOutButton />
-        </div>
-      </aside>
+      <BusinessSidebar activePath="/dashboard" totalUnread={totalUnread} profile={profile} />
 
       {/* ── Right column (mobile header + scrollable main) ──────────── */}
       <div className="flex min-h-0 flex-1 flex-col">
 
         {/* Mobile top bar */}
-        <header className="flex items-center justify-between border-b border-black/[0.08] bg-white px-4 py-3 lg:hidden">
-          <div className="flex items-center gap-2.5">
-            {profile.logo_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.logo_url} alt="Brand logo" className="h-8 w-8 rounded-xl object-cover" />
-            ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-coral to-violet text-xs font-bold text-white">
-                {logoInitial}
-              </div>
-            )}
-            <p className="text-sm font-bold text-ink">{profile.brand_name}</p>
-          </div>
-          <Link
-            href="/matches"
-            className="relative flex h-8 w-8 items-center justify-center rounded-xl text-ink/50 transition hover:bg-black/[0.05] hover:text-ink"
-            aria-label="Messages"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            {totalUnread > 0 ? (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[9px] font-bold text-white">
-                {totalUnread > 9 ? "9+" : totalUnread}
-              </span>
-            ) : null}
-          </Link>
-          <SignOutButton />
-        </header>
+        <MobileHeader
+          brandName={profile.brand_name}
+          logoUrl={profile.logo_url}
+          brandInitial={brandInitial}
+          totalUnread={totalUnread}
+          activePath="/dashboard"
+        />
 
         {/* Scrollable main */}
         <main className="flex-1 overflow-y-auto">

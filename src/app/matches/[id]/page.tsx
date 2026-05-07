@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { ChatView } from "@/components/matches/chat-view";
 import { createClient } from "@/utils/supabase/server";
+import { type RawCreatorJoin, extractProfilePhoto } from "@/types/models";
 
 export type ChatMatch = {
   id: string;
@@ -69,16 +70,7 @@ export default async function ChatPage({
   if (!matchRaw) redirect("/matches");
 
   // Flatten nested creator_profiles (may be array or object depending on Supabase join)
-  type RawCreator = {
-    id: string;
-    name: string;
-    avatar_url: string | null;
-    creator_profiles: { profile_photo_url: string | null } | { profile_photo_url: string | null }[] | null;
-  };
-  const rawCreator = matchRaw.creator as unknown as RawCreator | null;
-  const cp = Array.isArray(rawCreator?.creator_profiles)
-    ? (rawCreator?.creator_profiles as { profile_photo_url: string | null }[])[0] ?? null
-    : rawCreator?.creator_profiles ?? null;
+  const rawCreator = matchRaw.creator as unknown as RawCreatorJoin | null;
 
   const match: ChatMatch = {
     id: matchRaw.id,
@@ -91,7 +83,7 @@ export default async function ChatPage({
           id: rawCreator.id,
           name: rawCreator.name,
           avatar_url: rawCreator.avatar_url,
-          profile_photo_url: cp?.profile_photo_url ?? null,
+          profile_photo_url: extractProfilePhoto(rawCreator),
         }
       : null,
   };

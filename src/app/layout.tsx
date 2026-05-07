@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 
 import "./globals.css";
 
@@ -13,8 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className="font-sans antialiased">
+        {children}
+        <Toaster
+          position="bottom-right"
+          visibleToasts={4}
+          gap={8}
+          toastOptions={{ unstyled: true, classNames: { toast: "" } }}
+        />
+      </body>
     </html>
   );
 }

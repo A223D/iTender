@@ -6,348 +6,14 @@ import { useRouter } from "next/navigation";
 
 import type { CampaignDetail, InterestedCreator } from "@/app/campaigns/[id]/page";
 import { createClient } from "@/utils/supabase/client";
+import { CONTENT_TYPES, COMPENSATION_TYPES, COMP_LABELS, DOC_MIME_TYPES } from "@/lib/campaign-constants";
+import { addDays, daysLeft } from "@/lib/dates";
+import { extractStoragePath } from "@/lib/storage-utils";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { CreatorPipeline } from "./creator-pipeline";
+import type { NormalizedCreator } from "./creator-card";
 
-// ── Constants ──────────────────────────────────────────────────────────────────
-
-const CONTENT_TYPES = ["Post", "Short-form Video", "Long-form Video", "Story", "Blog / Article"];
-
-const COMPENSATION_TYPES = [
-  { value: "paid", label: "Paid", description: "Cash payment to the creator" },
-  { value: "product", label: "Product or Service", description: "Free product, service, or experience" },
-  { value: "paid_product", label: "Paid + Product", description: "Cash plus free product or service" },
-  { value: "affiliate", label: "Affiliate", description: "% of sales the creator drives" },
-  { value: "negotiable", label: "Negotiable", description: "Discuss details in chat" },
-];
-
-const COMP_LABELS: Record<string, string> = {
-  paid: "Paid",
-  product: "Product or Service",
-  paid_product: "Paid + Product",
-  affiliate: "Affiliate",
-  negotiable: "Negotiable",
-};
-
-const DOC_MIME_TYPES: Record<string, string> = {
-  pdf: "application/pdf",
-  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  doc: "application/msword",
-};
-
-const STATUS_STYLES: Record<string, string> = {
-  live: "bg-moss/10 text-moss",
-  draft: "bg-black/[0.06] text-ink/50",
-  closed: "bg-coral/10 text-coral",
-  pending: "bg-yellow-100 text-yellow-700",
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  live: "Live",
-  draft: "Draft",
-  closed: "Closed",
-  pending: "Pending",
-};
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-function formatFollowers(n: number | null): string {
-  if (!n || n === 0) return "0";
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
-  return String(n);
-}
-
-function extractStoragePath(url: string, bucket: string): string | null {
-  const marker = `/storage/v1/object/public/${bucket}/`;
-  const idx = url.indexOf(marker);
-  return idx !== -1 ? url.slice(idx + marker.length) : null;
-}
-
-function addDays(n: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + n);
-  return d.toISOString().split("T")[0];
-}
-
-function daysLeft(deadline: string): number {
-  return Math.max(0, Math.ceil((new Date(deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-}
-
-// ── Sub-components ─────────────────────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLES[status] ?? "bg-black/[0.06] text-ink/50"}`}>
-      {STATUS_LABELS[status] ?? status}
-    </span>
-  );
-}
-
-type NormalizedCreator = {
-  pitch: string | null;
-  created_at: string;
-  id: string;
-  name: string;
-  avatar_url: string | null;
-  city: string | null;
-  profile_photo_url: string | null;
-  bio: string | null;
-  brand_categories: string[];
-  instagram_handle: string | null;
-  instagram_followers: number;
-  tiktok_handle: string | null;
-  tiktok_followers: number;
-  youtube_handle: string | null;
-  youtube_followers: number;
-};
-
-function CreatorCard({
-  creator,
-  matchId,
-  accepting,
-  onAccept,
-}: {
-  creator: NormalizedCreator;
-  matchId: string | null;
-  accepting: boolean;
-  onAccept: () => void;
-}) {
-  const photo = creator.profile_photo_url ?? creator.avatar_url;
-  const handle = creator.instagram_handle ? `@${creator.instagram_handle}` : creator.city ?? null;
-  const platforms = [
-    { label: "IG", count: creator.instagram_followers },
-    { label: "TK", count: creator.tiktok_followers },
-    { label: "YT", count: creator.youtube_followers },
-  ].filter((p) => p.count > 0);
-  const totalFollowers = creator.instagram_followers + creator.tiktok_followers + creator.youtube_followers;
-
-  return (
-    <div className="overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-moss/30 bg-white shadow-sm">
-      <div className="p-5">
-        <div className="flex items-start gap-3">
-          {/* Avatar */}
-          <div className="shrink-0">
-            {photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={photo} alt={creator.name} className="h-12 w-12 rounded-xl object-cover" />
-            ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-coral/20 to-violet/20 text-sm font-bold text-ink/60">
-                {creator.name.charAt(0).toUpperCase()}
-              </div>
-            )}
-          </div>
-
-          {/* Name / handle / total followers */}
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="truncate font-semibold text-ink">{creator.name}</p>
-                {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
-                <Link
-                  href={`/creators/${creator.id}`}
-                  target="_blank"
-                  className="text-xs font-medium text-moss/70 transition hover:text-moss"
-                >
-                  View profile ↗
-                </Link>
-              </div>
-              {totalFollowers > 0 ? (
-                <span className="shrink-0 text-sm font-bold text-ink">Total: {formatFollowers(totalFollowers)}</span>
-              ) : null}
-            </div>
-
-            {/* Platform pills */}
-            {platforms.length > 0 ? (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {platforms.map((p) => (
-                  <span key={p.label} className="rounded-full bg-black/[0.05] px-2.5 py-1 text-xs font-bold text-ink/65">
-                    {p.label} {formatFollowers(p.count)}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        {/* Bio */}
-        {creator.bio ? (
-          <p className="mt-3 line-clamp-2 text-sm leading-5 text-ink/60">{creator.bio}</p>
-        ) : null}
-
-        {/* Categories */}
-        {creator.brand_categories.length > 0 ? (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {creator.brand_categories.map((cat) => (
-              <span key={cat} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs text-ink/55">
-                {cat}
-              </span>
-            ))}
-          </div>
-        ) : null}
-
-        {/* Pitch */}
-        {creator.pitch ? (
-          <div className="mt-4 rounded-xl border border-moss/20 bg-moss/[0.04] px-4 py-3">
-            <p className="mb-1 text-xs font-semibold text-moss">Why they&apos;re a fit</p>
-            <p className="text-sm leading-5 text-ink/70">{creator.pitch}</p>
-          </div>
-        ) : null}
-
-        {/* Action row */}
-        <div className="mt-4 flex items-center justify-end gap-2">
-          {matchId ? (
-            <>
-              <span className="rounded-full bg-moss/10 px-3 py-1.5 text-xs font-semibold text-moss">
-                Accepted ✓
-              </span>
-              <Link
-                href={`/matches/${matchId}`}
-                className="rounded-xl bg-moss px-3 py-1.5 text-xs font-bold text-white transition hover:bg-moss/90"
-              >
-                Message →
-              </Link>
-            </>
-          ) : (
-            <button
-              type="button"
-              onClick={onAccept}
-              disabled={accepting}
-              className="rounded-xl bg-moss px-3 py-1.5 text-xs font-bold text-white transition hover:bg-moss/90 disabled:opacity-60"
-            >
-              {accepting ? "Accepting…" : "Accept"}
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Creator pipeline panel (shared between mobile and desktop) ─────────────────
-
-function CreatorPipeline({
-  creators,
-  filteredCreators,
-  sortBy,
-  setSortBy,
-  minFollowers,
-  setMinFollowers,
-  nicheFilter,
-  setNicheFilter,
-  allNiches,
-  sticky,
-  localMatches,
-  accepting,
-  onAccept,
-}: {
-  creators: NormalizedCreator[];
-  filteredCreators: NormalizedCreator[];
-  sortBy: "followers" | "recent";
-  setSortBy: (v: "followers" | "recent") => void;
-  minFollowers: number;
-  setMinFollowers: (v: number) => void;
-  nicheFilter: string;
-  setNicheFilter: (v: string) => void;
-  allNiches: string[];
-  sticky: boolean;
-  localMatches: Map<string, string>;
-  accepting: string | null;
-  onAccept: (creator: NormalizedCreator) => void;
-}) {
-  return (
-    <div>
-      {/* Panel header */}
-      <div className="mb-4 flex items-center gap-3">
-        <h2 className="font-display text-lg font-semibold text-ink">Creator Pipeline</h2>
-        {creators.length > 0 ? (
-          <span className="rounded-full bg-moss/10 px-2.5 py-0.5 text-sm font-semibold text-moss">
-            {filteredCreators.length}{filteredCreators.length !== creators.length ? ` / ${creators.length}` : ""}
-          </span>
-        ) : null}
-      </div>
-
-      {creators.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-black/15 bg-white px-6 py-16 text-center">
-          <span className="mb-3 text-4xl">👀</span>
-          <p className="font-semibold text-ink">No creators yet</p>
-          <p className="mt-1 text-sm text-ink/50">Creators who express interest will appear here.</p>
-        </div>
-      ) : (
-        <>
-          {/* Sticky filter bar */}
-          <div className={`mb-4 flex flex-wrap gap-2 ${sticky ? "sticky top-0 z-10 bg-paper/95 pb-3 pt-1 backdrop-blur" : ""}`}>
-            {/* Sort */}
-            <div className="flex overflow-hidden rounded-xl border border-black/10">
-              {(["followers", "recent"] as const).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setSortBy(s)}
-                  className={`px-3 py-1.5 text-xs font-semibold transition ${sortBy === s ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
-                >
-                  {s === "followers" ? "Most Followers" : "Most Recent"}
-                </button>
-              ))}
-            </div>
-
-            {/* Min followers */}
-            <div className="flex overflow-hidden rounded-xl border border-black/10">
-              {[
-                { label: "Any", value: 0 },
-                { label: "1K+", value: 1_000 },
-                { label: "5K+", value: 5_000 },
-                { label: "10K+", value: 10_000 },
-                { label: "50K+", value: 50_000 },
-              ].map((f) => (
-                <button
-                  key={f.value}
-                  type="button"
-                  onClick={() => setMinFollowers(f.value)}
-                  className={`px-3 py-1.5 text-xs font-semibold transition ${minFollowers === f.value ? "bg-moss text-white" : "bg-white text-ink/55 hover:bg-black/[0.03]"}`}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Niche */}
-            {allNiches.length > 0 ? (
-              <select
-                value={nicheFilter}
-                onChange={(e) => setNicheFilter(e.target.value)}
-                className="rounded-xl border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-ink outline-none transition focus:border-moss"
-              >
-                <option value="all">All Niches</option>
-                {allNiches.map((n) => (
-                  <option key={n} value={n}>{n}</option>
-                ))}
-              </select>
-            ) : null}
-          </div>
-
-          {filteredCreators.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-black/15 bg-white px-5 py-8 text-center text-sm text-ink/40">
-              No creators match the current filters.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {filteredCreators.map((creator, i) => (
-                <CreatorCard
-                  key={creator.id || i}
-                  creator={creator}
-                  matchId={localMatches.get(creator.id) ?? null}
-                  accepting={accepting === creator.id}
-                  onAccept={() => onAccept(creator)}
-                />
-              ))}
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-// ── Main component ─────────────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────────────
 
 type Props = {
   campaign: CampaignDetail;
@@ -364,6 +30,8 @@ type EditForm = {
   creatorsNeeded: string;
   deadline: string;
 };
+
+// ── Main component ─────────────────────────────────────────────────────────────
 
 export function CampaignDetailView({ campaign, interestedCreators, userId, existingMatches = new Map() }: Props) {
   const router = useRouter();
@@ -384,7 +52,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   const [minFollowers, setMinFollowers] = useState(0);
   const [nicheFilter, setNicheFilter] = useState("all");
 
-  // Edit form state — refreshed from prop each time editing starts
+  // Edit form state
   const [editForm, setEditForm] = useState<EditForm>({
     title: campaign.title,
     description: campaign.description,
@@ -408,7 +76,8 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   const [docRemoved, setDocRemoved] = useState(false);
   const docInputRef = useRef<HTMLInputElement>(null);
 
-  // Normalize interested creators
+  // ── Normalize creators ────────────────────────────────────────────────────────
+
   const creators: NormalizedCreator[] = interestedCreators.map((row) => {
     const usersNode = Array.isArray(row.users) ? row.users[0] : row.users;
     const cpNode = usersNode?.creator_profiles;
@@ -439,10 +108,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
       if (minFollowers === 0) return true;
       return Math.max(c.instagram_followers, c.tiktok_followers, c.youtube_followers) >= minFollowers;
     })
-    .filter((c) => {
-      if (nicheFilter === "all") return true;
-      return c.brand_categories.includes(nicheFilter);
-    })
+    .filter((c) => nicheFilter === "all" || c.brand_categories.includes(nicheFilter))
     .sort((a, b) => {
       if (sortBy === "recent") {
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
@@ -505,6 +171,11 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Moodboard image must be under 5 MB.");
+      e.target.value = "";
+      return;
+    }
     setNewImageFile(file);
     setNewImagePreview(URL.createObjectURL(file));
     setImageRemoved(false);
@@ -513,6 +184,11 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   function handleDocChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 15 * 1024 * 1024) {
+      setError("Reference document must be under 15 MB.");
+      e.target.value = "";
+      return;
+    }
     setNewDocFile(file);
     setDocRemoved(false);
   }
@@ -654,6 +330,23 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   const editImageSrc = imageRemoved ? null : newImagePreview ?? currentImageUrl;
   const editDocName = docRemoved ? null : newDocFile?.name ?? campaign.reference_doc_name;
 
+  // ── Shared pipeline props ─────────────────────────────────────────────────────
+
+  const pipelineProps = {
+    creators,
+    filteredCreators,
+    sortBy,
+    setSortBy,
+    minFollowers,
+    setMinFollowers,
+    nicheFilter,
+    setNicheFilter,
+    allNiches,
+    localMatches,
+    accepting,
+    onAccept: handleAccept,
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
@@ -714,10 +407,9 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
         </div>
       ) : null}
 
-      {/* ── Sticky header ────────────────────────────────────────────────────────── */}
+      {/* ── Sticky header ─────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-30 border-b border-black/[0.08] bg-white/95 backdrop-blur">
         <div className="mx-auto flex h-[57px] max-w-7xl items-center gap-3 px-4 lg:px-8">
-          {/* Back */}
           <Link
             href="/dashboard"
             className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-ink/50 transition hover:text-ink"
@@ -728,17 +420,14 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
             <span>All Campaigns</span>
           </Link>
 
-          {/* Divider + title + status (desktop) */}
           <div className="hidden h-5 w-px bg-black/10 lg:block" />
           <div className="hidden min-w-0 flex-1 items-center gap-2.5 lg:flex">
             <h1 className="truncate font-display text-sm font-semibold text-ink">{campaign.title}</h1>
             <StatusBadge status={campaign.status} />
           </div>
 
-          {/* Spacer on mobile */}
           <div className="flex-1 lg:hidden" />
 
-          {/* Action buttons */}
           {!editing ? (
             <div className="flex shrink-0 items-center gap-2">
               <button
@@ -762,8 +451,8 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
         </div>
       </header>
 
-      {/* ── Page body ─────────────────────────────────────────────────────────────── */}
-      <div className={`${editing ? "mx-auto max-w-2xl px-4 pb-16 sm:px-6" : "mx-auto max-w-7xl px-4 py-6 lg:px-8"}`}>
+      {/* ── Page body ─────────────────────────────────────────────────────────── */}
+      <div className={editing ? "mx-auto max-w-2xl px-4 pb-16 sm:px-6" : "mx-auto max-w-7xl px-4 py-6 lg:px-8"}>
 
         {editing ? (
           /* ── EDIT MODE ──────────────────────────────────────────────────────── */
@@ -981,7 +670,6 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                 />
               </label>
 
-              {/* Error */}
               {error ? (
                 <p className="rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3 text-sm text-coral">{error}</p>
               ) : null}
@@ -1035,20 +723,14 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                     <span className="text-sm font-semibold text-ink">{COMP_LABELS[campaign.compensation_type] ?? campaign.compensation_type}</span>
                   </div>
                   <div className="px-4">
-                    <span className="text-sm font-semibold text-ink">
-                      {campaign.creators_needed} needed
-                    </span>
+                    <span className="text-sm font-semibold text-ink">{campaign.creators_needed} needed</span>
                   </div>
                   <div className="px-4">
                     <span className={`text-sm font-semibold ${isExpired || isExpiringSoon ? "text-coral" : "text-ink"}`}>
                       {isExpired ? "Expired" : `${left}d left`}
                     </span>
                     <span className="ml-2 text-xs text-ink/40">
-                      {new Date(campaign.deadline).toLocaleDateString("en-CA", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                      {new Date(campaign.deadline).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
                   </div>
                   <div className="pl-4">
@@ -1091,43 +773,15 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                 </div>
               ) : null}
 
-              {/* Mobile: creator pipeline below left panel */}
+              {/* Mobile: pipeline below info */}
               <div className="mt-8 lg:hidden">
-                <CreatorPipeline
-                  creators={creators}
-                  filteredCreators={filteredCreators}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  minFollowers={minFollowers}
-                  setMinFollowers={setMinFollowers}
-                  nicheFilter={nicheFilter}
-                  setNicheFilter={setNicheFilter}
-                  allNiches={allNiches}
-                  sticky={false}
-                  localMatches={localMatches}
-                  accepting={accepting}
-                  onAccept={handleAccept}
-                />
+                <CreatorPipeline {...pipelineProps} sticky={false} />
               </div>
             </div>
 
-            {/* ── Right panel — creator pipeline (desktop, sticky) ───────── */}
+            {/* ── Right panel — pipeline (desktop sticky) ────────────────── */}
             <div className="hidden w-full shrink-0 lg:sticky lg:top-[57px] lg:block lg:max-h-[calc(100vh-57px)] lg:w-[420px] lg:overflow-y-auto lg:border-l lg:border-black/[0.08] lg:pl-8">
-              <CreatorPipeline
-                creators={creators}
-                filteredCreators={filteredCreators}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                minFollowers={minFollowers}
-                setMinFollowers={setMinFollowers}
-                nicheFilter={nicheFilter}
-                setNicheFilter={setNicheFilter}
-                allNiches={allNiches}
-                sticky={true}
-                localMatches={localMatches}
-                accepting={accepting}
-                onAccept={handleAccept}
-              />
+              <CreatorPipeline {...pipelineProps} sticky={true} />
             </div>
 
           </div>
