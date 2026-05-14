@@ -7,6 +7,7 @@ import type { ChatMatch, ChatMessage } from "@/app/matches/[id]/page";
 import { createClient } from "@/utils/supabase/client";
 import { COMP_LABELS } from "@/lib/campaign-constants";
 import { CreatorAvatar } from "@/components/ui/creator-avatar";
+import { Spinner } from "@/components/ui/spinner";
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
@@ -281,9 +282,13 @@ export function ChatView({
             aria-label="Send"
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-coral to-violet shadow-glow text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2L2 8l5 2 2 5 5-13z" />
-            </svg>
+            {sending ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2L2 8l5 2 2 5 5-13z" />
+              </svg>
+            )}
           </button>
         </div>
       </div>

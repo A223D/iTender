@@ -1,9 +1,7 @@
 "use client";
 
 import { CONTENT_TYPES } from "@/lib/campaign-constants";
-
-const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[#07070E] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
+import { Input } from "@/components/ui/input";
 
 export function Step1Fields({
   title,
@@ -20,7 +18,7 @@ export function Step1Fields({
 }) {
   return (
     <div className="space-y-7">
-      <label className="block">
+      <div>
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
             Campaign title <span className="text-coral">*</span>
@@ -29,15 +27,15 @@ export function Step1Fields({
             {title.length} / 80
           </span>
         </div>
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           onKeyDown={onTitleKeyDown}
           placeholder="e.g. Summer launch — sunglasses"
-          className={inputClass}
+          className="py-3.5"
         />
-      </label>
+      </div>
 
       <div>
         <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">

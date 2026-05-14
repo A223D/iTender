@@ -11,6 +11,7 @@ import { Step1Fields } from "./steps/step-1-fields";
 import { Step2Fields } from "./steps/step-2-fields";
 import { Step3Fields, type CouponState } from "./steps/step-3-fields";
 import { ConfettiBurst } from "@/components/ui/confetti-burst";
+import { Spinner } from "@/components/ui/spinner";
 
 type FormData = {
   title: string;
@@ -233,7 +234,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
   const canPublish = coupon.status === "valid" && coupon.discount === 100;
 
   return (
-    <div className="flex min-h-screen w-full flex-col md:flex-row">
+    <div className="flex h-screen w-full flex-col overflow-hidden md:flex-row">
       <CampaignPanel currentStep={step} campaignTitle={form.title} />
 
       <section className="relative flex flex-1 flex-col bg-white">
@@ -370,7 +371,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
               disabled={saving}
               className="min-h-12 min-w-[160px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
             >
-              {saving ? "Publishing…" : "Publish Campaign ->"}
+              {saving ? <span className="flex items-center gap-2"><Spinner className="h-4 w-4" />Publishing…</span> : "Publish Campaign ->"}
             </button>
           ) : (
             <div className="flex flex-col items-end gap-1.5">

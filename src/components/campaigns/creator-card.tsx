@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { formatFollowers } from "@/lib/formatters";
 import { ConfettiBurst } from "@/components/ui/confetti-burst";
+import { Spinner } from "@/components/ui/spinner";
 
 export type NormalizedCreator = {
   pitch: string | null;
@@ -137,7 +138,7 @@ export function CreatorCard({
               disabled={accepting}
               className="rounded-xl bg-gradient-to-r from-coral to-violet px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90 disabled:opacity-60"
             >
-              {accepting ? "Accepting…" : "Accept"}
+              {accepting ? <Spinner className="h-3.5 w-3.5" /> : "Accept"}
             </button>
           )}
         </div>

@@ -2,8 +2,7 @@
 
 import { useRef } from "react";
 
-const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[#07070E] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
+import { Textarea } from "@/components/ui/textarea";
 
 export function Step2Fields({
   description,
@@ -36,12 +35,12 @@ export function Step2Fields({
             {description.length} / 1000
           </span>
         </div>
-        <textarea
+        <Textarea
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           rows={7}
           placeholder={"What's the campaign about? What should creators highlight, and is there anything to avoid mentioning?\n\ne.g. Launching our spring collection — show how the pieces work for everyday wear. Casual tone. No competitor brands in frame."}
-          className={`${inputClass} min-h-[180px] resize-none leading-7`}
+          className="min-h-[180px] py-3.5 leading-7"
         />
       </div>
 

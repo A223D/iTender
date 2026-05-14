@@ -3,9 +3,7 @@
 import { DatePicker } from "@/components/ui/date-picker";
 import { COMPENSATION_TYPES } from "@/lib/campaign-constants";
 import { addDays } from "@/lib/dates";
-
-const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[#07070E] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
+import { Input } from "@/components/ui/input";
 
 export type CouponState =
   | { status: "idle" }
@@ -73,34 +71,34 @@ export function Step3Fields({
       </div>
 
       {/* Compensation details */}
-      <label className="block">
+      <div>
         <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
           Compensation details{" "}
           <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
         </span>
-        <input
+        <Input
           type="text"
           value={compensationDetails}
           onChange={(e) => setField("compensationDetails", e.target.value)}
           placeholder="e.g. Free dinner for 2 + $100 cash"
-          className={inputClass}
+          className="py-3.5"
         />
-      </label>
+      </div>
 
       {/* Creators needed */}
-      <label className="block">
+      <div>
         <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
           Creators needed <span className="text-coral">*</span>
         </span>
-        <input
+        <Input
           type="number"
           min={1}
           value={creatorsNeeded}
           onChange={(e) => setField("creatorsNeeded", e.target.value)}
           onKeyDown={onCreatorsNeededKeyDown}
-          className={inputClass}
+          className="py-3.5"
         />
-      </label>
+      </div>
 
       {/* Deadline */}
       <div>
@@ -123,12 +121,12 @@ export function Step3Fields({
           <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
         </p>
         <div className="flex gap-2">
-          <input
+          <Input
             type="text"
             value={couponInput}
             onChange={(e) => onCouponInputChange(e.target.value)}
             placeholder="e.g. LAUNCH100"
-            className={`flex-1 ${inputClass} uppercase tracking-wider placeholder:normal-case placeholder:tracking-normal`}
+            className="flex-1 py-3.5 uppercase tracking-wider placeholder:normal-case placeholder:tracking-normal"
           />
           <button
             type="button"

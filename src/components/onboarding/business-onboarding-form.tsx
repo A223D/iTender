@@ -7,6 +7,9 @@ import type { Graphics, Sprite } from "pixi.js";
 
 import { createClient } from "@/utils/supabase/client";
 import { FILE_SIZE_LIMITS } from "@/lib/app-config";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const INDUSTRIES = [
   "UGC",
@@ -354,13 +357,19 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 disabled={saving}
                 className="min-h-12 min-w-[180px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
               >
-                {saving
-                  ? "Saving..."
-                  : step === 0
-                    ? "Continue ->"
-                    : isEditing
-                      ? "Save changes ->"
-                      : "Create your profile ->"}
+                {saving ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Saving…
+                  </span>
+                ) : step === 0
+                  ? "Continue ->"
+                  : isEditing
+                    ? "Save changes ->"
+                    : "Create your profile ->"}
               </button>
             </div>
           ) : null}
@@ -416,36 +425,38 @@ function BrandBasicsStep({
       </div>
 
       <FormField label="Business name" required>
-        <input
+        <Input
           type="text"
           value={form.brandName}
           onChange={(e) => set("brandName", e.target.value)}
           placeholder="e.g. Bloom Cafe"
-          className={fieldClassName}
+          className="py-3.5"
         />
       </FormField>
 
       <FormField label="Industry" required>
-        <select value={form.industry} onChange={(e) => set("industry", e.target.value)} className={fieldClassName}>
-          <option value="" disabled>
-            Select your industry...
-          </option>
-          {INDUSTRIES.map((industry) => (
-            <option key={industry} value={industry}>
-              {industry}
-            </option>
-          ))}
-        </select>
+        <Select value={form.industry} onValueChange={(v) => set("industry", v)}>
+          <SelectTrigger className="py-3.5">
+            <SelectValue placeholder="Select your industry…" />
+          </SelectTrigger>
+          <SelectContent>
+            {INDUSTRIES.map((industry) => (
+              <SelectItem key={industry} value={industry}>
+                {industry}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </FormField>
 
       <div className="grid gap-4 md:grid-cols-2">
         <FormField label="City" required>
-          <input
+          <Input
             type="text"
             value={form.city}
             onChange={(e) => set("city", e.target.value)}
             placeholder="e.g. Toronto"
-            className={fieldClassName}
+            className="py-3.5"
           />
         </FormField>
 
@@ -454,13 +465,13 @@ function BrandBasicsStep({
             <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-[13px] font-medium text-black/40">
               https://
             </span>
-            <input
+            <Input
               type="text"
               inputMode="url"
               value={form.websiteUrl}
               onChange={(e) => set("websiteUrl", stripWebsiteProtocol(e.target.value))}
               placeholder="yourbrand.com"
-              className={`${fieldClassName} pl-16`}
+              className="py-3.5 pl-16"
             />
           </div>
         </FormField>
@@ -483,12 +494,12 @@ function BrandStoryStep({ form, set }: { form: FormData; set: (key: keyof FormDa
             {count} / 1000
           </span>
         </div>
-        <textarea
+        <Textarea
           value={form.brandValues}
           onChange={(e) => set("brandValues", e.target.value)}
           rows={9}
           placeholder="Tell creators what your brand is about - your values, vibe, the kind of content you're looking for, and what makes working with you exciting."
-          className={`${fieldClassName} min-h-[220px] resize-none leading-7`}
+          className="min-h-[220px] py-3.5 leading-7"
         />
       </div>
 
@@ -869,9 +880,6 @@ function FormField({ label, required, children }: { label: string; required?: bo
     </label>
   );
 }
-
-const fieldClassName =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-[var(--scout-ink)] outline-none transition placeholder:text-black/30 hover:border-black/25 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,69,102,0.15)]";
 
 function ITenderLogo() {
   return (
