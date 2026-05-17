@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { CampaignBuilderForm } from "@/components/campaigns/campaign-builder-form";
+import { BgStack } from "@/components/ui/bg-stack";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function NewCampaignPage() {
@@ -22,7 +23,8 @@ export default async function NewCampaignPage() {
   if (!profile) redirect("/onboarding/business");
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="relative min-h-screen">
+      <BgStack />
       <CampaignBuilderForm userId={user.id} />
     </main>
   );

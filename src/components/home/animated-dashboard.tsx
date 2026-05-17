@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 
@@ -28,13 +28,13 @@ type Props = {
 };
 
 const toneBg: Record<NonNullable<LandingStat["tone"]>, string> = {
-  rose: "bg-coral/[0.08] border-coral/20",
+  rose: "bg-white/[0.08] border-white/20",
   emerald: "bg-teal/[0.08] border-teal/20",
   slate: "bg-gray-50 border-gray-200",
 };
 
 const toneValue: Record<NonNullable<LandingStat["tone"]>, string> = {
-  rose: "text-coral",
+  rose: "text-[var(--color-text-muted)]",
   emerald: "text-teal",
   slate: "text-gray-800",
 };
@@ -83,35 +83,35 @@ export function AnimatedDashboard({ summaryPanel }: Props) {
         className="float-chip absolute -left-8 -top-8 z-20 opacity-0 animate-float-slow rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur-md"
         style={{ animationDelay: "0.6s" }}
       >
-        🎥 @sarahsnaps · 8.2K
+        ðŸŽ¥ @sarahsnaps Â· 8.2K
       </div>
       <div
-        className="float-chip absolute -right-6 -top-3 z-20 opacity-0 animate-float-medium rounded-full border border-coral/30 bg-coral/[0.07] px-4 py-2 text-xs font-semibold text-coral backdrop-blur-md"
+        className="float-chip absolute -right-6 -top-3 z-20 opacity-0 animate-float-medium rounded-full border border-white/20 bg-white/[0.08] px-4 py-2 text-xs font-semibold text-[var(--color-text-muted)] backdrop-blur-md"
         style={{ animationDelay: "1.1s" }}
       >
-        <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse-dot rounded-full bg-coral" />
+        <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse-dot rounded-full bg-[var(--color-text)]" />
         Live Campaign
       </div>
       <div
         className="float-chip absolute -bottom-6 -left-10 z-20 opacity-0 animate-float-fast rounded-full border border-teal/25 bg-teal/[0.07] px-4 py-2 text-xs font-semibold text-teal backdrop-blur-md"
         style={{ animationDelay: "0.3s" }}
       >
-        +$1.2K earned 💸
+        +$1.2K earned ðŸ’¸
       </div>
       <div
-        className="float-chip absolute -right-8 bottom-10 z-20 opacity-0 animate-float-medium rounded-full border border-violet/25 bg-violet/[0.07] px-4 py-2 text-xs font-semibold text-violet backdrop-blur-md"
+        className="float-chip absolute -right-8 bottom-10 z-20 opacity-0 animate-float-medium rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-semibold text-[var(--color-text-muted)] backdrop-blur-md"
         style={{ animationDelay: "1.5s" }}
       >
-        ✨ 3 brand deals
+        âœ¨ 3 brand deals
       </div>
 
       {/* Card glow */}
-      <div className="pointer-events-none absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-coral/10 via-violet/8 to-teal/8 blur-2xl" />
+      <div className="pointer-events-none absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-fuchsia-500/10 via-violet/8 to-teal/8 blur-2xl" />
 
       {/* Main card */}
       <div className="dashboard-frame relative opacity-0 rounded-[2.5rem] border border-gray-200 bg-white p-6 shadow-dashboard-light">
         {/* Top gradient accent */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 rounded-t-[2.5rem] bg-gradient-to-r from-coral via-violet to-teal" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 rounded-t-[2.5rem] bg-gradient-to-r from-fuchsia-500 via-violet to-teal" />
 
         <div className="relative">
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-400">
@@ -143,7 +143,7 @@ export function AnimatedDashboard({ summaryPanel }: Props) {
             <p className="mt-2 text-sm font-medium text-gray-600">{summaryPanel.footerCard.detail}</p>
             <button
               type="button"
-              className="mt-3 w-full rounded-full bg-gradient-to-r from-coral to-violet py-2.5 text-sm font-bold text-white transition hover:opacity-90"
+              className="mt-3 w-full rounded-full bg-gradient-to-r from-fuchsia-500 to-fuchsia-700 py-2.5 text-sm font-bold text-white transition hover:opacity-90"
             >
               {summaryPanel.footerCard.actionLabel}
             </button>
@@ -153,3 +153,4 @@ export function AnimatedDashboard({ summaryPanel }: Props) {
     </div>
   );
 }
+

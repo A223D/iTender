@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -29,9 +29,9 @@ const CAMPAIGN_STEPS = [
 ];
 
 const STEP_HEADINGS = [
-  <>Campaign <em className="text-coral">basics</em>.</>,
-  <>Brief & <em className="text-coral">materials</em>.</>,
-  <>Compensation & <em className="text-coral">launch</em>.</>,
+  <>Campaign <em className="text-[var(--color-text-muted)]">basics</em>.</>,
+  <>Brief & <em className="text-[var(--color-text-muted)]">materials</em>.</>,
+  <>Compensation & <em className="text-[var(--color-text-muted)]">launch</em>.</>,
 ];
 
 const STEP_SUBTITLES = [
@@ -237,43 +237,43 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
     <div className="flex h-screen w-full flex-col overflow-hidden md:flex-row">
       <CampaignPanel currentStep={step} campaignTitle={form.title} />
 
-      <section className="relative flex flex-1 flex-col bg-white">
-        {/* ── Published success overlay ───────────────────────────────────────── */}
+      <section className="relative flex flex-1 flex-col glass">
+        {/* â”€â”€ Published success overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {published ? (
-          <div className="scout-onboarding-step-in absolute inset-0 z-20 flex flex-col items-center justify-center bg-white px-8 text-center">
+          <div className="scout-onboarding-step-in absolute inset-0 z-20 flex flex-col items-center justify-center glass px-8 text-center">
             <ConfettiBurst trigger={confettiKey} />
             <div className="relative z-10">
-              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-4xl shadow-glow">
-                🎉
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full glass text-4xl">
+                ðŸŽ‰
               </div>
-              <h2 className="font-display text-3xl font-bold text-[#07070E]">Campaign is live!</h2>
-              <p className="mt-3 max-w-xs text-base text-black/50">
-                <span className="font-semibold text-[#07070E]">{form.title}</span> is now visible to creators on iTender.
+              <h2 className="font-display text-3xl font-bold text-[var(--color-text)]">Campaign is live!</h2>
+              <p className="mt-3 max-w-xs text-base text-[var(--color-text-muted)]">
+                <span className="font-semibold text-[var(--color-text)]">{form.title}</span> is now visible to creators on iTender.
               </p>
-              <p className="mt-6 text-sm text-black/30">Redirecting to dashboard…</p>
+              <p className="mt-6 text-sm text-[var(--color-text-hint)]">Redirecting to dashboardâ€¦</p>
             </div>
           </div>
         ) : null}
 
         {/* Step counter header */}
-        <div className="flex h-14 items-center justify-between border-b border-black/[0.08] px-5 sm:px-9">
+        <div className="flex h-14 items-center justify-between border-b border-white/[0.08] px-5 sm:px-9">
           <div className="font-mono text-[11px] font-semibold uppercase text-black/40">
             Step{" "}
-            <span className="text-[#07070E]">{String(step + 1).padStart(2, "0")}</span>
+            <span className="text-[var(--color-text)]">{String(step + 1).padStart(2, "0")}</span>
             <span className="text-black/35"> / {String(CAMPAIGN_STEPS.length).padStart(2, "0")}</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="text-xs font-semibold text-black/55 transition hover:text-[#07070E] sm:text-sm"
+              className="text-xs font-semibold text-black/55 transition hover:text-[var(--color-text)] sm:text-sm"
             >
               Save & exit
             </button>
             <div className="hidden h-4 w-px bg-black/10 sm:block" />
             <a
               href="mailto:support@itender.com?subject=Campaign%20help"
-              className="hidden text-sm font-semibold text-black/55 transition hover:text-[#07070E] sm:inline"
+              className="hidden text-sm font-semibold text-black/55 transition hover:text-[var(--color-text)] sm:inline"
             >
               Need help?
             </a>
@@ -286,7 +286,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             key={step}
             className="scout-onboarding-step-in mx-auto max-w-[620px] px-5 py-10 sm:px-10 md:mx-0 lg:px-12 lg:py-12"
           >
-            <h1 className="font-display text-3xl font-bold leading-tight text-[#07070E] sm:text-[34px]">
+            <h1 className="font-display text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-[34px]">
               {STEP_HEADINGS[step]}
             </h1>
             <p className="mt-3 max-w-[460px] text-[15px] leading-7 text-black/55">
@@ -336,7 +336,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             </div>
 
             {error ? (
-              <p className="mt-5 rounded-xl border border-coral/25 bg-coral/10 px-4 py-3 text-sm font-medium text-coral">
+              <p className="mt-5 rounded-xl border border-error/25 bg-error/10 px-4 py-3 text-sm font-medium text-error">
                 {error}
               </p>
             ) : null}
@@ -344,12 +344,12 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
         </div>
 
         {/* Footer navigation */}
-        <div className="flex items-center gap-3 border-t border-black/10 bg-white px-5 py-5 sm:px-10 lg:px-12">
+        <div className="flex items-center gap-3 border-t border-white/[0.12] glass px-5 py-5 sm:px-10 lg:px-12">
           {step > 0 ? (
             <button
               type="button"
               onClick={() => { setError(null); setStep((s) => s - 1); }}
-              className="rounded-xl border border-black/10 bg-white px-5 py-3 text-sm font-semibold transition hover:border-black/30 hover:bg-black/[0.03] active:scale-[0.98]"
+              className="rounded-xl border border-white/[0.12] glass px-5 py-3 text-sm font-semibold transition hover:border-white/[0.12] hover:bg-black/[0.03] active:scale-[0.98]"
             >
               Back
             </button>
@@ -360,7 +360,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             <button
               type="button"
               onClick={handleNext}
-              className="min-h-12 min-w-[160px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98]"
+              className="min-h-12 min-w-[160px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-90 active:scale-[0.98]"
             >
               Continue -&gt;
             </button>
@@ -369,20 +369,20 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="min-h-12 min-w-[160px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
+              className="min-h-12 min-w-[160px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
             >
-              {saving ? <span className="flex items-center gap-2"><Spinner className="h-4 w-4" />Publishing…</span> : "Publish Campaign ->"}
+              {saving ? <span className="flex items-center gap-2"><Spinner className="h-4 w-4" />Publishingâ€¦</span> : "Publish Campaign ->"}
             </button>
           ) : (
             <div className="flex flex-col items-end gap-1.5">
               <button
                 type="button"
                 disabled
-                className="min-h-12 cursor-not-allowed rounded-xl bg-black/10 px-6 py-3 text-sm font-bold text-ink/30"
+                className="min-h-12 cursor-not-allowed rounded-xl bg-black/10 px-6 py-3 text-sm font-bold text-[var(--color-text-muted)]"
               >
                 Complete Payment
               </button>
-              <p className="text-right text-xs text-ink/40">
+              <p className="text-right text-xs text-[var(--color-text-muted)]">
                 Apply a 100% coupon to publish now
               </p>
             </div>
@@ -407,8 +407,8 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
     >
       {/* Ambient gradient blobs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-24 top-1/4 h-[380px] w-[380px] rounded-full bg-violet/[0.14] blur-[100px]" />
-        <div className="absolute right-0 top-1/2 h-[300px] w-[300px] rounded-full bg-coral/[0.10] blur-[90px]" />
+        <div className="absolute -left-24 top-1/4 h-[380px] w-[380px] rounded-full bg-fuchsia-500/[0.08] blur-[100px]" />
+        <div className="absolute right-0 top-1/2 h-[300px] w-[300px] rounded-full bg-fuchsia-400/[0.06] blur-[90px]" />
         <div className="absolute bottom-0 left-1/3 h-[240px] w-[240px] rounded-full bg-teal/[0.07] blur-[80px]" />
       </div>
 
@@ -423,13 +423,13 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
 
         {/* Heading */}
         <div className="mt-9 lg:mt-16">
-          <div className="mb-3 font-mono text-[11px] font-semibold uppercase text-coral">
+          <div className="mb-3 font-mono text-[11px] font-semibold uppercase text-[var(--color-text-muted)]">
             -&gt; New campaign
           </div>
           <h2 className="font-display text-[36px] font-bold leading-none text-white">
             Launch a campaign
             <br />
-            creators <em className="text-coral">want</em>
+            creators <em className="text-[var(--color-text-muted)]">want</em>
             <br />
             to join.
           </h2>
@@ -449,9 +449,9 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition ${
                       done
-                        ? "bg-coral text-white"
+                        ? "bg-[var(--color-text)] text-slate-950"
                         : active
-                          ? "bg-white text-[#07070E]"
+                          ? "glass text-[var(--color-text)]"
                           : "border border-white/15 text-white/35"
                     }`}
                   >
@@ -459,7 +459,7 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
                   </span>
                   {index < PANEL_STEPS.length - 1 ? (
                     <span
-                      className={`mt-1 hidden h-6 w-px lg:block ${done ? "bg-coral" : "bg-white/10"}`}
+                      className={`mt-1 hidden h-6 w-px lg:block ${done ? "bg-[var(--color-text)]" : "bg-white/10"}`}
                     />
                   ) : null}
                 </div>
@@ -537,3 +537,6 @@ function PanelCheckIcon() {
     </svg>
   );
 }
+
+
+

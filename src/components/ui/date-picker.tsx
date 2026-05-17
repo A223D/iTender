@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { format } from "date-fns";
@@ -37,8 +37,8 @@ export function DatePicker({
         <button
           type="button"
           className={cn(
-            "flex w-full items-center justify-between rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition hover:border-black/20 focus:border-moss",
-            selected ? "text-ink" : "text-ink/35",
+            "input-recessed flex w-full items-center justify-between rounded-2xl px-4 py-3 text-sm outline-none transition",
+            selected ? "text-[var(--color-text)]" : "text-[var(--color-text-hint)]",
             className,
           )}
         >
@@ -52,7 +52,7 @@ export function DatePicker({
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="shrink-0 text-ink/40"
+            className="shrink-0 text-[var(--color-text-hint)]"
           >
             <rect x="1" y="2" width="14" height="13" rx="2" />
             <path d="M1 6h14M5 1v2M11 1v2" />
@@ -63,7 +63,7 @@ export function DatePicker({
         <Popover.Content
           sideOffset={8}
           align="start"
-          className="z-50 rounded-2xl border border-black/[0.08] bg-white shadow-xl outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+          className="glass-ambient z-50 rounded-2xl outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
         >
           <Calendar
             mode="single"
@@ -86,3 +86,4 @@ export function DatePicker({
     </Popover.Root>
   );
 }
+

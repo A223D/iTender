@@ -1,4 +1,4 @@
-type Size = "sm" | "md" | "lg" | "xl";
+﻿type Size = "sm" | "md" | "lg" | "xl";
 type Shape = "circle" | "rounded";
 
 const SIZE_CLASSES: Record<Size, string> = {
@@ -35,8 +35,9 @@ export function CreatorAvatar({
   }
 
   return (
-    <div className={`flex ${sizeCls} ${roundedCls} items-center justify-center bg-gradient-to-br from-coral to-violet font-bold text-white`}>
+    <div className={`flex ${sizeCls} ${roundedCls} items-center justify-center bg-gradient-to-br from-fuchsia-500 to-fuchsia-700 font-bold text-white`}>
       {initial}
     </div>
   );
 }
+

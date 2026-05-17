@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export function CreatorCard({
   }, [matchId]);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-l-2 border-black/[0.08] border-l-coral/30 bg-white shadow-sm">
+    <div className="glass relative overflow-hidden rounded-2xl border-l-2 border-l-white/20">
       <ConfettiBurst trigger={celebrateKey} count={40} />
       <div className="p-5">
         <div className="flex items-start gap-3">
@@ -62,7 +62,7 @@ export function CreatorCard({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={photo} alt={creator.name} className="h-12 w-12 rounded-xl object-cover" />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-coral/20 to-violet/20 text-sm font-bold text-ink/60">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-fuchsia-700/20 text-sm font-bold text-[var(--color-text-muted)]">
                 {creator.name.charAt(0).toUpperCase()}
               </div>
             )}
@@ -70,21 +70,21 @@ export function CreatorCard({
 
           {/* Name / handle / profile link */}
           <div className="min-w-0 flex-1">
-            <p className="truncate font-semibold text-ink">{creator.name}</p>
-            {handle ? <p className="text-xs text-ink/45">{handle}</p> : null}
+            <p className="truncate font-semibold text-[var(--color-text)]">{creator.name}</p>
+            {handle ? <p className="text-xs text-[var(--color-text-muted)]">{handle}</p> : null}
             <Link
               href={`/creators/${creator.id}`}
               target="_blank"
-              className="text-xs font-medium text-coral/70 transition hover:text-coral"
+              className="text-xs font-medium text-[var(--color-text-hint)] transition hover:text-[var(--color-text-muted)]"
             >
-              View profile ↗
+              View profile â†—
             </Link>
 
             {/* Platform follower pills */}
             {platforms.length > 0 ? (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {platforms.map((p) => (
-                  <span key={p.label} className="rounded-full bg-black/[0.05] px-2.5 py-1 text-xs font-bold text-ink/65">
+                  <span key={p.label} className="rounded-full bg-black/[0.05] px-2.5 py-1 text-xs font-bold text-[var(--color-text-muted)]">
                     {p.label} {formatFollowers(p.count)}
                   </span>
                 ))}
@@ -95,14 +95,14 @@ export function CreatorCard({
 
         {/* Bio */}
         {creator.bio ? (
-          <p className="mt-3 line-clamp-2 text-sm leading-5 text-ink/60">{creator.bio}</p>
+          <p className="mt-3 line-clamp-2 text-sm leading-5 text-[var(--color-text-muted)]">{creator.bio}</p>
         ) : null}
 
         {/* Category tags */}
         {creator.brand_categories.length > 0 ? (
           <div className="mt-3 flex flex-wrap gap-1.5">
             {creator.brand_categories.map((cat) => (
-              <span key={cat} className="rounded-full border border-black/10 px-2.5 py-0.5 text-xs text-ink/55">
+              <span key={cat} className="rounded-full border border-white/10 px-2.5 py-0.5 text-xs text-[var(--color-text-muted)]">
                 {cat}
               </span>
             ))}
@@ -111,9 +111,9 @@ export function CreatorCard({
 
         {/* Pitch */}
         {creator.pitch ? (
-          <div className="mt-4 rounded-xl border border-coral/20 bg-coral/[0.04] px-4 py-3">
-            <p className="mb-1 text-xs font-semibold text-coral">Why they&apos;re a fit</p>
-            <p className="text-sm leading-5 text-ink/70">{creator.pitch}</p>
+          <div className="mt-4 rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3">
+            <p className="mb-1 text-xs font-semibold text-[var(--color-text-muted)]">Why they&apos;re a fit</p>
+            <p className="text-sm leading-5 text-[var(--color-text-muted)]">{creator.pitch}</p>
           </div>
         ) : null}
 
@@ -121,14 +121,14 @@ export function CreatorCard({
         <div className="mt-4 flex items-center justify-end gap-2">
           {matchId ? (
             <>
-              <span className="scout-pop-in rounded-full bg-coral/10 px-3 py-1.5 text-xs font-semibold text-coral">
-                Accepted ✓
+              <span className="scout-pop-in rounded-full glass/20 px-3 py-1.5 text-xs font-semibold text-[var(--color-text-muted)]">
+                Accepted âœ“
               </span>
               <Link
                 href={`/matches/${matchId}`}
-                className="rounded-xl bg-gradient-to-r from-coral to-violet px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90"
+                className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-fuchsia-700 px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90"
               >
-                Message →
+                Message â†’
               </Link>
             </>
           ) : (
@@ -136,7 +136,7 @@ export function CreatorCard({
               type="button"
               onClick={onAccept}
               disabled={accepting}
-              className="rounded-xl bg-gradient-to-r from-coral to-violet px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90 disabled:opacity-60"
+              className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-fuchsia-700 px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90 disabled:opacity-60"
             >
               {accepting ? <Spinner className="h-3.5 w-3.5" /> : "Accept"}
             </button>
@@ -146,3 +146,5 @@ export function CreatorCard({
     </div>
   );
 }
+
+

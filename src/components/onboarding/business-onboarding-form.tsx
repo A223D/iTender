@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -37,9 +37,6 @@ const THEME_STYLE = {
   "--scout-paper": "#F2F2FF",
   "--scout-lime": "#FF4566",
   "--scout-lime-deep": "#E63059",
-  "--scout-coral": "#FF4566",
-  "--scout-violet": "#7B5FFF",
-  "--scout-sky": "#00E5CC",
 } as CSSProperties;
 
 type InitialProfile = {
@@ -243,20 +240,20 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
   }
 
   return (
-    <div style={THEME_STYLE} className="min-h-screen bg-[var(--scout-cream)] text-[var(--scout-ink)]">
+    <div style={THEME_STYLE} className="min-h-screen text-[var(--color-text)]">
       <div className="flex min-h-screen w-full flex-col md:flex-row">
         <BrandPanel current={completed ? STEPS.length : step} isEditing={isEditing} />
 
-        <section className="relative flex min-h-[680px] flex-1 flex-col bg-[var(--scout-cream)]">
+        <section className="glass relative flex min-h-[680px] flex-1 flex-col rounded-none border-t-0 border-b-0 border-l-0 border-r-0">
           <ConfettiBurst trigger={confettiKey} />
 
-          <div className="flex h-14 items-center justify-between border-b border-black/10 px-5 sm:px-9">
-            <div className="font-mono text-[11px] font-semibold uppercase text-black/40">
+          <div className="flex h-14 items-center justify-between border-b border-white/[0.08] px-5 sm:px-9">
+            <div className="font-mono text-[11px] font-semibold uppercase text-[var(--color-text-hint)]">
               {completed ? (
-                <span className="text-[var(--scout-ink)]">Complete</span>
+                <span className="text-[var(--color-text)]">Complete</span>
               ) : (
                 <>
-                  Step <span className="text-[var(--scout-ink)]">{String(step + 1).padStart(2, "0")}</span>
+                  Step <span className="text-[var(--color-text)]">{String(step + 1).padStart(2, "0")}</span>
                   <span className="text-black/35"> / {String(STEPS.length).padStart(2, "0")}</span>
                 </>
               )}
@@ -265,14 +262,14 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
               <button
                 type="button"
                 onClick={() => router.push("/dashboard")}
-                className="text-xs font-semibold text-black/55 transition hover:text-[var(--scout-ink)] sm:text-sm"
+                className="text-xs font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:text-sm"
               >
                 Save & exit
               </button>
               <div className="hidden h-4 w-px bg-black/10 sm:block" />
               <a
                 href="mailto:support@itender.com?subject=Business%20onboarding%20help"
-                className="hidden text-sm font-semibold text-black/55 transition hover:text-[var(--scout-ink)] sm:inline"
+                className="hidden text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:inline"
               >
                 Need help?
               </a>
@@ -292,20 +289,20 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 style={{ "--dir": direction } as CSSProperties}
                 className="scout-onboarding-step-in mx-auto max-w-[680px] px-5 py-10 sm:px-10 md:mx-0 lg:px-14 lg:py-12"
               >
-                <h1 className="m-0 font-display text-4xl font-bold leading-tight text-[var(--scout-ink)] sm:text-[38px]">
+                <h1 className="m-0 font-display text-4xl font-bold leading-tight text-[var(--color-text)] sm:text-[38px]">
                   {step === 0 ? (
                     <>
                       Tell us about{" "}
-                      <em className="text-coral">your brand</em>.
+                      <em className="text-[var(--color-accent-fg)]">your brand</em>.
                     </>
                   ) : (
                     <>
                       What is your brand{" "}
-                      <em className="text-coral">about</em>?
+                      <em className="text-[var(--color-accent-fg)]">about</em>?
                     </>
                   )}
                 </h1>
-                <p className="mt-3 max-w-[480px] text-[15px] leading-7 text-black/55">
+                <p className="mt-3 max-w-[480px] text-[15px] leading-7 text-[var(--color-text-muted)]">
                   {step === 0
                     ? "These basics help us match you with creators in your space."
                     : "Give creators a sense of your values, voice, and the content you love."}
@@ -326,7 +323,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 </div>
 
                 {error ? (
-                  <p className="mt-5 rounded-xl border border-[var(--scout-coral)]/25 bg-[var(--scout-coral)]/10 px-4 py-3 text-sm font-medium text-[var(--scout-coral)]">
+                  <p className="mt-5 rounded-xl border border-error/25 bg-error/10 px-4 py-3 text-sm font-medium text-error">
                     {error}
                   </p>
                 ) : null}
@@ -335,7 +332,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
           </div>
 
           {!completed ? (
-            <div className="flex items-center gap-3 border-t border-black/10 bg-[var(--scout-cream)] px-5 py-5 sm:px-10 lg:px-14">
+            <div className="flex items-center gap-3 border-t border-white/[0.08] px-5 py-5 sm:px-10 lg:px-14">
               {step > 0 ? (
                 <button
                   type="button"
@@ -344,18 +341,18 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                     setDirection(-1);
                     setStep(0);
                   }}
-                  className="rounded-xl border border-black/10 bg-white px-5 py-3 text-sm font-semibold transition hover:border-black/30 hover:bg-black/[0.03] active:scale-[0.98]"
+                  className="rounded-xl glass px-5 py-3 text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] active:scale-[0.98]"
                 >
                   Back
                 </button>
               ) : null}
               <div className="flex-1" />
-              <div className="hidden font-mono text-[11px] text-black/40 sm:block">{email}</div>
+              <div className="hidden font-mono text-[11px] text-[var(--color-text-hint)] sm:block">{email}</div>
               <button
                 type="button"
                 onClick={step === 0 ? handleNextStep : handleSubmit}
                 disabled={saving}
-                className="min-h-12 min-w-[180px] rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
+                className="min-h-12 min-w-[180px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-slate-950"
               >
                 {saving ? (
                   <span className="flex items-center gap-2">
@@ -395,12 +392,12 @@ function BrandBasicsStep({
   return (
     <div className="space-y-6">
       <div>
-        <div className="mb-2 text-[11px] font-bold uppercase text-[var(--scout-ink)]">Brand logo</div>
+        <div className="mb-2 text-[11px] font-bold uppercase text-[var(--color-text)]">Brand logo</div>
         <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => logoInputRef.current?.click()}
-            className="relative flex h-[88px] w-[88px] shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-black/20 bg-white transition hover:border-[var(--scout-ink)]"
+            className="glass relative flex h-[88px] w-[88px] shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-white/[0.20] transition hover:border-white/[0.40]"
             aria-label={logoPreview ? "Change brand logo" : "Upload brand logo"}
           >
             {logoPreview ? (
@@ -414,11 +411,11 @@ function BrandBasicsStep({
             <button
               type="button"
               onClick={() => logoInputRef.current?.click()}
-              className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold transition hover:border-black/30 hover:bg-black/[0.03]"
+              className="glass rounded-xl px-4 py-2.5 text-sm font-semibold text-[var(--color-text)] transition hover:opacity-80"
             >
               {logoPreview ? "Change logo" : "Upload logo"}
             </button>
-            <p className="mt-2 text-xs text-black/40">Optional - JPG, PNG, WEBP</p>
+            <p className="mt-2 text-xs text-[var(--color-text-hint)]">Optional - JPG, PNG, WEBP</p>
           </div>
         </div>
         <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={onLogoChange} />
@@ -462,7 +459,7 @@ function BrandBasicsStep({
 
         <FormField label="Website URL">
           <div className="relative">
-            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-[13px] font-medium text-black/40">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-[13px] font-medium text-[var(--color-text-hint)]">
               https://
             </span>
             <Input
@@ -487,10 +484,10 @@ function BrandStoryStep({ form, set }: { form: FormData; set: (key: keyof FormDa
     <div className="space-y-5">
       <div>
         <div className="mb-2 flex items-baseline justify-between gap-4">
-          <label className="text-[11px] font-bold uppercase text-[var(--scout-ink)]">
-            Brand bio <span className="text-[var(--scout-coral)]">*</span>
+          <label className="text-[11px] font-bold uppercase text-[var(--color-text)]">
+            Brand bio <span className="text-[var(--color-accent-fg)]">*</span>
           </label>
-          <span className={`font-mono text-xs font-medium ${count > 1000 ? "text-[var(--scout-coral)]" : "text-black/40"}`}>
+          <span className={`font-mono text-xs font-medium ${count > 1000 ? "text-[var(--color-accent-fg)]" : "text-[var(--color-text-hint)]"}`}>
             {count} / 1000
           </span>
         </div>
@@ -535,7 +532,7 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
           <h2 className="m-0 font-display text-[42px] font-bold leading-none text-white">
             Make creators
             <br />
-            <em className="text-coral">fall</em> for
+            <em className="text-[var(--color-accent-fg)]">fall</em> for
             <br />
             your brand.
           </h2>
@@ -555,9 +552,9 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition ${
                       done
-                        ? "bg-[var(--scout-lime)] text-[var(--scout-ink)]"
+                        ? "bg-[var(--scout-lime)] text-[var(--color-text)]"
                         : active
-                          ? "bg-white text-[var(--scout-ink)]"
+                          ? "bg-[var(--color-text)] text-slate-950"
                           : "border border-white/15 text-white/35"
                     }`}
                   >
@@ -625,24 +622,24 @@ function CompletionScreen({
 }) {
   return (
     <div className="scout-onboarding-step-in flex max-w-[560px] flex-col items-start px-5 py-16 sm:px-10 lg:px-14 lg:py-20">
-      <div className="mb-8 flex h-[72px] w-[72px] items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet shadow-glow-violet">
+      <div className="mb-8 flex h-[72px] w-[72px] items-center justify-center rounded-full glass">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
           <path d="M9 18.5L15 24.5L27 12.5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
-      <h1 className="m-0 font-display text-[38px] font-bold leading-tight text-[var(--scout-ink)]">
+      <h1 className="m-0 font-display text-[38px] font-bold leading-tight text-[var(--color-text)]">
         {brandName} is {isEditing ? "updated" : "ready"}
         <br />
-        to meet <em className="text-coral">creators</em>.
+        to meet <em className="text-[var(--color-accent-fg)]">creators</em>.
       </h1>
-      <p className="mt-4 max-w-[440px] text-[15px] leading-7 text-black/55">
+      <p className="mt-4 max-w-[440px] text-[15px] leading-7 text-[var(--color-text-muted)]">
         Your profile is live. Browse creators in your city or post your first brief, and iTender will surface
         matches as they roll in.
       </p>
       <button
         type="button"
         onClick={onDashboard}
-        className="mt-8 rounded-xl bg-gradient-to-r from-coral to-violet px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:opacity-90 active:scale-[0.98]"
+        className="mt-8 rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-90 active:scale-[0.98]"
       >
         Go to dashboard -&gt;
       </button>
@@ -873,8 +870,8 @@ function ParticleShowlight() {
 function FormField({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-[11px] font-bold uppercase text-[var(--scout-ink)]">
-        {label} {required ? <span className="text-[var(--scout-coral)]">*</span> : null}
+      <span className="mb-2 block text-[11px] font-bold uppercase text-[var(--color-text)]">
+        {label} {required ? <span className="text-[var(--color-accent-fg)]">*</span> : null}
       </span>
       {children}
     </label>
@@ -935,3 +932,5 @@ function StarIcon() {
     </svg>
   );
 }
+
+

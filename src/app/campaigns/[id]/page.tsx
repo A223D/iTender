@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { CampaignDetailView } from "@/components/campaigns/campaign-detail-view";
+import { BgStack } from "@/components/ui/bg-stack";
 import { createClient } from "@/utils/supabase/server";
 
 export type CampaignDetail = {
@@ -118,7 +119,8 @@ export default async function CampaignDetailPage({
   );
 
   return (
-    <main className="min-h-screen bg-[#F7F6FF]">
+    <main className="relative min-h-screen">
+      <BgStack />
       <CampaignDetailView
         campaign={campaign as CampaignDetail}
         interestedCreators={interestedCreators}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { createClient } from "@/utils/supabase/client";
 
 const MAX_TOASTS = 4;
 
-// ── Audio ──────────────────────────────────────────────────────────────────────
+// â”€â”€ Audio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function useNotificationAudio() {
   const ctxRef = useRef<AudioContext | null>(null);
@@ -62,7 +62,7 @@ function useNotificationAudio() {
   return play;
 }
 
-// ── Toast UI ───────────────────────────────────────────────────────────────────
+// â”€â”€ Toast UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function NotificationToast({
   id,
@@ -80,27 +80,25 @@ function NotificationToast({
   const isApplication = type === "application";
 
   return (
-    <div className="relative flex w-[340px] overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.10),0_1px_4px_rgba(0,0,0,0.06)]">
+    <div className="glass-ambient relative flex w-[340px] overflow-hidden rounded-2xl">
       {/* Left accent bar */}
-      <div className={`absolute left-0 top-0 h-full w-[3px] ${isApplication ? "bg-coral" : "bg-moss"}`} />
+      <div className={`absolute left-0 top-0 h-full w-[3px] ${isApplication ? "bg-[var(--color-text)]" : "bg-[var(--color-accent-fg)]"}`} />
 
       {/* Body */}
       <div className="flex min-w-0 flex-1 items-start gap-3 py-4 pl-5 pr-4">
         {/* Icon badge */}
         <div
-          className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-base ${
-            isApplication ? "bg-coral/10" : "bg-moss/10"
-          }`}
+          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-base bg-white/[0.10] dark:bg-white/[0.10]"
         >
-          {isApplication ? "💌" : "💬"}
+          {isApplication ? "ðŸ’Œ" : "ðŸ’¬"}
         </div>
 
         {/* Text */}
         <div className="min-w-0 flex-1">
-          <p className="text-[13px] font-semibold leading-snug text-ink">
+          <p className="text-[13px] font-semibold leading-snug text-[var(--color-text)]">
             {isApplication ? "New application" : "New message"}
           </p>
-          <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink/55">{message}</p>
+          <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-[var(--color-text-muted)]">{message}</p>
           {href ? (
             <button
               type="button"
@@ -108,11 +106,9 @@ function NotificationToast({
                 onNavigate?.();
                 toast.dismiss(id);
               }}
-              className={`mt-2 text-xs font-semibold transition-opacity hover:opacity-70 ${
-                isApplication ? "text-coral" : "text-moss"
-              }`}
+              className="mt-2 text-xs font-semibold text-[var(--color-text-muted)] transition-opacity hover:opacity-70"
             >
-              {isApplication ? "View applicants →" : "Open chat →"}
+              {isApplication ? "View applicants â†’" : "Open chat â†’"}
             </button>
           ) : null}
         </div>
@@ -123,7 +119,7 @@ function NotificationToast({
         type="button"
         onClick={() => toast.dismiss(id)}
         aria-label="Dismiss"
-        className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full text-ink/25 transition-colors hover:bg-black/[0.05] hover:text-ink/50"
+        className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full text-[var(--color-text-muted)] transition-colors hover:bg-white/[0.08] hover:text-[var(--color-text)]"
       >
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
           <path d="M1 1l8 8M9 1L1 9" />
@@ -133,7 +129,7 @@ function NotificationToast({
   );
 }
 
-// ── Component ──────────────────────────────────────────────────────────────────
+// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function NotificationListener({
   userId,
@@ -196,7 +192,7 @@ export function NotificationListener({
     );
   }
 
-  // ── Swipes — new creator applications ─────────────────────────────────────
+  // â”€â”€ Swipes â€” new creator applications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     const channel = supabase
       .channel(`business-swipes:${userId}`)
@@ -240,7 +236,7 @@ export function NotificationListener({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  // ── Messages — new creator messages ───────────────────────────────────────
+  // â”€â”€ Messages â€” new creator messages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     const channel = supabase
       .channel(`business-messages:${userId}`)
@@ -286,3 +282,4 @@ export function NotificationListener({
 
   return null;
 }
+

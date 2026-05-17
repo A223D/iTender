@@ -1,4 +1,4 @@
-export const CONTENT_TYPES = [
+﻿export const CONTENT_TYPES = [
   "Post",
   "Short-form Video",
   "Long-form Video",
@@ -37,9 +37,11 @@ export const STATUS_LABELS: Record<string, string> = {
 };
 
 export const STATUS_STYLES: Record<string, string> = {
-  live: "bg-moss/10 text-moss",
-  draft: "bg-black/[0.06] text-ink/50",
-  closed: "bg-coral/10 text-coral",
-  pending: "bg-yellow-100 text-yellow-700",
-  completed: "bg-teal/10 text-teal",
+  live: "bg-[var(--color-accent-fg)]/10 text-[var(--color-accent-fg)]",
+  draft: "bg-white/[0.06] text-[var(--color-text-muted)]",
+  closed: "bg-error/10 text-error",
+  pending: "bg-white/[0.06] text-[var(--color-text-muted)]",
+  completed: "bg-white/[0.08] text-[var(--color-text-muted)]",
 };
+
+

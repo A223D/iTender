@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
+import { BgStack } from "@/components/ui/bg-stack";
 import { MatchesList, type MatchGroup } from "./matches-list";
 import { UnreadBadge } from "@/components/ui/unread-badge";
 
@@ -113,26 +114,21 @@ export function MatchesPanelShell({
   const isInChat = pathname !== "/matches";
 
   return (
-    <div className="flex h-screen bg-white">
-      {/* ── Left panel: dark conversation list ─────────────────────────── */}
+    <div className="relative flex h-screen">
+      <BgStack />
+
+      {/* ── Left panel: conversation list ─────────────────────────────── */}
       <div
-        className={`relative flex flex-col overflow-hidden ${
+        className={`glass relative flex flex-col overflow-hidden rounded-none border-t-0 border-b-0 border-l-0 border-r border-r-white/[0.08] ${
           isInChat ? "hidden lg:flex lg:w-72 lg:shrink-0" : "w-full lg:w-72 lg:shrink-0"
         }`}
-        style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)" }}
       >
-        {/* Ambient blobs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-16 -top-8 h-[240px] w-[240px] rounded-full bg-violet/[0.12] blur-[70px]" />
-          <div className="absolute bottom-1/3 right-0 h-[180px] w-[180px] rounded-full bg-coral/[0.09] blur-[60px]" />
-        </div>
-
         <div className="relative z-10 flex h-full flex-col">
           {/* Header */}
           <header className="flex shrink-0 items-center justify-between border-b border-white/[0.08] px-4 py-3.5">
             <Link
               href="/dashboard"
-              className="flex items-center gap-1 text-sm text-white/45 transition hover:text-white/80"
+              className="flex items-center gap-1 text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 11L5 7l4-4" />
@@ -140,7 +136,7 @@ export function MatchesPanelShell({
               Dashboard
             </Link>
             <div className="flex items-center gap-2">
-              <h1 className="font-display text-base font-semibold text-white">Messages</h1>
+              <h1 className="text-base font-semibold text-[var(--color-text)]">Messages</h1>
               <UnreadBadge count={totalUnread} />
             </div>
           </header>
@@ -155,7 +151,7 @@ export function MatchesPanelShell({
       </div>
 
       {/* ── Right panel: chat or empty state ───────────────────────────── */}
-      <div className={`flex flex-1 flex-col bg-[#F7F6FF] ${isInChat ? "flex" : "hidden lg:flex"}`}>
+      <div className={`flex flex-1 flex-col ${isInChat ? "flex" : "hidden lg:flex"}`}>
         {children}
       </div>
     </div>

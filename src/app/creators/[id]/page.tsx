@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
 import { CreatorProfileView } from "@/components/creators/creator-profile-view";
+import { BgStack } from "@/components/ui/bg-stack";
 import { createClient } from "@/utils/supabase/server";
 
 export type CreatorProfile = {
@@ -55,7 +56,8 @@ export default async function CreatorProfilePage({
   if (!profile) notFound();
 
   return (
-    <main className="min-h-screen bg-[#F7F6FF]">
+    <main className="relative min-h-screen">
+      <BgStack />
       <CreatorProfileView profile={profile as unknown as CreatorProfile} />
     </main>
   );

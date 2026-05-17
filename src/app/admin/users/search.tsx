@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -70,7 +70,7 @@ export function AdminUserSearch({ searchUser, deleteUser }: Props) {
           }}
           placeholder="user@example.com"
           disabled={status === "searching" || status === "deleting"}
-          className="flex-1 rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss disabled:opacity-60"
+          className="flex-1 rounded-2xl border border-white/10 glass px-4 py-2.5 text-sm text-[var(--color-text)] outline-none transition placeholder:text-[var(--color-text-hint)] focus:border-white/30 disabled:opacity-60"
         />
         <button
           type="submit"
@@ -83,8 +83,8 @@ export function AdminUserSearch({ searchUser, deleteUser }: Props) {
 
       {/* Not found */}
       {status === "not-found" ? (
-        <p className="rounded-2xl bg-black/[0.04] px-4 py-3 text-sm text-ink/55">
-          No account found for <span className="font-medium text-ink">{email}</span>.
+        <p className="rounded-2xl bg-white/[0.04] px-4 py-3 text-sm text-[var(--color-text-muted)]">
+          No account found for <span className="font-medium text-[var(--color-text)]">{email}</span>.
         </p>
       ) : null}
 
@@ -92,15 +92,15 @@ export function AdminUserSearch({ searchUser, deleteUser }: Props) {
       {status === "deleted" ? (
         <div className="rounded-2xl border border-moss/20 bg-moss/[0.06] px-4 py-3">
           <p className="text-sm font-semibold text-moss">Account deleted ✓</p>
-          <p className="mt-0.5 text-xs text-ink/55">All data, files, and the auth identity have been removed.</p>
+          <p className="mt-0.5 text-xs text-[var(--color-text-muted)]">All data, files, and the auth identity have been removed.</p>
         </div>
       ) : null}
 
       {/* Error */}
       {status === "error" ? (
-        <div className="rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3">
-          <p className="text-sm font-semibold text-coral">Deletion failed</p>
-          <p className="mt-0.5 text-xs text-ink/55">{errorMsg}</p>
+        <div className="rounded-2xl border border-error/20 bg-error/[0.06] px-4 py-3">
+          <p className="text-sm font-semibold text-error">Deletion failed</p>
+          <p className="mt-0.5 text-xs text-[var(--color-text-muted)]">{errorMsg}</p>
         </div>
       ) : null}
 
@@ -109,12 +109,12 @@ export function AdminUserSearch({ searchUser, deleteUser }: Props) {
         <div className="rounded-2xl border border-black/[0.07] bg-black/[0.025] px-5 py-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="truncate font-semibold text-ink">{found.name}</p>
-              <p className="text-xs text-ink/45">{found.email}</p>
-              <p className="mt-1 text-xs text-ink/35">
+              <p className="truncate font-semibold text-[var(--color-text)]">{found.name}</p>
+              <p className="text-xs text-[var(--color-text-hint)]">{found.email}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-hint)]">
                 {found.role} · Member since {memberSince}
               </p>
-              <p className="mt-0.5 font-mono text-[10px] text-ink/25">{found.id}</p>
+              <p className="mt-0.5 font-mono text-[10px] text-[var(--color-text-hint)]">{found.id}</p>
             </div>
 
             {/* Actions */}
@@ -123,37 +123,37 @@ export function AdminUserSearch({ searchUser, deleteUser }: Props) {
                 <button
                   type="button"
                   onClick={() => setStatus("confirming")}
-                  className="rounded-xl bg-coral px-3 py-1.5 text-xs font-bold text-white transition hover:bg-coral/90"
+                  className="rounded-xl bg-error px-3 py-1.5 text-xs font-bold text-white transition hover:bg-error/90"
                 >
                   Delete account
                 </button>
               ) : null}
               {status === "deleting" ? (
-                <span className="text-xs text-ink/40">Deleting…</span>
+                <span className="text-xs text-[var(--color-text-hint)]">Deleting…</span>
               ) : null}
             </div>
           </div>
 
           {/* Inline confirmation */}
           {status === "confirming" ? (
-            <div className="mt-4 rounded-xl border border-coral/20 bg-coral/[0.05] px-4 py-3">
-              <p className="text-sm font-semibold text-coral">Permanently delete this account?</p>
-              <p className="mt-1 text-xs leading-relaxed text-ink/55">
+            <div className="mt-4 rounded-xl border border-error/20 bg-error/[0.05] px-4 py-3">
+              <p className="text-sm font-semibold text-error">Permanently delete this account?</p>
+              <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-muted)]">
                 This will wipe all campaigns, chats, messages, files, and the login identity for{" "}
-                <span className="font-medium text-ink">{found.name}</span>. This cannot be undone.
+                <span className="font-medium text-[var(--color-text)]">{found.name}</span>. This cannot be undone.
               </p>
               <div className="mt-3 flex gap-2">
                 <button
                   type="button"
                   onClick={() => setStatus("found")}
-                  className="rounded-xl border border-black/10 px-3 py-1.5 text-xs font-semibold text-ink/60 transition hover:border-black/20 hover:text-ink"
+                  className="rounded-xl border border-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-text-muted)] transition hover:border-white/20 hover:text-[var(--color-text)]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="rounded-xl bg-coral px-3 py-1.5 text-xs font-bold text-white transition hover:bg-coral/90"
+                  className="rounded-xl bg-error px-3 py-1.5 text-xs font-bold text-white transition hover:bg-error/90"
                 >
                   Yes, delete permanently
                 </button>
@@ -165,3 +165,5 @@ export function AdminUserSearch({ searchUser, deleteUser }: Props) {
     </div>
   );
 }
+
+

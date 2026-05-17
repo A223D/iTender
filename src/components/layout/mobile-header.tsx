@@ -17,32 +17,32 @@ export function MobileHeader({
   activePath: string;
 }) {
   return (
-    <header className="flex items-center justify-between border-b border-black/[0.08] bg-white px-4 py-3 lg:hidden">
+    <header className="glass flex items-center justify-between rounded-none border-t-0 border-l-0 border-r-0 border-b border-b-white/10 px-4 py-3 lg:hidden">
       {/* Brand identity */}
       <div className="flex items-center gap-2.5">
         {logoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={logoUrl} alt="Brand logo" className="h-8 w-8 rounded-xl object-cover" />
         ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-coral to-violet text-xs font-bold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl glass text-xs font-bold text-[var(--color-text)]">
             {brandInitial}
           </div>
         )}
-        <p className="text-sm font-bold text-ink">{brandName}</p>
+        <p className="text-sm font-bold text-[var(--color-text)]">{brandName}</p>
       </div>
 
       {/* Action icons */}
       <div className="flex items-center gap-1">
         <Link
           href="/matches"
-          className="relative flex h-8 w-8 items-center justify-center rounded-xl text-ink/50 transition hover:bg-black/[0.05] hover:text-ink"
+          className="relative flex h-8 w-8 items-center justify-center rounded-xl text-[var(--color-text-muted)] transition hover:bg-white/[0.06] hover:text-[var(--color-text)]"
           aria-label="Messages"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
           {totalUnread > 0 ? (
-            <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[9px] font-bold text-white">
+            <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-text)] text-[9px] font-bold text-slate-950 dark:text-slate-950">
               {totalUnread > UNREAD_BADGE_MAX ? `${UNREAD_BADGE_MAX}+` : totalUnread}
             </span>
           ) : null}
@@ -51,7 +51,7 @@ export function MobileHeader({
         {activePath !== "/settings" ? (
           <Link
             href="/settings"
-            className="flex h-8 w-8 items-center justify-center rounded-xl text-ink/50 transition hover:bg-black/[0.05] hover:text-ink"
+            className="flex h-8 w-8 items-center justify-center rounded-xl text-[var(--color-text-muted)] transition hover:bg-white/[0.06] hover:text-[var(--color-text)]"
             aria-label="Settings"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

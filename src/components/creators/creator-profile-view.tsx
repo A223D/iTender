@@ -49,24 +49,9 @@ function YouTubeIcon() {
 // ── Platform config ────────────────────────────────────────────────────────────
 
 const PLATFORM_CONFIG = {
-  instagram: {
-    label: "Instagram",
-    icon: <InstagramIcon />,
-    cardClass: "border-coral/20 bg-gradient-to-br from-coral/[0.08] to-white",
-    accentClass: "text-coral/70",
-  },
-  tiktok: {
-    label: "TikTok",
-    icon: <TikTokIcon />,
-    cardClass: "border-violet/20 bg-gradient-to-br from-violet/[0.07] to-white",
-    accentClass: "text-violet/70",
-  },
-  youtube: {
-    label: "YouTube",
-    icon: <YouTubeIcon />,
-    cardClass: "border-teal/20 bg-gradient-to-br from-teal/[0.07] to-white",
-    accentClass: "text-teal/60",
-  },
+  instagram: { label: "Instagram", icon: <InstagramIcon /> },
+  tiktok:    { label: "TikTok",    icon: <TikTokIcon /> },
+  youtube:   { label: "YouTube",   icon: <YouTubeIcon /> },
 } as const;
 
 // ── Main component ─────────────────────────────────────────────────────────────
@@ -137,15 +122,11 @@ export function CreatorProfileView({ profile }: { profile: CreatorProfile }) {
         </div>
       ) : null}
 
-      {/* ── Dark hero ─────────────────────────────────────────────────────────── */}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <div
-        className="relative overflow-hidden"
-        style={{ background: "linear-gradient(145deg, #07070E 0%, #0F0F1A 60%, #161628 100%)", minHeight: "220px" }}
+        className="glass relative overflow-hidden rounded-none border-t-0 border-l-0 border-r-0 border-b border-b-white/10"
+        style={{ minHeight: "220px" }}
       >
-        {/* Ambient blobs */}
-        <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-violet/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-coral/15 blur-3xl" />
-        <div className="pointer-events-none absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 rounded-full bg-teal/10 blur-3xl" />
 
         {/* Cinematic blurred photo background */}
         {photo ? (
@@ -183,10 +164,10 @@ export function CreatorProfileView({ profile }: { profile: CreatorProfile }) {
               <img
                 src={photo}
                 alt={profile.name}
-                className="h-24 w-24 rounded-full object-cover shadow-2xl ring-4 ring-[#F7F6FF]"
+                className="h-24 w-24 rounded-full object-cover shadow-2xl ring-4 ring-white/20"
               />
             ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-coral to-violet text-3xl font-bold text-white shadow-2xl ring-4 ring-[#F7F6FF]">
+              <div className="glass flex h-24 w-24 items-center justify-center rounded-full text-3xl font-bold text-[var(--color-text)] shadow-2xl ring-4 ring-white/20">
                 {initial}
               </div>
             )}
@@ -197,14 +178,14 @@ export function CreatorProfileView({ profile }: { profile: CreatorProfile }) {
       </div>
 
       {/* ── Body ──────────────────────────────────────────────────────────────── */}
-      <div className="bg-[#F7F6FF] pb-20">
+      <div className="pb-20">
         <div className="mx-auto max-w-lg px-4 sm:px-6">
 
           {/* Name + city (padded to clear avatar overlap) */}
           <div className="pb-6 pt-16 text-center">
-            <h1 className="font-display text-2xl font-bold text-ink">{profile.name}</h1>
+            <h1 className="text-2xl font-bold text-[var(--color-text)]">{profile.name}</h1>
             {profile.city ? (
-              <p className="mt-1 text-sm text-ink/45">{profile.city}</p>
+              <p className="mt-1 text-sm text-[var(--color-text-muted)]">{profile.city}</p>
             ) : null}
           </div>
 
@@ -223,15 +204,15 @@ export function CreatorProfileView({ profile }: { profile: CreatorProfile }) {
                     href={socialUrl(p.platform, p.handle)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`group flex flex-col rounded-2xl border p-4 shadow-sm transition hover:shadow-md ${config.cardClass}`}
+                    className="glass group flex flex-col rounded-2xl p-4 transition hover:opacity-80"
                   >
-                    <div className={`mb-2 flex items-center gap-1.5 ${config.accentClass}`}>
+                    <div className="mb-2 flex items-center gap-1.5 text-[var(--color-text-muted)]">
                       {config.icon}
                       <p className="text-[10px] font-bold uppercase tracking-wide">{config.label}</p>
                     </div>
-                    <p className="text-lg font-bold text-ink">{formatFollowers(p.followers)}</p>
-                    <p className="mt-0.5 truncate text-xs text-ink/45">@{normalizeHandle(p.handle)}</p>
-                    <span className={`mt-3 inline-flex items-center gap-1 text-[11px] font-semibold transition ${config.accentClass} opacity-60 group-hover:opacity-100`}>
+                    <p className="text-lg font-bold text-[var(--color-text)]">{formatFollowers(p.followers)}</p>
+                    <p className="mt-0.5 truncate text-xs text-[var(--color-text-hint)]">@{normalizeHandle(p.handle)}</p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-text-muted)] opacity-60 transition group-hover:opacity-100">
                       View profile
                       <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M2 8L8 2M8 2H3M8 2v5" />
@@ -245,19 +226,19 @@ export function CreatorProfileView({ profile }: { profile: CreatorProfile }) {
 
           {/* Bio */}
           {bio ? (
-            <div className="mb-4 rounded-2xl border border-black/[0.07] bg-white px-5 py-4 shadow-sm">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-ink/40">About</p>
-              <p className="text-sm leading-relaxed text-ink/70">{bio}</p>
+            <div className="glass mb-4 rounded-2xl px-5 py-4">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-[var(--color-text-hint)]">About</p>
+              <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">{bio}</p>
             </div>
           ) : null}
 
           {/* Categories */}
           {categories.length > 0 ? (
-            <div className="mb-4 rounded-2xl border border-black/[0.07] bg-white px-5 py-4 shadow-sm">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-wide text-ink/40">Categories</p>
+            <div className="glass mb-4 rounded-2xl px-5 py-4">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-wide text-[var(--color-text-hint)]">Categories</p>
               <div className="flex flex-wrap gap-2">
                 {categories.map((cat) => (
-                  <span key={cat} className="rounded-full border border-black/10 bg-[#F7F6FF] px-3 py-1 text-sm text-ink/60">
+                  <span key={cat} className="glass rounded-full px-3 py-1 text-sm text-[var(--color-text-muted)]">
                     {cat}
                   </span>
                 ))}
@@ -268,14 +249,14 @@ export function CreatorProfileView({ profile }: { profile: CreatorProfile }) {
           {/* Gallery */}
           {galleryUrls.length > 0 ? (
             <div>
-              <p className="mb-3 px-1 text-[10px] font-bold uppercase tracking-wide text-ink/40">Gallery</p>
+              <p className="mb-3 px-1 text-[10px] font-bold uppercase tracking-wide text-[var(--color-text-hint)]">Gallery</p>
               <div className="grid grid-cols-3 gap-1.5">
                 {galleryUrls.map((url, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => setLightboxIndex(i)}
-                    className="aspect-square overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+                    className="aspect-square overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

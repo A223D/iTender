@@ -4,6 +4,7 @@ import { AudienceQuestionnaire } from "@/components/home/audience-questionnaire"
 import { BusinessHomePage } from "@/components/home/business-homepage";
 import { CreatorHomePage } from "@/components/home/creator-homepage";
 import { NavBar } from "@/components/discover/nav-bar";
+import { BgStack } from "@/components/ui/bg-stack";
 import { audienceCookieName, getSelectedAudience } from "@/lib/audience";
 
 export default async function HomePage() {
@@ -11,7 +12,8 @@ export default async function HomePage() {
   const selectedAudience = getSelectedAudience(cookieStore.get(audienceCookieName)?.value);
 
   return (
-    <main id="top" className="min-h-screen bg-void">
+    <main id="top" className="relative min-h-screen">
+      <BgStack />
       <NavBar
         initialAudience={selectedAudience}
         homeView={selectedAudience === null ? "chooser" : selectedAudience}

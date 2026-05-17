@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
+import { BgStack } from "@/components/ui/bg-stack";
 import { upsertBusinessUser, postAuthRedirect } from "@/lib/user-auth";
 
 type Step = "method" | "otp";
@@ -29,8 +30,6 @@ export default function LoginPage() {
 
   const digitRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // ── Google OAuth ──────────────────────────────────────────────────────────
-
   async function handleGoogleSignIn() {
     setLoading(true);
     await supabase.auth.signInWithOAuth({
@@ -38,8 +37,6 @@ export default function LoginPage() {
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
   }
-
-  // ── Email OTP — send ──────────────────────────────────────────────────────
 
   async function handleSendCode() {
     setError(null);
@@ -49,7 +46,6 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
-    // No emailRedirectTo → Supabase sends a numeric OTP instead of a magic link
     const { error: otpError } = await supabase.auth.signInWithOtp({ email: trimmed });
     setLoading(false);
     if (otpError) {
@@ -58,17 +54,12 @@ export default function LoginPage() {
     }
     setDigits(["", "", "", "", "", ""]);
     setStep("otp");
-    // Focus first digit box after render
     setTimeout(() => digitRefs.current[0]?.focus(), 50);
   }
 
-  // ── Email OTP — digit input ───────────────────────────────────────────────
-
   function handleDigitChange(index: number, value: string) {
-    // Accept only digits; handle paste of full code
     const cleaned = value.replace(/\D/g, "");
     if (cleaned.length > 1) {
-      // Pasted — distribute across boxes
       const next = [...digits];
       for (let i = 0; i < 6 && i < cleaned.length; i++) {
         next[index + i] = cleaned[i] ?? "";
@@ -107,8 +98,6 @@ export default function LoginPage() {
     }
   }
 
-  // ── Email OTP — verify ────────────────────────────────────────────────────
-
   async function handleVerify() {
     setError(null);
     const token = digits.join("");
@@ -129,18 +118,14 @@ export default function LoginPage() {
     }
 
     const user = data.user;
-
     const { hasProfile } = await upsertBusinessUser(supabase, user);
 
-    // New user — fire welcome email via server route (keeps API key server-side)
     if (!hasProfile) {
       fetch("/api/send-welcome", { method: "POST" }).catch(() => {});
     }
 
     router.push(postAuthRedirect(hasProfile));
   }
-
-  // ── Resend ────────────────────────────────────────────────────────────────
 
   async function handleResend() {
     setError(null);
@@ -154,28 +139,37 @@ export default function LoginPage() {
     else setTimeout(() => digitRefs.current[0]?.focus(), 50);
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────
-
   return (
-    <main className="flex min-h-screen items-center justify-center bg-paper px-4">
+    <main className="relative flex min-h-screen items-center justify-center px-4">
+      <BgStack />
+
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="mb-10 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-violet text-lg font-bold text-white shadow-glow">
-            S
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl glass text-lg font-bold text-[var(--color-text)]">
+            <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+              <path
+                d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
+                fill="currentColor"
+                strokeWidth="1.2"
+                strokeOpacity="0.5"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
           <div>
-            <p className="font-sans text-xl font-semibold tracking-tight text-gray-900">Scout for Business</p>
-            <p className="mt-1 text-sm text-gray-400">Connect with creators and grow your brand</p>
+            <p className="text-xl font-semibold tracking-tight text-[var(--color-text)]">Scout for Business</p>
+            <p className="mt-1 text-sm text-[var(--color-text-muted)]">Connect with creators and grow your brand</p>
           </div>
         </div>
 
-        {/* Card */}
-        <div className="rounded-3xl border border-black/5 bg-white p-8 shadow-card">
+        {/* Glass card */}
+        <div className="glass-ambient p-8" style={{ borderRadius: 24 }}>
           {step === "method" ? (
             <>
-              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Welcome</h1>
-              <p className="mt-2 text-sm leading-6 text-ink/60">
+              <h1 className="text-2xl font-semibold tracking-tight text-[var(--color-text)]">Welcome</h1>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
                 Sign in to manage your campaigns and find the right creators for your brand.
               </p>
 
@@ -184,7 +178,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="mt-8 flex w-full items-center justify-center gap-3 rounded-2xl border border-black/10 bg-white px-5 py-3.5 text-sm font-semibold text-ink shadow-sm transition hover:border-black/20 hover:bg-gray-50 active:scale-[0.98] disabled:opacity-60"
+                className="mt-8 flex w-full items-center justify-center gap-3 rounded-2xl glass px-5 py-3.5 text-sm font-semibold text-[var(--color-text)] transition hover:opacity-80 active:scale-[0.98] disabled:opacity-60"
               >
                 {GOOGLE_SVG}
                 {loading ? "Redirecting…" : "Continue with Google"}
@@ -192,9 +186,9 @@ export default function LoginPage() {
 
               {/* Divider */}
               <div className="my-6 flex items-center gap-3">
-                <div className="h-px flex-1 bg-black/8" />
-                <span className="text-xs font-medium text-ink/35">or</span>
-                <div className="h-px flex-1 bg-black/8" />
+                <div className="h-px flex-1 bg-[var(--color-text-hint)]" style={{ opacity: 0.3 }} />
+                <span className="text-xs font-medium text-[var(--color-text-hint)]">or</span>
+                <div className="h-px flex-1 bg-[var(--color-text-hint)]" style={{ opacity: 0.3 }} />
               </div>
 
               {/* Email */}
@@ -206,27 +200,27 @@ export default function LoginPage() {
                   onKeyDown={(e) => e.key === "Enter" && handleSendCode()}
                   placeholder="you@company.com"
                   autoComplete="email"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss"
+                  className="input-recessed w-full text-sm"
                 />
                 <button
                   type="button"
                   onClick={handleSendCode}
                   disabled={loading || !email.trim()}
-                  className="w-full rounded-2xl bg-moss px-5 py-3.5 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-50"
+                  className="w-full rounded-2xl bg-[var(--color-text)] px-5 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-[0.98] disabled:opacity-50 dark:text-slate-950"
                 >
                   {loading ? "Sending…" : "Send code →"}
                 </button>
               </div>
 
               {error ? (
-                <p className="mt-4 rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3 text-sm text-coral">
+                <p className="mt-4 rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">
                   {error}
                 </p>
               ) : null}
 
-              <p className="mt-6 text-center text-xs text-ink/40">
+              <p className="mt-6 text-center text-xs text-[var(--color-text-hint)]">
                 New to Scout?{" "}
-                <span className="text-ink/60">Signing in will create your account automatically.</span>
+                <span className="text-[var(--color-text-muted)]">Signing in will create your account automatically.</span>
               </p>
             </>
           ) : (
@@ -234,15 +228,15 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => { setStep("method"); setError(null); }}
-                className="mb-6 flex items-center gap-1.5 text-sm font-medium text-ink/45 transition hover:text-ink/70"
+                className="mb-6 flex items-center gap-1.5 text-sm font-medium text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
               >
                 ← Back
               </button>
 
-              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Check your email</h1>
-              <p className="mt-2 text-sm leading-6 text-ink/60">
+              <h1 className="text-2xl font-semibold tracking-tight text-[var(--color-text)]">Check your email</h1>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
                 We sent a 6-digit code to{" "}
-                <span className="font-semibold text-ink/80">{email.trim().toLowerCase()}</span>.
+                <span className="font-semibold text-[var(--color-text)]">{email.trim().toLowerCase()}</span>.
               </p>
 
               {/* 6-digit boxes */}
@@ -259,7 +253,8 @@ export default function LoginPage() {
                     onChange={(e) => handleDigitChange(i, e.target.value)}
                     onKeyDown={(e) => handleDigitKeyDown(i, e)}
                     onFocus={(e) => e.target.select()}
-                    className="h-14 w-full rounded-2xl border border-black/10 bg-white text-center text-xl font-bold text-ink outline-none transition focus:border-moss focus:ring-2 focus:ring-moss/20"
+                    className="input-recessed h-14 w-full text-center text-xl font-bold"
+                    style={{ padding: "0" }}
                   />
                 ))}
               </div>
@@ -268,24 +263,24 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleVerify}
                 disabled={loading || digits.join("").length < 6}
-                className="mt-6 w-full rounded-2xl bg-moss px-5 py-3.5 text-sm font-bold text-white transition hover:bg-moss/90 active:scale-[0.98] disabled:opacity-50"
+                className="mt-6 w-full rounded-2xl bg-[var(--color-text)] px-5 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-[0.98] disabled:opacity-50 dark:text-slate-950"
               >
                 {loading ? "Verifying…" : "Verify →"}
               </button>
 
               {error ? (
-                <p className="mt-4 rounded-2xl border border-coral/20 bg-coral/[0.06] px-4 py-3 text-sm text-coral">
+                <p className="mt-4 rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">
                   {error}
                 </p>
               ) : null}
 
-              <p className="mt-5 text-center text-sm text-ink/45">
+              <p className="mt-5 text-center text-sm text-[var(--color-text-hint)]">
                 Didn&apos;t get it?{" "}
                 <button
                   type="button"
                   onClick={handleResend}
                   disabled={loading}
-                  className="font-semibold text-ink/70 underline underline-offset-2 transition hover:text-ink disabled:opacity-40"
+                  className="font-semibold text-[var(--color-text-muted)] underline underline-offset-2 transition hover:text-[var(--color-text)] disabled:opacity-40"
                 >
                   Resend code
                 </button>
@@ -294,11 +289,11 @@ export default function LoginPage() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-ink/35">
+        <p className="mt-6 text-center text-xs text-[var(--color-text-hint)]">
           Looking to collaborate as a creator?{" "}
           <a
             href="https://apps.apple.com/app/scout"
-            className="font-medium text-ink/55 underline underline-offset-2 transition hover:text-ink/80"
+            className="font-medium text-[var(--color-text-muted)] underline underline-offset-2 transition hover:text-[var(--color-text)]"
           >
             Download the Scout app
           </a>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { DatePicker } from "@/components/ui/date-picker";
 import { COMPENSATION_TYPES } from "@/lib/campaign-constants";
@@ -38,8 +38,8 @@ export function Step3Fields({
     <div className="space-y-7">
       {/* Compensation type */}
       <div>
-        <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
-          Compensation type <span className="text-coral">*</span>
+        <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
+          Compensation type <span className="text-[var(--color-text-muted)]">*</span>
         </p>
         <div className="space-y-2">
           {COMPENSATION_TYPES.map((ct) => {
@@ -51,18 +51,18 @@ export function Step3Fields({
                 onClick={() => setField("compensationType", ct.value)}
                 className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${
                   selected
-                    ? "border-coral/40 bg-coral/[0.05]"
-                    : "border-black/10 bg-white hover:border-black/20"
+                    ? "border-white/20 bg-white/[0.08]"
+                    : "border-white/10 bg-white/[0.04] hover:border-white/20"
                 }`}
               >
                 <div
                   className={`h-4 w-4 shrink-0 rounded-full border-2 transition ${
-                    selected ? "border-coral bg-coral" : "border-black/25"
+                    selected ? "border-white bg-[var(--color-text)]" : "border-white/25"
                   }`}
                 />
                 <div>
-                  <p className="text-sm font-semibold text-[#07070E]">{ct.label}</p>
-                  <p className="text-xs text-black/45">{ct.description}</p>
+                  <p className="text-sm font-semibold text-[var(--color-text)]">{ct.label}</p>
+                  <p className="text-xs text-[var(--color-text-hint)]">{ct.description}</p>
                 </div>
               </button>
             );
@@ -72,9 +72,9 @@ export function Step3Fields({
 
       {/* Compensation details */}
       <div>
-        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
           Compensation details{" "}
-          <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
+          <span className="font-normal normal-case text-[var(--color-text-hint)] tracking-normal">Â· Optional</span>
         </span>
         <Input
           type="text"
@@ -87,8 +87,8 @@ export function Step3Fields({
 
       {/* Creators needed */}
       <div>
-        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
-          Creators needed <span className="text-coral">*</span>
+        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
+          Creators needed <span className="text-[var(--color-text-muted)]">*</span>
         </span>
         <Input
           type="number"
@@ -102,8 +102,8 @@ export function Step3Fields({
 
       {/* Deadline */}
       <div>
-        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
-          Application deadline <span className="text-coral">*</span>
+        <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
+          Application deadline <span className="text-[var(--color-text-muted)]">*</span>
         </span>
         <DatePicker
           value={deadline}
@@ -116,9 +116,9 @@ export function Step3Fields({
 
       {/* Coupon code */}
       <div>
-        <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
           Coupon code{" "}
-          <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
+          <span className="font-normal normal-case text-[var(--color-text-hint)] tracking-normal">Â· Optional</span>
         </p>
         <div className="flex gap-2">
           <Input
@@ -132,22 +132,23 @@ export function Step3Fields({
             type="button"
             onClick={onApplyCoupon}
             disabled={coupon.status === "validating" || !couponInput.trim()}
-            className="rounded-xl border border-black/10 px-4 py-3 text-sm font-semibold text-[#07070E] transition hover:border-black/30 hover:bg-black/[0.03] disabled:opacity-40"
+            className="glass rounded-xl px-4 py-3 text-sm font-semibold text-[var(--color-text)] transition hover:opacity-80 disabled:opacity-40"
           >
-            {coupon.status === "validating" ? "Checking…" : "Apply"}
+            {coupon.status === "validating" ? "Checkingâ€¦" : "Apply"}
           </button>
         </div>
         {coupon.status === "valid" ? (
-          <p className="mt-2 text-sm font-semibold text-coral">
+          <p className="mt-2 text-sm font-semibold text-[var(--color-text-muted)]">
             {coupon.discount === 100
-              ? "100% off — campaign will go live for free"
-              : `${coupon.discount}% off — discount applied at checkout`}
+              ? "100% off â€” campaign will go live for free"
+              : `${coupon.discount}% off â€” discount applied at checkout`}
           </p>
         ) : null}
         {coupon.status === "invalid" ? (
-          <p className="mt-2 text-sm text-coral">{coupon.message}</p>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">{coupon.message}</p>
         ) : null}
       </div>
     </div>
   );
 }
+

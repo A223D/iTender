@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -91,13 +91,13 @@ export function CampaignBoard({ initialCampaigns }: CampaignBoardProps) {
       <section className="mt-8 lg:mt-6 lg:min-h-0 lg:flex-1">
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-cols-[380px_minmax(0,1fr)] xl:grid-cols-[420px_minmax(0,1fr)]">
           <div
-            className={`rounded-[2rem] border border-black/5 bg-white/78 p-3 shadow-card lg:flex lg:min-h-0 lg:flex-col ${
+            className={`glass rounded-[2rem] p-3 lg:flex lg:min-h-0 lg:flex-col ${
               isMobileDetailOpen ? "hidden lg:flex" : "block"
             }`}
           >
-            <div className="border-b border-black/6 px-4 pb-4 pt-3">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-moss">Campaigns</p>
-              <p className="mt-2 text-sm text-ink/60">
+            <div className="border-b border-white/[0.08] px-4 pb-4 pt-3">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-text-muted)]">Campaigns</p>
+              <p className="mt-2 text-sm text-[var(--color-text-muted)]">
                 {filteredJobs.length} match{filteredJobs.length === 1 ? "" : "es"}
               </p>
             </div>
@@ -113,18 +113,18 @@ export function CampaignBoard({ initialCampaigns }: CampaignBoardProps) {
                   />
                 ))
               ) : (
-                <div className="rounded-[1.5rem] border border-dashed border-black/15 bg-white/70 p-6 text-center">
-                  <p className="font-display text-xl font-semibold text-ink">No campaigns found.</p>
+                <div className="glass rounded-[1.5rem] p-6 text-center opacity-60">
+                  <p className="font-display text-xl font-semibold text-[var(--color-text)]">No campaigns found.</p>
                 </div>
               )}
 
               <div ref={loadMoreRef} className="flex min-h-20 items-center justify-center">
                 {visibleJobs.length < filteredJobs.length ? (
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/45">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-text-hint)]">
                     Loading more campaigns...
                   </p>
                 ) : filteredJobs.length > PAGE_SIZE ? (
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/45">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-text-hint)]">
                     You&apos;ve reached the end
                   </p>
                 ) : null}
@@ -144,3 +144,4 @@ export function CampaignBoard({ initialCampaigns }: CampaignBoardProps) {
     </div>
   );
 }
+

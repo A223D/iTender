@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { BusinessOnboardingForm } from "@/components/onboarding/business-onboarding-form";
+import { BgStack } from "@/components/ui/bg-stack";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function BusinessOnboardingPage() {
@@ -24,7 +25,8 @@ export default async function BusinessOnboardingPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-paper">
+    <main className="relative min-h-screen">
+      <BgStack />
       <BusinessOnboardingForm
         userId={user.id}
         email={user.email ?? ""}

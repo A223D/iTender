@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { CONTENT_TYPES } from "@/lib/campaign-constants";
 import { Input } from "@/components/ui/input";
@@ -20,10 +20,10 @@ export function Step1Fields({
     <div className="space-y-7">
       <div>
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
-            Campaign title <span className="text-coral">*</span>
+          <span className="text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
+            Campaign title <span className="text-[var(--color-text-muted)]">*</span>
           </span>
-          <span className={`text-xs font-medium ${title.length > 80 ? "text-coral" : "text-black/40"}`}>
+          <span className={`text-xs font-medium ${title.length > 80 ? "text-[var(--color-text-muted)]" : "text-[var(--color-text-hint)]"}`}>
             {title.length} / 80
           </span>
         </div>
@@ -32,14 +32,14 @@ export function Step1Fields({
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           onKeyDown={onTitleKeyDown}
-          placeholder="e.g. Summer launch — sunglasses"
+          placeholder="e.g. Summer launch â€” sunglasses"
           className="py-3.5"
         />
       </div>
 
       <div>
-        <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[#07070E]">
-          Content types <span className="text-coral">*</span>
+        <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
+          Content types <span className="text-[var(--color-text-muted)]">*</span>
         </p>
         <div className="flex flex-wrap gap-2">
           {CONTENT_TYPES.map((type) => {
@@ -51,8 +51,8 @@ export function Step1Fields({
                 onClick={() => onToggleContentType(type)}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition active:scale-[0.97] ${
                   selected
-                    ? "border-[#07070E] bg-[#07070E] text-coral"
-                    : "border-black/10 bg-white text-[#07070E] hover:border-black/30"
+                    ? "border-[var(--color-text)] glass text-[var(--color-text)]"
+                    : "glass text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
                 }`}
               >
                 {type}
@@ -64,3 +64,4 @@ export function Step1Fields({
     </div>
   );
 }
+

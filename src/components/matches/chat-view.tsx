@@ -9,8 +9,6 @@ import { COMP_LABELS } from "@/lib/campaign-constants";
 import { CreatorAvatar } from "@/components/ui/creator-avatar";
 import { Spinner } from "@/components/ui/spinner";
 
-// ── Sub-components ─────────────────────────────────────────────────────────────
-
 function MessageBubble({ msg, isMe }: { msg: ChatMessage; isMe: boolean }) {
   const [showTime, setShowTime] = useState(false);
   const time = new Date(msg.created_at).toLocaleTimeString(undefined, {
@@ -25,14 +23,14 @@ function MessageBubble({ msg, isMe }: { msg: ChatMessage; isMe: boolean }) {
         onClick={() => setShowTime((v) => !v)}
         className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-left text-sm leading-relaxed focus:outline-none ${
           isMe
-            ? "bg-gradient-to-br from-coral to-violet text-white"
-            : "rounded-bl-sm bg-white text-ink shadow-sm"
-        } ${msg.id.startsWith("temp-") ? "opacity-60" : ""}`}
+            ? "glass text-[var(--color-text)] rounded-br-sm"
+            : "glass text-[var(--color-text)] rounded-bl-sm opacity-70"
+        } ${msg.id.startsWith("temp-") ? "opacity-50" : ""}`}
       >
         {msg.content}
       </button>
       {showTime ? (
-        <p className="mt-1 px-1 text-[10px] text-ink/35">{time}</p>
+        <p className="mt-1 px-1 text-[10px] text-[var(--color-text-hint)]">{time}</p>
       ) : null}
     </div>
   );
@@ -44,7 +42,7 @@ function CampaignBrief({ match }: { match: ChatMatch }) {
   if (!camp) return null;
 
   return (
-    <div className="border-b border-black/[0.07] bg-white">
+    <div className="border-b border-white/[0.08] glass rounded-none border-t-0 border-l-0 border-r-0">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -52,7 +50,7 @@ function CampaignBrief({ match }: { match: ChatMatch }) {
       >
         <div className="flex items-center gap-2">
           <span className="text-xs">📣</span>
-          <span className="text-xs font-semibold text-ink/70 truncate max-w-[200px]">
+          <span className="text-xs font-semibold text-[var(--color-text-muted)] truncate max-w-[200px]">
             {camp.title ?? "Campaign brief"}
           </span>
         </div>
@@ -65,19 +63,19 @@ function CampaignBrief({ match }: { match: ChatMatch }) {
           strokeWidth="1.8"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className={`shrink-0 text-ink/35 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`shrink-0 text-[var(--color-text-hint)] transition-transform ${open ? "rotate-180" : ""}`}
         >
           <path d="M2 4l4 4 4-4" />
         </svg>
       </button>
 
       {open ? (
-        <div className="border-t border-black/[0.06] px-4 pb-3 pt-2">
+        <div className="border-t border-white/[0.08] px-4 pb-3 pt-2">
           {camp.description ? (
-            <p className="text-xs leading-relaxed text-ink/60 line-clamp-3">{camp.description}</p>
+            <p className="text-xs leading-relaxed text-[var(--color-text-muted)] line-clamp-3">{camp.description}</p>
           ) : null}
           {camp.compensation_type ? (
-            <p className="mt-1.5 text-xs font-semibold text-coral">
+            <p className="mt-1.5 text-xs font-semibold text-[var(--color-accent-fg)]">
               {COMP_LABELS[camp.compensation_type] ?? camp.compensation_type}
               {camp.compensation_details ? ` · ${camp.compensation_details}` : ""}
             </p>
@@ -87,8 +85,6 @@ function CampaignBrief({ match }: { match: ChatMatch }) {
     </div>
   );
 }
-
-// ── Main component ─────────────────────────────────────────────────────────────
 
 export function ChatView({
   match,
@@ -115,18 +111,15 @@ export function ChatView({
     });
   }, [match.id, userId, supabase]);
 
-  // Scroll to bottom
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     bottomRef.current?.scrollIntoView({ behavior });
   }, []);
 
-  // Mark read + scroll on mount
   useEffect(() => {
     markAsRead();
     scrollToBottom("instant");
   }, [markAsRead, scrollToBottom]);
 
-  // Supabase Realtime subscription
   useEffect(() => {
     const channel = supabase
       .channel(`chat:${match.id}`)
@@ -141,9 +134,7 @@ export function ChatView({
         (payload) => {
           const msg = payload.new as ChatMessage;
           setMessages((prev) => {
-            // Deduplicate — may already exist if optimistically inserted
             if (prev.some((m) => m.id === msg.id)) return prev;
-            // Replace temp message from sender if content matches
             const tempIdx = prev.findIndex(
               (m) => m.id.startsWith("temp-") && m.sender_id === msg.sender_id && m.content === msg.content,
             );
@@ -165,12 +156,11 @@ export function ChatView({
     };
   }, [match.id, supabase, markAsRead, scrollToBottom]);
 
-  // Auto-resize textarea
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight, 96)}px`; // max ~4 lines
+    el.style.height = `${Math.min(el.scrollHeight, 96)}px`;
   }, [input]);
 
   async function handleSend() {
@@ -199,7 +189,6 @@ export function ChatView({
     });
 
     if (error) {
-      // Roll back optimistic message
       setMessages((prev) => prev.filter((m) => m.id !== tempId));
       setInput(text);
       setSendError("Failed to send. Try again.");
@@ -215,13 +204,13 @@ export function ChatView({
   }
 
   return (
-    <div className="flex h-full flex-col bg-[#F7F6FF]">
+    <div className="flex h-full flex-col">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="flex items-center gap-3 border-b border-black/[0.08] bg-white px-4 py-3">
+      <header className="glass flex items-center gap-3 rounded-none border-t-0 border-l-0 border-r-0 border-b border-b-white/[0.08] px-4 py-3">
         <Link
           href="/matches"
-          className="flex items-center gap-1 text-sm text-ink/50 transition hover:text-ink lg:hidden"
+          className="flex items-center gap-1 text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] lg:hidden"
           aria-label="Back to messages"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -240,8 +229,8 @@ export function ChatView({
             size="sm"
           />
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-ink">{match.creator?.name ?? "Creator"}</p>
-            <p className="text-xs text-ink/40">View profile ↗</p>
+            <p className="truncate text-sm font-semibold text-[var(--color-text)]">{match.creator?.name ?? "Creator"}</p>
+            <p className="text-xs text-[var(--color-text-hint)]">View profile ↗</p>
           </div>
         </Link>
       </header>
@@ -260,9 +249,9 @@ export function ChatView({
       </div>
 
       {/* ── Input bar ──────────────────────────────────────────────────── */}
-      <div className="border-t border-black/[0.08] bg-white px-4 pb-safe-area-inset-bottom pt-3 pb-4">
+      <div className="glass rounded-none border-t border-t-white/[0.08] border-b-0 border-l-0 border-r-0 px-4 pb-4 pt-3">
         {sendError ? (
-          <p className="mb-2 text-center text-xs text-coral">{sendError}</p>
+          <p className="mb-2 text-center text-xs text-error">{sendError}</p>
         ) : null}
         <div className="flex items-end gap-2">
           <textarea
@@ -272,7 +261,7 @@ export function ChatView({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Message…"
-            className="flex-1 resize-none rounded-2xl border border-black/[0.1] bg-black/[0.03] px-4 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-coral/40 focus:bg-white focus:outline-none"
+            className="input-recessed flex-1 resize-none text-sm"
             style={{ maxHeight: 96 }}
           />
           <button
@@ -280,7 +269,7 @@ export function ChatView({
             onClick={handleSend}
             disabled={!input.trim() || sending}
             aria-label="Send"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-coral to-violet shadow-glow text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-text)] text-slate-950 transition hover:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 dark:text-slate-950"
           >
             {sending ? (
               <Spinner className="h-4 w-4" />

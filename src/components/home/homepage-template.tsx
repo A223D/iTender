@@ -35,18 +35,6 @@ export type HomePageTemplateProps = {
   footerLinkHref?: string;
 };
 
-const whyAccents = [
-  { ring: "ring-coral/20", bg: "bg-coral/10", text: "text-coral" },
-  { ring: "ring-violet/20", bg: "bg-violet/10", text: "text-violet" },
-  { ring: "ring-teal/20", bg: "bg-teal/10", text: "text-teal" },
-];
-
-const howAccents = [
-  { num: "from-coral to-violet" },
-  { num: "from-violet to-teal" },
-  { num: "from-teal to-gold" },
-];
-
 export function HomePageTemplate({
   badge,
   title,
@@ -119,18 +107,11 @@ export function HomePageTemplate({
   useScrollSectionReveal(howRef, ".how-heading", ".how-card");
 
   return (
-    <div className="overflow-hidden bg-white text-gray-900">
+    <div className="overflow-hidden">
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section ref={heroRef} className="relative flex min-h-screen items-start lg:h-[100svh] lg:items-center lg:overflow-hidden">
         <ParticleCanvas />
-
-        {/* Ambient gradient blobs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-32 top-1/4 h-[700px] w-[700px] rounded-full bg-violet/[0.08] blur-[140px]" />
-          <div className="absolute right-0 top-1/3 h-[560px] w-[560px] rounded-full bg-coral/[0.07] blur-[120px]" />
-          <div className="absolute bottom-0 left-1/3 h-[460px] w-[460px] rounded-full bg-teal/[0.05] blur-[120px]" />
-        </div>
 
         {/* Floating decorative emojis — desktop only */}
         <div className="pointer-events-none absolute inset-0 hidden select-none overflow-hidden lg:block">
@@ -147,30 +128,30 @@ export function HomePageTemplate({
 
             {/* Left: text */}
             <div className="text-center lg:text-left">
-              <div className="hero-badge mx-auto inline-flex items-center gap-2.5 rounded-full border border-coral/25 bg-coral/[0.07] px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-coral opacity-0 lg:mx-0">
-                <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-coral" />
+              <div className="hero-badge mx-auto inline-flex items-center gap-2.5 rounded-full glass px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-[var(--color-text-muted)] opacity-0 lg:mx-0">
+                <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-[var(--color-text-muted)]" />
                 {badge}
               </div>
 
-              <h1 className="hero-title mt-5 font-display text-4xl font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 sm:text-5xl xl:text-6xl">
+              <h1 className="hero-title mt-5 text-4xl font-bold leading-[1.08] tracking-tight text-[var(--color-text)] opacity-0 sm:text-5xl xl:text-6xl">
                 {title}
               </h1>
 
-              <p className="hero-desc mt-5 text-base leading-relaxed text-gray-500 opacity-0 sm:text-lg">
+              <p className="hero-desc mt-5 text-base leading-relaxed text-[var(--color-text-muted)] opacity-0 sm:text-lg">
                 {description}
               </p>
 
               <div className="mt-7 space-y-3">
                 {highlightCards.map((card) => (
                   <div key={card.title} className="hero-tag flex items-start justify-center gap-3 opacity-0 lg:justify-start">
-                    <span className="mt-0.5 w-20 shrink-0 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    <span className="mt-0.5 w-20 shrink-0 text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-hint)]">
                       {card.title}
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {card.items.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-600 transition hover:border-violet/30 hover:bg-violet/[0.04]"
+                          className="glass rounded-full px-3 py-1 text-xs text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
                         >
                           {item}
                         </span>
@@ -184,14 +165,14 @@ export function HomePageTemplate({
                 {primaryActionHref ? (
                   <a
                     href={primaryActionHref}
-                    className="hero-cta rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white opacity-0 shadow-glow transition hover:opacity-90 active:scale-95"
+                    className="hero-cta rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 opacity-0 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
                   >
                     {primaryActionLabel}
                   </a>
                 ) : (
                   <button
                     type="button"
-                    className="hero-cta rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white opacity-0 shadow-glow transition hover:opacity-90 active:scale-95"
+                    className="hero-cta rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 opacity-0 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
                   >
                     {primaryActionLabel}
                   </button>
@@ -199,14 +180,14 @@ export function HomePageTemplate({
                 {secondaryActionHref ? (
                   <a
                     href={secondaryActionHref}
-                    className="hero-cta rounded-full border border-gray-200 bg-white px-7 py-3.5 text-sm font-semibold text-gray-700 opacity-0 transition hover:border-gray-300 hover:bg-gray-50 active:scale-95"
+                    className="hero-cta glass rounded-full px-7 py-3.5 text-sm font-semibold text-[var(--color-text-muted)] opacity-0 transition hover:text-[var(--color-text)] active:scale-95"
                   >
                     {secondaryActionLabel}
                   </a>
                 ) : (
                   <button
                     type="button"
-                    className="hero-cta rounded-full border border-gray-200 bg-white px-7 py-3.5 text-sm font-semibold text-gray-700 opacity-0 transition hover:border-gray-300 hover:bg-gray-50 active:scale-95"
+                    className="hero-cta glass rounded-full px-7 py-3.5 text-sm font-semibold text-[var(--color-text-muted)] opacity-0 transition hover:text-[var(--color-text)] active:scale-95"
                   >
                     {secondaryActionLabel}
                   </button>
@@ -221,12 +202,12 @@ export function HomePageTemplate({
           </div>
         </div>
 
-        {/* Scroll hint — fixed to viewport bottom, desktop only, fades on scroll */}
+        {/* Scroll hint */}
         <div
           className={`pointer-events-none fixed bottom-8 left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-500 lg:flex ${scrollVisible ? "opacity-100" : "opacity-0"}`}
         >
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Scroll</span>
-          <div className="h-8 w-px bg-gradient-to-b from-gray-300 to-transparent" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-text-hint)]">Scroll</span>
+          <div className="h-8 w-px bg-gradient-to-b from-[var(--color-text-hint)] to-transparent" />
         </div>
       </section>
 
@@ -234,51 +215,43 @@ export function HomePageTemplate({
       <section
         ref={whyRef as RefObject<HTMLElement>}
         id="why-scout"
-        className="relative bg-[#F7F6FF] py-24 lg:py-32"
+        className="relative py-24 lg:py-32"
       >
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -right-32 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-violet/[0.08] blur-[110px]" />
-          <div className="absolute -left-20 bottom-0 h-[300px] w-[300px] rounded-full bg-coral/[0.06] blur-[90px]" />
-        </div>
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="why-heading opacity-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-violet">🙌 Why Scout</p>
-            <h2 className="mt-4 max-w-2xl font-display text-4xl font-bold text-gray-900 lg:text-5xl">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-fg)]">🙌 Why Scout</p>
+            <h2 className="mt-4 max-w-2xl text-4xl font-bold text-[var(--color-text)] lg:text-5xl">
               Built for how creators and brands{" "}
-              <span className="bg-gradient-to-r from-coral via-violet to-teal bg-clip-text text-transparent">
+              <span className="text-[var(--color-accent-fg)]">
                 actually work.
               </span>
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-500">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-muted)]">
               {whyScoutDescription}
             </p>
           </div>
 
           <div className="mt-14 grid gap-5 md:grid-cols-3">
-            {whyScoutCards.map((card, i) => {
-              const accent = whyAccents[i % whyAccents.length];
-              return (
-                <div
-                  key={card.title}
-                  className="why-card group relative rounded-3xl border border-gray-200 bg-white p-7 opacity-0 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-gray-300 hover:shadow-md"
-                >
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-2xl ring-2 ${accent.ring} ${accent.bg} text-2xl`}
-                  >
-                    {card.icon ?? String(i + 1)}
-                  </div>
-                  <h3 className="mt-5 text-lg font-bold text-gray-900">{card.title}</h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-gray-500">{card.description}</p>
+            {whyScoutCards.map((card, i) => (
+              <div
+                key={card.title}
+                className="why-card glass group p-7 opacity-0 transition duration-300 hover:-translate-y-2"
+                style={{ borderRadius: 24 }}
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl glass text-2xl">
+                  {card.icon ?? String(i + 1)}
                 </div>
-              );
-            })}
+                <h3 className="mt-5 text-lg font-bold text-[var(--color-text)]">{card.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-[var(--color-text-muted)]">{card.description}</p>
+              </div>
+            ))}
           </div>
 
           {footerLinkLabel && footerLinkHref ? (
             <div className="mt-14">
               <Link
                 href={footerLinkHref}
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-coral to-violet px-7 py-3.5 text-sm font-bold text-white transition hover:opacity-90"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 dark:text-slate-950"
               >
                 {footerLinkLabel}
               </Link>
@@ -291,47 +264,41 @@ export function HomePageTemplate({
       <section
         ref={howRef as RefObject<HTMLElement>}
         id="how-it-works"
-        className="relative overflow-hidden bg-white py-24 lg:py-32"
+        className="relative overflow-hidden py-24 lg:py-32"
       >
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute right-0 top-0 h-[450px] w-[450px] rounded-full bg-coral/[0.06] blur-[110px]" />
-          <div className="absolute bottom-0 left-0 h-[350px] w-[350px] rounded-full bg-teal/[0.05] blur-[90px]" />
-        </div>
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="how-heading opacity-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-coral">🗺️ How it Works</p>
-            <h2 className="mt-4 max-w-2xl font-display text-4xl font-bold text-gray-900 lg:text-5xl">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-fg)]">🗺️ How it Works</p>
+            <h2 className="mt-4 max-w-2xl text-4xl font-bold text-[var(--color-text)] lg:text-5xl">
               Three steps to your{" "}
-              <span className="bg-gradient-to-r from-violet to-teal bg-clip-text text-transparent">
+              <span className="text-[var(--color-accent-fg)]">
                 first deal.
               </span>
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-500">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-muted)]">
               {howItWorksDescription}
             </p>
           </div>
 
           <div className="mt-14 grid gap-5 md:grid-cols-3">
-            {howItWorksCards.map((card, i) => {
-              const accent = howAccents[i % howAccents.length];
-              return (
-                <div
-                  key={card.title}
-                  className="how-card group relative rounded-3xl border border-gray-200 bg-white p-8 opacity-0 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-gray-300 hover:shadow-md"
-                >
-                  <div className="flex items-center gap-3">
-                    {card.icon ? (
-                      <span className="text-3xl">{card.icon}</span>
-                    ) : null}
-                    <span className={`select-none bg-gradient-to-br ${accent.num} bg-clip-text font-display text-5xl font-bold leading-none text-transparent`}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-lg font-bold text-gray-900">{card.title}</h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-gray-500">{card.description}</p>
+            {howItWorksCards.map((card, i) => (
+              <div
+                key={card.title}
+                className="how-card glass group p-8 opacity-0 transition duration-300 hover:-translate-y-2"
+                style={{ borderRadius: 24 }}
+              >
+                <div className="flex items-center gap-3">
+                  {card.icon ? (
+                    <span className="text-3xl">{card.icon}</span>
+                  ) : null}
+                  <span className="select-none font-sans text-5xl font-bold leading-none text-[var(--color-text-hint)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
-              );
-            })}
+                <h3 className="mt-5 text-lg font-bold text-[var(--color-text)]">{card.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-[var(--color-text-muted)]">{card.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
