@@ -8,27 +8,36 @@
   color-scheme: light dark;
 
   --color-text: #000000;
+  --color-on-text: #FFFFFF;    /* contrast text ON a --color-text background */
   --color-text-muted: rgba(0, 0, 0, 0.60);
   --color-text-hint: rgba(0, 0, 0, 0.40);
   --color-accent-fg: #A21CAF; /* fuchsia-700 */
+  --color-bubble-me: rgba(0, 0, 0, 0.88);   /* sent bubble bg (light) */
+  --color-bubble-them: rgba(0, 0, 0, 0.06); /* received bubble bg (light) */
 }
 
 /* Dark: OS preference (when no explicit class override) */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     --color-text: #FFFFFF;
+    --color-on-text: #0F172A; /* slate-950 */
     --color-text-muted: rgba(255, 255, 255, 0.70);
     --color-text-hint: rgba(255, 255, 255, 0.50);
     --color-accent-fg: #F0ABFC; /* fuchsia-300 */
+    --color-bubble-me: rgba(255, 255, 255, 0.92);
+    --color-bubble-them: rgba(255, 255, 255, 0.08);
   }
 }
 
 /* Dark: explicit class (overrides OS light preference) */
 :root.dark {
   --color-text: #FFFFFF;
+  --color-on-text: #0F172A;
   --color-text-muted: rgba(255, 255, 255, 0.70);
   --color-text-hint: rgba(255, 255, 255, 0.50);
   --color-accent-fg: #F0ABFC;
+  --color-bubble-me: rgba(255, 255, 255, 0.92);
+  --color-bubble-them: rgba(255, 255, 255, 0.08);
 }
 
 html {
@@ -200,30 +209,30 @@ body {
 /* ── Glass primitive — ambient (dialogs, modals, popovers) ─────────────────── */
 
 .glass-ambient {
-  background: rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.50);
 }
 
 @media (prefers-color-scheme: light) {
   :not(.dark) .glass-ambient {
-    background: rgba(255, 255, 255, 0.12);
-    border-top: 1px solid rgba(255, 255, 255, 0.20);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 }
 .light .glass-ambient {
-  background: rgba(255, 255, 255, 0.12);
-  border-top: 1px solid rgba(255, 255, 255, 0.20);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 .dark .glass-ambient {
-  background: rgba(0, 0, 0, 0.15);
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.50);
 }
 
 /* ── Input fields — recessed inset ─────────────────────────────────────────── */

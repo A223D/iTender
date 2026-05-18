@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef } from "react";
 
@@ -39,7 +39,7 @@ export function Step2Fields({
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           rows={7}
-          placeholder={"What's the campaign about? What should creators highlight, and is there anything to avoid mentioning?\n\ne.g. Launching our spring collection â€” show how the pieces work for everyday wear. Casual tone. No competitor brands in frame."}
+          placeholder={"What's the campaign about? What should creators highlight, and is there anything to avoid mentioning?\n\ne.g. Launching our spring collection - show how the pieces work for everyday wear. Casual tone. No competitor brands in frame."}
           className="min-h-[180px] py-3.5 leading-7"
         />
       </div>
@@ -47,11 +47,12 @@ export function Step2Fields({
       {/* Moodboard image */}
       <div>
         <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
-          Moodboard image <span className="font-normal normal-case text-[var(--color-text-hint)] tracking-normal">Â· Optional</span>
+          Moodboard image{" "}
+          <span className="font-normal normal-case tracking-normal text-[var(--color-text-hint)]">· Optional</span>
         </p>
         <div className="flex items-center gap-4">
           {imagePreview ? (
-            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-white/[0.12]">
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-black/[0.10] dark:border-white/[0.12]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={imagePreview} alt="Moodboard preview" className="h-full w-full object-cover" />
             </div>
@@ -59,9 +60,13 @@ export function Step2Fields({
             <button
               type="button"
               onClick={() => imageInputRef.current?.click()}
-              className="glass flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-white/[0.15] transition hover:border-white/[0.30]"
+              className="glass flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-black/[0.12] dark:border-white/[0.15] transition hover:border-black/[0.24] dark:hover:border-white/[0.30]"
             >
-              <span className="text-2xl">ðŸ–¼ï¸</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-text-hint)]">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="M21 15l-5-5L5 21" />
+              </svg>
             </button>
           )}
           <div>
@@ -72,7 +77,7 @@ export function Step2Fields({
             >
               {imagePreview ? "Change image" : "Upload image"}
             </button>
-            <p className="mt-1.5 text-xs text-[var(--color-text-hint)]">JPG, PNG, WEBP Â· max 5 MB</p>
+            <p className="mt-1.5 text-xs text-[var(--color-text-hint)]">JPG, PNG, WEBP · max 5 MB</p>
           </div>
         </div>
         <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={onImageChange} />
@@ -81,7 +86,8 @@ export function Step2Fields({
       {/* Reference document */}
       <div>
         <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
-          Reference document <span className="font-normal normal-case text-[var(--color-text-hint)] tracking-normal">Â· Optional</span>
+          Reference document{" "}
+          <span className="font-normal normal-case tracking-normal text-[var(--color-text-hint)]">· Optional</span>
         </p>
         <div className="flex items-center gap-3">
           <button
@@ -101,10 +107,9 @@ export function Step2Fields({
             </button>
           ) : null}
         </div>
-        <p className="mt-1.5 text-xs text-[var(--color-text-hint)]">PDF, DOCX, DOC Â· max 15 MB</p>
+        <p className="mt-1.5 text-xs text-[var(--color-text-hint)]">PDF, DOCX, DOC · max 15 MB</p>
         <input ref={docInputRef} type="file" accept=".pdf,.docx,.doc" className="hidden" onChange={onDocChange} />
       </div>
     </div>
   );
 }
-

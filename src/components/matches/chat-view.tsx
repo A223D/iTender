@@ -21,11 +21,17 @@ function MessageBubble({ msg, isMe }: { msg: ChatMessage; isMe: boolean }) {
       <button
         type="button"
         onClick={() => setShowTime((v) => !v)}
-        className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-left text-sm leading-relaxed focus:outline-none ${
+        className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-left text-sm leading-relaxed focus:outline-none transition-opacity ${
           isMe
-            ? "glass text-[var(--color-text)] rounded-br-sm"
-            : "glass text-[var(--color-text)] rounded-bl-sm opacity-70"
-        } ${msg.id.startsWith("temp-") ? "opacity-50" : ""}`}
+            ? "rounded-br-sm text-[var(--color-on-text)]"
+            : "rounded-bl-sm border border-white/[0.10] text-[var(--color-text)]"
+        } ${msg.id.startsWith("temp-") ? "opacity-40" : ""}`}
+        style={{
+          background: isMe
+            ? "var(--color-bubble-me)"
+            : "var(--color-bubble-them)",
+          backdropFilter: isMe ? "none" : "blur(12px)",
+        }}
       >
         {msg.content}
       </button>
@@ -230,7 +236,12 @@ export function ChatView({
           />
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-[var(--color-text)]">{match.creator?.name ?? "Creator"}</p>
-            <p className="text-xs text-[var(--color-text-hint)]">View profile ↗</p>
+            <p className="flex items-center gap-1 text-xs text-[var(--color-text-hint)]">
+              View profile
+              <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 10L10 2M10 2H5M10 2V7" />
+              </svg>
+            </p>
           </div>
         </Link>
       </header>
@@ -279,6 +290,10 @@ export function ChatView({
               </svg>
             )}
           </button>
+        </div>
+        <div className="mt-2 hidden items-center gap-3 font-mono text-[10px] text-[var(--color-text-hint)] sm:flex">
+          <span><kbd className="rounded px-1.5 py-0.5" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>Enter</kbd> send</span>
+          <span><kbd className="rounded px-1.5 py-0.5" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>Shift+Enter</kbd> newline</span>
         </div>
       </div>
 

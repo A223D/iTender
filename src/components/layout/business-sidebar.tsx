@@ -118,6 +118,18 @@ export function BusinessSidebar({
           </Link>
         ) : null}
 
+        {/* Quick jump hint */}
+        <div className="mx-3 mb-3 flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-text-hint)]">
+            <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
+          </svg>
+          <span className="flex-1 text-xs text-[var(--color-text-muted)]">Quick jump</span>
+          <span className="flex items-center gap-0.5">
+            <kbd className="inline-flex h-4 items-center justify-center rounded px-1 font-mono text-[10px] text-[var(--color-text-hint)]" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>⌘</kbd>
+            <kbd className="inline-flex h-4 items-center justify-center rounded px-1 font-mono text-[10px] text-[var(--color-text-hint)]" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>K</kbd>
+          </span>
+        </div>
+
         {/* Sign out */}
         <div className="px-4 pb-6">
           <SignOutButton className="w-full rounded-xl glass px-4 py-2 text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]" />

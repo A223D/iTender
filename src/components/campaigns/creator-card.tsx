@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -75,9 +75,12 @@ export function CreatorCard({
             <Link
               href={`/creators/${creator.id}`}
               target="_blank"
-              className="text-xs font-medium text-[var(--color-text-hint)] transition hover:text-[var(--color-text-muted)]"
+              className="inline-flex items-center gap-1 text-xs font-medium text-[var(--color-text-hint)] transition hover:text-[var(--color-text-muted)]"
             >
-              View profile â†—
+              View profile
+              <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 10L10 2M10 2H5M10 2V7" />
+              </svg>
             </Link>
 
             {/* Platform follower pills */}
@@ -121,14 +124,20 @@ export function CreatorCard({
         <div className="mt-4 flex items-center justify-end gap-2">
           {matchId ? (
             <>
-              <span className="scout-pop-in rounded-full glass/20 px-3 py-1.5 text-xs font-semibold text-[var(--color-text-muted)]">
-                Accepted âœ“
+              <span className="scout-pop-in inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-[var(--color-text-muted)]" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}>
+                Accepted
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 6l3 3 5-5" />
+                </svg>
               </span>
               <Link
                 href={`/matches/${matchId}`}
-                className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-fuchsia-700 px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90"
+                className="inline-flex items-center gap-1 rounded-xl bg-gradient-to-r from-fuchsia-500 to-fuchsia-700 px-3 py-1.5 text-xs font-bold text-white transition hover:opacity-90"
               >
-                Message â†’
+                Message
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 6h8M7 3l3 3-3 3" />
+                </svg>
               </Link>
             </>
           ) : (
@@ -146,5 +155,3 @@ export function CreatorCard({
     </div>
   );
 }
-
-

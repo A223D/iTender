@@ -24,7 +24,7 @@ export function Calendar({
         caption_label: "text-sm font-semibold text-[var(--color-text)]",
         nav: "flex items-center",
         nav_button:
-          "absolute flex h-7 w-7 items-center justify-center rounded-xl border border-white/10 glass text-[var(--color-text-muted)] transition hover:border-white/20 hover:bg-white/[0.04] hover:text-[var(--color-text)]",
+          "absolute flex h-7 w-7 items-center justify-center rounded-xl border border-black/[0.08] dark:border-white/10 glass text-[var(--color-text-muted)] transition hover:border-black/[0.16] dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] hover:text-[var(--color-text)]",
         nav_button_previous: "left-1",
         nav_button_next: "right-1",
         table: "w-full border-collapse",
@@ -32,9 +32,9 @@ export function Calendar({
         head_cell: "w-9 text-center text-[11px] font-semibold text-[var(--color-text-hint)] pb-2 uppercase tracking-wider",
         row: "flex w-full mt-1",
         cell: "relative w-9 p-0 text-center text-sm",
-        day: "h-9 w-9 rounded-xl text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-fg)]",
+        day: "h-9 w-9 rounded-xl text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-black/[0.06] dark:hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-fg)]",
         day_selected:
-          "bg-[var(--color-accent-fg)] text-white hover:opacity-90 focus-visible:opacity-90",
+          "!bg-[var(--color-text)] !text-[var(--color-on-text)] hover:opacity-90 focus-visible:opacity-90",
         day_today: "bg-[var(--color-accent-fg)]/10 text-[var(--color-accent-fg)] font-bold",
         day_outside: "text-[var(--color-text-hint)] hover:text-[var(--color-text-hint)]",
         day_disabled: "text-[var(--color-text-hint)] cursor-not-allowed hover:bg-transparent",

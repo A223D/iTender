@@ -244,36 +244,36 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             <ConfettiBurst trigger={confettiKey} />
             <div className="relative z-10">
               <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full glass text-4xl">
-                ðŸŽ‰
+                🎉
               </div>
               <h2 className="font-display text-3xl font-bold text-[var(--color-text)]">Campaign is live!</h2>
               <p className="mt-3 max-w-xs text-base text-[var(--color-text-muted)]">
                 <span className="font-semibold text-[var(--color-text)]">{form.title}</span> is now visible to creators on iTender.
               </p>
-              <p className="mt-6 text-sm text-[var(--color-text-hint)]">Redirecting to dashboardâ€¦</p>
+              <p className="mt-6 text-sm text-[var(--color-text-hint)]">Redirecting to dashboard...</p>
             </div>
           </div>
         ) : null}
 
         {/* Step counter header */}
-        <div className="flex h-14 items-center justify-between border-b border-white/[0.08] px-5 sm:px-9">
-          <div className="font-mono text-[11px] font-semibold uppercase text-black/40">
+        <div className="flex h-14 items-center justify-between border-b border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-9">
+          <div className="font-mono text-[11px] font-semibold uppercase text-[var(--color-text-hint)]">
             Step{" "}
             <span className="text-[var(--color-text)]">{String(step + 1).padStart(2, "0")}</span>
-            <span className="text-black/35"> / {String(CAMPAIGN_STEPS.length).padStart(2, "0")}</span>
+            <span className="text-[var(--color-text-hint)]"> / {String(CAMPAIGN_STEPS.length).padStart(2, "0")}</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="text-xs font-semibold text-black/55 transition hover:text-[var(--color-text)] sm:text-sm"
+              className="text-xs font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:text-sm"
             >
               Save & exit
             </button>
-            <div className="hidden h-4 w-px bg-black/10 sm:block" />
+            <div className="hidden h-4 w-px bg-[var(--color-text-hint)]/20 sm:block" />
             <a
               href="mailto:support@itender.com?subject=Campaign%20help"
-              className="hidden text-sm font-semibold text-black/55 transition hover:text-[var(--color-text)] sm:inline"
+              className="hidden text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:inline"
             >
               Need help?
             </a>
@@ -289,7 +289,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             <h1 className="font-display text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-[34px]">
               {STEP_HEADINGS[step]}
             </h1>
-            <p className="mt-3 max-w-[460px] text-[15px] leading-7 text-black/55">
+            <p className="mt-3 max-w-[460px] text-[15px] leading-7 text-[var(--color-text-muted)]">
               {STEP_SUBTITLES[step]}
             </p>
 
@@ -344,12 +344,12 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
         </div>
 
         {/* Footer navigation */}
-        <div className="flex items-center gap-3 border-t border-white/[0.12] glass px-5 py-5 sm:px-10 lg:px-12">
+        <div className="flex items-center gap-3 border-t border-black/[0.08] dark:border-white/[0.12] glass px-5 py-5 sm:px-10 lg:px-12">
           {step > 0 ? (
             <button
               type="button"
               onClick={() => { setError(null); setStep((s) => s - 1); }}
-              className="rounded-xl border border-white/[0.12] glass px-5 py-3 text-sm font-semibold transition hover:border-white/[0.12] hover:bg-black/[0.03] active:scale-[0.98]"
+              className="rounded-xl border border-black/[0.10] dark:border-white/[0.12] glass px-5 py-3 text-sm font-semibold text-[var(--color-text)] transition hover:border-black/[0.18] dark:hover:border-white/[0.18] hover:bg-black/[0.04] dark:hover:bg-white/[0.04] active:scale-[0.98]"
             >
               Back
             </button>
@@ -360,7 +360,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             <button
               type="button"
               onClick={handleNext}
-              className="min-h-12 min-w-[160px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-90 active:scale-[0.98]"
+              className="min-h-12 min-w-[160px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-90 active:scale-[0.98]"
             >
               Continue -&gt;
             </button>
@@ -369,16 +369,16 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="min-h-12 min-w-[160px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
+              className="min-h-12 min-w-[160px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-90 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
             >
-              {saving ? <span className="flex items-center gap-2"><Spinner className="h-4 w-4" />Publishingâ€¦</span> : "Publish Campaign ->"}
+              {saving ? <span className="flex items-center gap-2"><Spinner className="h-4 w-4" />Publishing...</span> : "Publish Campaign ->"}
             </button>
           ) : (
             <div className="flex flex-col items-end gap-1.5">
               <button
                 type="button"
                 disabled
-                className="min-h-12 cursor-not-allowed rounded-xl bg-black/10 px-6 py-3 text-sm font-bold text-[var(--color-text-muted)]"
+                className="min-h-12 cursor-not-allowed rounded-xl bg-black/[0.06] dark:bg-white/[0.08] px-6 py-3 text-sm font-bold text-[var(--color-text-muted)]"
               >
                 Complete Payment
               </button>
@@ -423,13 +423,13 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
 
         {/* Heading */}
         <div className="mt-9 lg:mt-16">
-          <div className="mb-3 font-mono text-[11px] font-semibold uppercase text-[var(--color-text-muted)]">
+          <div className="mb-3 font-mono text-[11px] font-semibold uppercase text-white/60">
             -&gt; New campaign
           </div>
           <h2 className="font-display text-[36px] font-bold leading-none text-white">
             Launch a campaign
             <br />
-            creators <em className="text-[var(--color-text-muted)]">want</em>
+            creators <em className="text-white/60">want</em>
             <br />
             to join.
           </h2>
@@ -449,9 +449,9 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition ${
                       done
-                        ? "bg-[var(--color-text)] text-slate-950"
+                        ? "bg-white text-slate-900"
                         : active
-                          ? "glass text-[var(--color-text)]"
+                          ? "border border-white/25 bg-white/10 text-white"
                           : "border border-white/15 text-white/35"
                     }`}
                   >
@@ -459,7 +459,7 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
                   </span>
                   {index < PANEL_STEPS.length - 1 ? (
                     <span
-                      className={`mt-1 hidden h-6 w-px lg:block ${done ? "bg-[var(--color-text)]" : "bg-white/10"}`}
+                      className={`mt-1 hidden h-6 w-px lg:block ${done ? "bg-white/60" : "bg-white/10"}`}
                     />
                   ) : null}
                 </div>

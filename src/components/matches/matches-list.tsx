@@ -39,7 +39,7 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
         </p>
         <Link
           href="/dashboard"
-          className="mt-6 rounded-xl bg-[var(--color-text)] px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
+          className="mt-6 rounded-xl bg-[var(--color-text)] px-5 py-2.5 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
         >
           Go to Dashboard
         </Link>
@@ -48,11 +48,11 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {groups.map((group) => (
         <div key={group.campaign.id}>
           {/* Campaign section header */}
-          <div className="mb-2 flex items-center justify-between px-1">
+          <div className="mb-1.5 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-sm">📣</span>
               <h2 className="truncate text-xs font-semibold uppercase tracking-wide text-[var(--color-text-hint)]">
@@ -61,26 +61,39 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
             </div>
             <Link
               href={`/campaigns/${group.campaign.id}`}
-              className="shrink-0 text-xs font-medium text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
+              className="flex shrink-0 items-center gap-1 text-xs font-medium text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
             >
-              View ↗
+              View
+              <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 10L10 2M10 2H5M10 2V7" />
+              </svg>
             </Link>
           </div>
 
           {/* Match tiles */}
-          <div className="overflow-hidden rounded-xl glass divide-y divide-white/[0.06]">
-            {group.matches.map((match) => {
+          <div className="overflow-hidden rounded-xl glass">
+            {group.matches.map((match, idx) => {
               const isActive = pathname === `/matches/${match.id}`;
+              const hasUnread = match.unreadCount > 0;
               return (
                 <Link
                   key={match.id}
                   href={`/matches/${match.id}`}
-                  className={`flex items-center gap-3 px-3.5 py-3 transition ${
-                    isActive
-                      ? "bg-white/[0.12]"
-                      : "hover:bg-white/[0.06]"
-                  }`}
+                  className={`relative flex items-center gap-3 px-3.5 py-3 transition ${
+                    idx > 0 ? "border-t border-white/[0.05]" : ""
+                  } ${isActive ? "bg-white/[0.14]" : "hover:bg-white/[0.06]"}`}
                 >
+                  {/* Active / unread indicator */}
+                  <span
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 rounded-r transition-all"
+                    style={{
+                      height: isActive ? "60%" : hasUnread ? "40%" : "0%",
+                      background: isActive
+                        ? "rgba(103,232,249,0.9)"
+                        : "rgba(103,232,249,0.5)",
+                    }}
+                  />
+
                   <CreatorAvatar
                     name={match.creator?.name}
                     photoUrl={match.creator?.profile_photo_url ?? match.creator?.avatar_url}
@@ -88,17 +101,17 @@ export function MatchesList({ groups }: { groups: MatchGroup[] }) {
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline justify-between gap-2">
-                      <p className="truncate text-sm font-semibold text-[var(--color-text)]">
+                      <p className={`truncate text-sm text-[var(--color-text)] ${hasUnread || isActive ? "font-semibold" : "font-medium"}`}>
                         {match.creator?.name ?? "Unknown Creator"}
                       </p>
                       {match.lastMessage ? (
-                        <span className="shrink-0 text-[10px] text-[var(--color-text-hint)]">
+                        <span className={`shrink-0 text-[10px] ${hasUnread ? "text-[rgba(103,232,249,0.8)]" : "text-[var(--color-text-hint)]"}`}>
                           {relativeTime(match.lastMessage.created_at)}
                         </span>
                       ) : null}
                     </div>
                     {match.lastMessage ? (
-                      <p className="mt-0.5 truncate text-xs text-[var(--color-text-muted)]">
+                      <p className={`mt-0.5 truncate text-xs ${hasUnread ? "text-[var(--color-text-muted)] font-medium" : "text-[var(--color-text-hint)]"}`}>
                         {match.lastMessage.fromMe ? (
                           <span className="text-[var(--color-text-hint)]">You: </span>
                         ) : null}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { CONTENT_TYPES } from "@/lib/campaign-constants";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ export function Step1Fields({
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           onKeyDown={onTitleKeyDown}
-          placeholder="e.g. Summer launch â€” sunglasses"
+          placeholder="e.g. Summer launch - sunglasses"
           className="py-3.5"
         />
       </div>
@@ -51,8 +51,8 @@ export function Step1Fields({
                 onClick={() => onToggleContentType(type)}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition active:scale-[0.97] ${
                   selected
-                    ? "border-[var(--color-text)] glass text-[var(--color-text)]"
-                    : "glass text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                    ? "border-transparent bg-[var(--color-text)] text-[var(--color-on-text)]"
+                    : "border-black/[0.10] bg-black/[0.02] text-[var(--color-text-muted)] hover:border-black/[0.18] hover:text-[var(--color-text)] dark:border-white/[0.12] dark:bg-transparent dark:hover:border-white/[0.22]"
                 }`}
               >
                 {type}
@@ -64,4 +64,3 @@ export function Step1Fields({
     </div>
   );
 }
-

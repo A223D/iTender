@@ -84,21 +84,25 @@ export default async function DashboardPage({
             </Link>
           </div>
 
-          <div className="mx-auto max-w-5xl px-6 pb-16 pt-6">
+          <div className="mx-auto max-w-7xl px-6 pb-16 pt-6">
 
             {/* Stats strip */}
-            <div className="mb-8 grid grid-cols-3 gap-4">
+            <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
               <div className="glass rounded-2xl px-5 py-4">
-                <p className="text-3xl font-bold text-[var(--color-text)]">{active.length}</p>
-                <p className="mt-0.5 text-xs font-semibold text-[var(--color-text-muted)]">Active Campaigns</p>
+                <p className="text-3xl font-bold tabular-nums text-[var(--color-text)]">{active.length}</p>
+                <p className="mt-1 text-xs font-semibold text-[var(--color-text-muted)]">Active Campaigns</p>
               </div>
               <div className="glass rounded-2xl px-5 py-4">
-                <p className="text-3xl font-bold text-[var(--color-text)]">{totalInterested}</p>
-                <p className="mt-0.5 text-xs font-semibold text-[var(--color-text-muted)]">Interested Creators</p>
+                <p className="text-3xl font-bold tabular-nums text-[var(--color-text)]" style={{ color: "rgba(103,232,249,1)" }}>{totalInterested}</p>
+                <p className="mt-1 text-xs font-semibold text-[var(--color-text-muted)]">Interested Creators</p>
               </div>
               <div className="glass rounded-2xl px-5 py-4">
-                <p className="text-3xl font-bold text-[var(--color-text)]">{campaigns?.length ?? 0}</p>
-                <p className="mt-0.5 text-xs font-semibold text-[var(--color-text-muted)]">Total Campaigns</p>
+                <p className="text-3xl font-bold tabular-nums text-[var(--color-text)]">{totalUnread}</p>
+                <p className="mt-1 text-xs font-semibold text-[var(--color-text-muted)]">Unread Messages</p>
+              </div>
+              <div className="glass rounded-2xl px-5 py-4">
+                <p className="text-3xl font-bold tabular-nums text-[var(--color-text)]">{campaigns?.length ?? 0}</p>
+                <p className="mt-1 text-xs font-semibold text-[var(--color-text-muted)]">Total Campaigns</p>
               </div>
             </div>
 
@@ -117,13 +121,13 @@ export default async function DashboardPage({
                       href={tab.value === "all" ? "/dashboard" : `/dashboard?status=${tab.value}`}
                       className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold transition ${
                         isActive
-                          ? "bg-[var(--color-text)] text-slate-950 dark:text-slate-950"
+                          ? "bg-[var(--color-text)] text-[var(--color-on-text)]"
                           : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
                       }`}
                     >
                       {tab.label}
                       <span className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${
-                        isActive ? "bg-black/10 text-slate-950 dark:bg-white/20 dark:text-slate-950" : "bg-white/10 text-[var(--color-text-hint)]"
+                        isActive ? "bg-[var(--color-on-text)]/10 text-[var(--color-on-text)]" : "bg-white/10 text-[var(--color-text-hint)]"
                       }`}>
                         {tab.count}
                       </span>
@@ -159,7 +163,7 @@ export default async function DashboardPage({
                     {active.length}
                   </span>
                 </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
                   {active.map((c) => (
                     <CampaignCard key={c.id} campaign={c} />
                   ))}
