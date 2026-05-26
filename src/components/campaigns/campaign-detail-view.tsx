@@ -13,7 +13,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { CreatorPipeline } from "./creator-pipeline";
 import type { NormalizedCreator } from "./creator-card";
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Types ──────────────────────────────────────────────────────────────────────
 
 type Props = {
   campaign: CampaignDetail;
@@ -31,7 +31,7 @@ type EditForm = {
   deadline: string;
 };
 
-// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Main component ─────────────────────────────────────────────────────────────
 
 export function CampaignDetailView({ campaign, interestedCreators, userId, existingMatches = new Map() }: Props) {
   const router = useRouter();
@@ -76,7 +76,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   const [docRemoved, setDocRemoved] = useState(false);
   const docInputRef = useRef<HTMLInputElement>(null);
 
-  // â”€â”€ Normalize creators â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Normalize creators ────────────────────────────────────────────────────────
 
   const creators: NormalizedCreator[] = interestedCreators.map((row) => {
     const usersNode = Array.isArray(row.users) ? row.users[0] : row.users;
@@ -119,7 +119,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
-  // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Helpers ──────────────────────────────────────────────────────────────────
 
   function setField(key: keyof EditForm, value: string) {
     setEditForm((prev) => ({ ...prev, [key]: value }));
@@ -193,7 +193,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
     setDocRemoved(false);
   }
 
-  // â”€â”€ Save â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Save ─────────────────────────────────────────────────────────────────────
 
   async function handleSave() {
     if (!editForm.title.trim()) { setError("Please enter a campaign title."); return; }
@@ -296,7 +296,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
     }
   }
 
-  // â”€â”€ Close â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Close ─────────────────────────────────────────────────────────────────────
 
   async function handleClose() {
     setSaving(true);
@@ -321,7 +321,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
     }
   }
 
-  // â”€â”€ Derived values â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Derived values ────────────────────────────────────────────────────────────
 
   const left = daysLeft(campaign.deadline);
   const isExpired = left === 0 && campaign.status === "live";
@@ -330,7 +330,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
   const editImageSrc = imageRemoved ? null : newImagePreview ?? currentImageUrl;
   const editDocName = docRemoved ? null : newDocFile?.name ?? campaign.reference_doc_name;
 
-  // â”€â”€ Shared pipeline props â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Shared pipeline props ─────────────────────────────────────────────────────
 
   const pipelineProps = {
     creators,
@@ -347,7 +347,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
     onAccept: handleAccept,
   };
 
-  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
     <>
@@ -400,7 +400,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                 disabled={saving}
                 className="flex-1 rounded-2xl glass py-3 text-sm font-bold text-[var(--color-text)] transition hover:opacity-80 disabled:opacity-60"
               >
-                {saving ? "Closingâ€¦" : "Close it"}
+                {saving ? "Closing..." : "Close it"}
               </button>
             </div>
           </div>
@@ -408,7 +408,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
       ) : null}
 
       {editing ? (
-        /* â”€â”€ EDIT MODE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+        /* ── EDIT MODE ────────────────────────────────────────────────────────── */
         <>
           <header className="sticky top-0 z-30 border-b border-white/[0.08] glass rounded-none border-t-0 border-l-0 border-r-0 backdrop-blur">
             <div className="mx-auto flex h-[57px] max-w-7xl items-center gap-3 px-4 lg:px-8">
@@ -447,9 +447,9 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                   type="button"
                   onClick={handleSave}
                   disabled={saving}
-                  className="rounded-xl bg-[var(--color-text)] px-4 py-2 text-sm font-bold text-white transition active:scale-[0.98] disabled:opacity-60 dark:text-slate-900"
+                  className="rounded-xl bg-[var(--color-text)] px-4 py-2 text-sm font-bold text-[var(--color-on-text)] transition active:scale-[0.98] disabled:opacity-60"
                 >
-                  {saving ? "Savingâ€¦" : "Save Changes"}
+                  {saving ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </div>
@@ -512,7 +512,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
               {/* Moodboard image */}
               <div>
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
-                  Moodboard image <span className="font-normal normal-case text-black/35 tracking-normal">Â· Optional</span>
+                  Moodboard image <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
                 </p>
                 <div className="flex items-center gap-4">
                   {editImageSrc ? (
@@ -526,7 +526,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                       onClick={() => imageInputRef.current?.click()}
                       className="glass flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-white/[0.15] transition hover:border-white/[0.30]"
                     >
-                      <span className="text-2xl">ðŸ–¼ï¸</span>
+                      <span className="text-2xl">🖼️</span>
                     </button>
                   )}
                   <div className="flex flex-col gap-2">
@@ -555,7 +555,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
               {/* Reference doc */}
               <div>
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
-                  Reference document <span className="font-normal normal-case text-black/35 tracking-normal">Â· Optional</span>
+                  Reference document <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
                 </p>
                 <div className="flex items-center gap-3">
                   <button
@@ -608,7 +608,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
               {/* Compensation details */}
               <label className="block">
                 <span className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text)]">
-                  Compensation details <span className="font-normal normal-case text-black/35 tracking-normal">Â· Optional</span>
+                  Compensation details <span className="font-normal normal-case text-black/35 tracking-normal">· Optional</span>
                 </span>
                 <input
                   type="text"
@@ -652,9 +652,9 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
         </>
 
       ) : (
-        /* â”€â”€ VIEW MODE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+        /* ── VIEW MODE ────────────────────────────────────────────────────────── */
         <>
-          {/* â”€â”€ Dark hero band â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Dark hero band ────────────────────────────────────────────────── */}
           <div className="glass relative overflow-hidden rounded-none border-t-0 border-l-0 border-r-0">
             {/* Ambient blobs */}
             <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-white/[0.06] blur-3xl" />
@@ -739,7 +739,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                   ) : null}
                 </div>
 
-                {/* Moodboard thumbnail (desktop only â€” clickable to lightbox) */}
+                {/* Moodboard thumbnail (desktop only — clickable to lightbox) */}
                 {currentImageUrl ? (
                   <button
                     type="button"
@@ -760,7 +760,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
             </div>
           </div>
 
-          {/* â”€â”€ Body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Body ──────────────────────────────────────────────────────────── */}
           <div className="pb-16">
             <div className="mx-auto max-w-7xl px-4 lg:px-8">
 
@@ -850,7 +850,7 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] underline underline-offset-2 transition hover:text-[var(--color-text-muted)]/70"
                       >
-                        ðŸ“„ {campaign.reference_doc_name ?? "View document"}
+                        📄 {campaign.reference_doc_name ?? "View document"}
                       </a>
                     </div>
                   ) : null}
@@ -874,7 +874,6 @@ export function CampaignDetailView({ campaign, interestedCreators, userId, exist
     </>
   );
 }
-
 
 
 

@@ -125,7 +125,7 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
             isCreatorHome ? (
               <a
                 href="#"
-                className="rounded-full bg-[var(--color-text)] px-5 py-2 text-sm font-bold text-[var(--color-bg,#fff)] dark:text-slate-950 text-slate-950 transition hover:opacity-80 active:scale-95"
+                className="rounded-full bg-[var(--color-text)] px-5 py-2 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
               >
                 Join as Creator
               </a>
@@ -133,7 +133,7 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
               <button
                 type="button"
                 onClick={() => router.push("/login?audience=business")}
-                className="rounded-full bg-[var(--color-text)] px-5 py-2 text-sm font-bold dark:text-slate-950 text-paper transition hover:opacity-80 active:scale-95"
+                className="rounded-full bg-[var(--color-text)] px-5 py-2 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
               >
                 Get started
               </button>

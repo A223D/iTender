@@ -52,8 +52,8 @@ export function DeleteAccountForm({
         return;
       }
 
-      // Auth identity is deleted server-side â€” signOut cleans up local cookies.
-      // The call may fail (identity already gone), which is expected â€” ignore the error.
+      // Auth identity is deleted server-side — signOut cleans up local cookies.
+      // The call may fail (identity already gone), which is expected — ignore the error.
       const supabase = createClient();
       await supabase.auth.signOut().catch(() => {});
       router.push("/");
@@ -69,7 +69,7 @@ export function DeleteAccountForm({
       <button
         type="button"
         onClick={openModal}
-        className="mt-4 rounded-2xl border border-white/20 px-5 py-2.5 text-sm font-semibold text-[var(--color-text-muted)] transition hover:bg-[var(--color-text)] hover:text-white active:scale-[0.98]"
+        className="mt-4 rounded-2xl border border-white/20 px-5 py-2.5 text-sm font-semibold text-[var(--color-text-muted)] transition hover:bg-[var(--color-text)] hover:text-[var(--color-on-text)] active:scale-[0.98]"
       >
         Delete my account
       </button>
@@ -153,9 +153,9 @@ export function DeleteAccountForm({
                 type="button"
                 onClick={handleDelete}
                 disabled={!canConfirm || state === "deleting"}
-                className="flex-1 rounded-2xl bg-[var(--color-text)] px-4 py-3 text-sm font-bold text-white transition hover:bg-white/20 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex-1 rounded-2xl bg-[var(--color-text)] px-4 py-3 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {state === "deleting" ? "Deletingâ€¦" : "Delete account"}
+                {state === "deleting" ? "Deleting..." : "Delete account"}
               </button>
             </div>
           </div>
@@ -164,4 +164,3 @@ export function DeleteAccountForm({
     </>
   );
 }
-

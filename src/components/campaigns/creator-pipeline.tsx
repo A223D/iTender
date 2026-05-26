@@ -46,7 +46,7 @@ export function CreatorPipeline({
 
       {creators.length === 0 ? (
         <div className="glass flex flex-col items-center justify-center rounded-3xl px-6 py-16 text-center opacity-70">
-          <span className="mb-3 text-4xl">ðŸ‘€</span>
+          <span className="mb-3 text-4xl">👀</span>
           <p className="font-semibold text-[var(--color-text)]">No creators yet</p>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">Creators who express interest will appear here.</p>
         </div>

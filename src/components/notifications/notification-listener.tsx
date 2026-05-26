@@ -8,7 +8,7 @@ import { createClient } from "@/utils/supabase/client";
 
 const MAX_TOASTS = 4;
 
-// â”€â”€ Audio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Audio ──────────────────────────────────────────────────────────────────────
 
 function useNotificationAudio() {
   const ctxRef = useRef<AudioContext | null>(null);
@@ -62,7 +62,7 @@ function useNotificationAudio() {
   return play;
 }
 
-// â”€â”€ Toast UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Toast UI ───────────────────────────────────────────────────────────────────
 
 function NotificationToast({
   id,
@@ -90,7 +90,7 @@ function NotificationToast({
         <div
           className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-base bg-white/[0.10] dark:bg-white/[0.10]"
         >
-          {isApplication ? "ðŸ’Œ" : "ðŸ’¬"}
+          {isApplication ? "💌" : "💬"}
         </div>
 
         {/* Text */}
@@ -108,7 +108,7 @@ function NotificationToast({
               }}
               className="mt-2 text-xs font-semibold text-[var(--color-text-muted)] transition-opacity hover:opacity-70"
             >
-              {isApplication ? "View applicants â†’" : "Open chat â†’"}
+              {isApplication ? "View applicants →" : "Open chat →"}
             </button>
           ) : null}
         </div>
@@ -129,7 +129,7 @@ function NotificationToast({
   );
 }
 
-// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Component ──────────────────────────────────────────────────────────────────
 
 export function NotificationListener({
   userId,
@@ -192,7 +192,7 @@ export function NotificationListener({
     );
   }
 
-  // â”€â”€ Swipes â€” new creator applications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Swipes — new creator applications ─────────────────────────────────────
   useEffect(() => {
     const channel = supabase
       .channel(`business-swipes:${userId}`)
@@ -236,7 +236,7 @@ export function NotificationListener({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  // â”€â”€ Messages â€” new creator messages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Messages — new creator messages ───────────────────────────────────────
   useEffect(() => {
     const channel = supabase
       .channel(`business-messages:${userId}`)

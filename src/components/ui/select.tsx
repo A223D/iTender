@@ -52,7 +52,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 min-w-[8rem] overflow-hidden rounded-2xl border border-white/[0.08] glass text-[var(--color-text)] shadow-lg",
+        "dropdown-surface relative z-50 min-w-[8rem] overflow-hidden rounded-2xl text-[var(--color-text)]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
         position === "popper" &&
@@ -96,8 +96,8 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-xl px-3 py-2 text-sm text-[var(--color-text)]",
-      "outline-none focus:bg-error/[0.06] focus:text-[var(--color-text)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "data-[state=checked]:font-semibold data-[state=checked]:text-error",
+      "outline-none focus:bg-[var(--color-tile)] focus:text-[var(--color-text)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "data-[state=checked]:font-semibold data-[state=checked]:text-[var(--color-text)]",
       className,
     )}
     {...props}

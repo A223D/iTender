@@ -78,7 +78,7 @@ export default async function DashboardPage({
             <h1 className="text-xl font-bold text-[var(--color-text)]">Campaigns</h1>
             <Link
               href="/campaigns/new"
-              className="rounded-full bg-[var(--color-text)] px-4 py-2 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
+              className="rounded-full bg-[var(--color-text)] px-4 py-2 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
             >
               + New Campaign
             </Link>
@@ -147,7 +147,7 @@ export default async function DashboardPage({
                 <p className="mb-6 text-sm text-[var(--color-text-muted)]">Create your first campaign to start finding creators.</p>
                 <Link
                   href="/campaigns/new"
-                  className="rounded-full bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
+                  className="rounded-full bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
                 >
                   Create Campaign
                 </Link>

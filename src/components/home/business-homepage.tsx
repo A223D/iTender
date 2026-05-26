@@ -44,7 +44,7 @@ export function BusinessHomePage() {
           <div className="l-hero-actions">
             <Link
               href="/login?audience=business"
-              className="rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-95"
+              className="rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
             >
               Start your first campaign
             </Link>
@@ -294,7 +294,7 @@ export function BusinessHomePage() {
             <div className="l-cta-actions">
               <Link
                 href="/login?audience=business"
-                className="rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-95"
+                className="rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-95"
               >
                 Sign in / get started
               </Link>

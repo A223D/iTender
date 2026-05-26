@@ -352,7 +352,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
                 type="button"
                 onClick={step === 0 ? handleNextStep : handleSubmit}
                 disabled={saving}
-                className="min-h-12 min-w-[180px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-slate-950"
+                className="min-h-12 min-w-[180px] rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
               >
                 {saving ? (
                   <span className="flex items-center gap-2">
@@ -554,7 +554,7 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
                       done
                         ? "bg-[var(--scout-lime)] text-[var(--color-text)]"
                         : active
-                          ? "bg-[var(--color-text)] text-slate-950"
+                          ? "bg-[var(--color-text)] text-[var(--color-on-text)]"
                           : "border border-white/15 text-white/35"
                     }`}
                   >
@@ -639,7 +639,7 @@ function CompletionScreen({
       <button
         type="button"
         onClick={onDashboard}
-        className="mt-8 rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-slate-950 transition hover:opacity-90 active:scale-[0.98]"
+        className="mt-8 rounded-xl bg-[var(--color-text)] px-6 py-3 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-90 active:scale-[0.98]"
       >
         Go to dashboard -&gt;
       </button>

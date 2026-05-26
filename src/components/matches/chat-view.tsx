@@ -280,7 +280,7 @@ export function ChatView({
             onClick={handleSend}
             disabled={!input.trim() || sending}
             aria-label="Send"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-text)] text-slate-950 transition hover:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 dark:text-slate-950"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-text)] text-[var(--color-on-text)] transition hover:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
           >
             {sending ? (
               <Spinner className="h-4 w-4" />

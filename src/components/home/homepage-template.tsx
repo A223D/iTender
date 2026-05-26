@@ -165,14 +165,14 @@ export function HomePageTemplate({
                 {primaryActionHref ? (
                   <a
                     href={primaryActionHref}
-                    className="hero-cta rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 opacity-0 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
+                    className="hero-cta rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-[var(--color-on-text)] opacity-0 transition hover:opacity-80 active:scale-95"
                   >
                     {primaryActionLabel}
                   </a>
                 ) : (
                   <button
                     type="button"
-                    className="hero-cta rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 opacity-0 transition hover:opacity-80 active:scale-95 dark:text-slate-950"
+                    className="hero-cta rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-[var(--color-on-text)] opacity-0 transition hover:opacity-80 active:scale-95"
                   >
                     {primaryActionLabel}
                   </button>
@@ -251,7 +251,7 @@ export function HomePageTemplate({
             <div className="mt-14">
               <Link
                 href={footerLinkHref}
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 dark:text-slate-950"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-text)] px-7 py-3.5 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80"
               >
                 {footerLinkLabel}
               </Link>

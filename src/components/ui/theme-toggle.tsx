@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 function SunIcon() {
   return (
@@ -27,11 +27,15 @@ function MoonIcon() {
 }
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
-  }, []);
+  const isDark = useSyncExternalStore(
+    (onStoreChange) => {
+      const observer = new MutationObserver(onStoreChange);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+      return () => observer.disconnect();
+    },
+    () => document.documentElement.classList.contains("dark"),
+    () => null,
+  );
 
   function toggle() {
     const next = !isDark;
@@ -45,7 +49,6 @@ export function ThemeToggle() {
       html.classList.add("light");
       localStorage.setItem("scout-theme", "light");
     }
-    setIsDark(next);
   }
 
   // Reserve space while determining initial theme (avoids layout shift)

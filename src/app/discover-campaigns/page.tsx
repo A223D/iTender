@@ -43,7 +43,7 @@ export default async function DiscoverCampaignsPage() {
   }
 
   const msPerDay = 1000 * 60 * 60 * 24;
-  const now = Date.now();
+  const now = new Date().getTime();
 
   const campaigns: Campaign[] = (data ?? []).map((row) => {
     const usersNode = Array.isArray(row.users) ? row.users[0] : row.users;

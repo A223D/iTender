@@ -238,7 +238,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
       <CampaignPanel currentStep={step} campaignTitle={form.title} />
 
       <section className="relative flex flex-1 flex-col glass">
-        {/* â”€â”€ Published success overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Published success overlay ───────────────────────────────────────── */}
         {published ? (
           <div className="scout-onboarding-step-in absolute inset-0 z-20 flex flex-col items-center justify-center glass px-8 text-center">
             <ConfettiBurst trigger={confettiKey} />

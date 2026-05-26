@@ -198,7 +198,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={handleSendCode}
                   disabled={loading || !email.trim()}
-                  className="w-full rounded-2xl bg-[var(--color-text)] px-5 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-[0.98] disabled:opacity-50 dark:text-slate-950"
+                  className="w-full rounded-2xl bg-[var(--color-text)] px-5 py-3.5 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-[0.98] disabled:opacity-50"
                 >
                   {loading ? "Sending…" : "Send code →"}
                 </button>
@@ -255,7 +255,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleVerify}
                 disabled={loading || digits.join("").length < 6}
-                className="mt-6 w-full rounded-2xl bg-[var(--color-text)] px-5 py-3.5 text-sm font-bold text-slate-950 transition hover:opacity-80 active:scale-[0.98] disabled:opacity-50 dark:text-slate-950"
+                className="mt-6 w-full rounded-2xl bg-[var(--color-text)] px-5 py-3.5 text-sm font-bold text-[var(--color-on-text)] transition hover:opacity-80 active:scale-[0.98] disabled:opacity-50"
               >
                 {loading ? "Verifying…" : "Verify →"}
               </button>

@@ -40,7 +40,7 @@ export default async function SettingsPage() {
       {/* ── Sidebar (desktop only) ───────────────────────────────────────── */}
       <BusinessSidebar activePath="/settings" totalUnread={totalUnread} profile={profile} />
 
-      {/* â”€â”€ Right column â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Right column ────────────────────────────────────────────── */}
       <div className="flex min-h-0 flex-1 flex-col">
 
         {/* Mobile top bar */}

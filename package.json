@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run check:encoding",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:encoding": "node scripts/check-text-encoding.mjs"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",

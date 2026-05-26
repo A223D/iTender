@@ -45,7 +45,7 @@ export function CampaignCard({ campaign }: { campaign: DashboardCampaign }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [menuOpen]);
 
-  const now = Date.now();
+  const now = new Date().getTime();
   const left = daysLeft(campaign.deadline);
   const isExpiringSoon = left > 0 && left <= 3;
   const isExpired = left === 0;

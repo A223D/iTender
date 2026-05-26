@@ -12,6 +12,8 @@
   --color-text-muted: rgba(0, 0, 0, 0.60);
   --color-text-hint: rgba(0, 0, 0, 0.40);
   --color-accent-fg: #A21CAF; /* fuchsia-700 */
+  --color-dropdown-bg: #FFFBFE;
+  --color-dropdown-border: rgba(0, 0, 0, 0.12);
   --color-bubble-me: rgba(0, 0, 0, 0.88);   /* sent bubble bg (light) */
   --color-bubble-them: rgba(0, 0, 0, 0.06); /* received bubble bg (light) */
 }
@@ -24,6 +26,8 @@
     --color-text-muted: rgba(255, 255, 255, 0.70);
     --color-text-hint: rgba(255, 255, 255, 0.50);
     --color-accent-fg: #F0ABFC; /* fuchsia-300 */
+    --color-dropdown-bg: #0F172A;
+    --color-dropdown-border: rgba(255, 255, 255, 0.14);
     --color-bubble-me: rgba(255, 255, 255, 0.92);
     --color-bubble-them: rgba(255, 255, 255, 0.08);
   }
@@ -36,6 +40,8 @@
   --color-text-muted: rgba(255, 255, 255, 0.70);
   --color-text-hint: rgba(255, 255, 255, 0.50);
   --color-accent-fg: #F0ABFC;
+  --color-dropdown-bg: #0F172A;
+  --color-dropdown-border: rgba(255, 255, 255, 0.14);
   --color-bubble-me: rgba(255, 255, 255, 0.92);
   --color-bubble-them: rgba(255, 255, 255, 0.08);
 }
@@ -233,6 +239,20 @@ body {
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.50);
+}
+
+/* Opaque dropdown menus */
+.dropdown-surface {
+  background: var(--color-dropdown-bg);
+  border: 1px solid var(--color-dropdown-border);
+  color: var(--color-text);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+select option,
+select optgroup {
+  background-color: var(--color-dropdown-bg);
+  color: var(--color-text);
 }
 
 /* ── Input fields — recessed inset ─────────────────────────────────────────── */

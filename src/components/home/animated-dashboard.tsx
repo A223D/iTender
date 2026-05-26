@@ -83,7 +83,7 @@ export function AnimatedDashboard({ summaryPanel }: Props) {
         className="float-chip absolute -left-8 -top-8 z-20 opacity-0 animate-float-slow rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur-md"
         style={{ animationDelay: "0.6s" }}
       >
-        ðŸŽ¥ @sarahsnaps Â· 8.2K
+        🎥 @sarahsnaps · 8.2K
       </div>
       <div
         className="float-chip absolute -right-6 -top-3 z-20 opacity-0 animate-float-medium rounded-full border border-white/20 bg-white/[0.08] px-4 py-2 text-xs font-semibold text-[var(--color-text-muted)] backdrop-blur-md"
@@ -96,13 +96,13 @@ export function AnimatedDashboard({ summaryPanel }: Props) {
         className="float-chip absolute -bottom-6 -left-10 z-20 opacity-0 animate-float-fast rounded-full border border-teal/25 bg-teal/[0.07] px-4 py-2 text-xs font-semibold text-teal backdrop-blur-md"
         style={{ animationDelay: "0.3s" }}
       >
-        +$1.2K earned ðŸ’¸
+        +$1.2K earned 💸
       </div>
       <div
         className="float-chip absolute -right-8 bottom-10 z-20 opacity-0 animate-float-medium rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-semibold text-[var(--color-text-muted)] backdrop-blur-md"
         style={{ animationDelay: "1.5s" }}
       >
-        âœ¨ 3 brand deals
+        ✨ 3 brand deals
       </div>
 
       {/* Card glow */}
