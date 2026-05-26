@@ -146,17 +146,9 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="mb-10 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl glass text-lg font-bold text-[var(--color-text)]">
-            <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-              <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
-              <path
-                d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
-                fill="currentColor"
-                strokeWidth="1.2"
-                strokeOpacity="0.5"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl glass">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-mark.png" alt="Scout logo" width={32} height={32} className="dark:invert" />
           </div>
           <div>
             <p className="text-xl font-semibold tracking-tight text-[var(--color-text)]">Scout for Business</p>

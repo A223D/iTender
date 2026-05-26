@@ -22,10 +22,11 @@ export default function Error({
       <div className="relative z-10 flex flex-col items-center">
         {/* Logo */}
         <Link href="/" className="mb-10 flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-fuchsia-700 text-sm font-bold text-white shadow-glass">
-            i
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl glass">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-mark.png" alt="Scout logo" width={26} height={26} className="dark:invert" />
           </div>
-          <span className="font-sans text-lg font-semibold tracking-tight text-[var(--color-text-muted)]">iTender</span>
+          <span className="font-sans text-lg font-semibold tracking-tight text-[var(--color-text-muted)]">Scout</span>
         </Link>
 
         {/* 500 */}

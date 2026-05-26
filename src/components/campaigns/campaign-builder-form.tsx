@@ -248,7 +248,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
               </div>
               <h2 className="font-display text-3xl font-bold text-[var(--color-text)]">Campaign is live!</h2>
               <p className="mt-3 max-w-xs text-base text-[var(--color-text-muted)]">
-                <span className="font-semibold text-[var(--color-text)]">{form.title}</span> is now visible to creators on iTender.
+                <span className="font-semibold text-[var(--color-text)]">{form.title}</span> is now visible to creators on Scout.
               </p>
               <p className="mt-6 text-sm text-[var(--color-text-hint)]">Redirecting to dashboard...</p>
             </div>
@@ -272,7 +272,7 @@ export function CampaignBuilderForm({ userId }: { userId: string }) {
             </button>
             <div className="hidden h-4 w-px bg-[var(--color-text-hint)]/20 sm:block" />
             <a
-              href="mailto:support@itender.com?subject=Campaign%20help"
+              href="mailto:support@scout.app?subject=Campaign%20help"
               className="hidden text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:inline"
             >
               Need help?
@@ -434,7 +434,7 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
             to join.
           </h2>
           <p className="mt-5 max-w-[300px] text-sm leading-6 text-white/65">
-            Set your brief once. iTender matches you with creators in your city who are ready to apply.
+            Set your brief once. Scout matches you with creators in your city who are ready to apply.
           </p>
         </div>
 
@@ -507,19 +507,9 @@ function CampaignPanel({ currentStep, campaignTitle }: { currentStep: number; ca
 function PanelLogo() {
   return (
     <div className="inline-flex items-center gap-2.5">
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" />
-          <path
-            d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
-            fill="#FF4566"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-      <span className="font-display text-2xl italic leading-none text-white">iTender</span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo-mark-white.png" alt="Scout logo" width={28} height={28} className="shrink-0" />
+      <span className="font-display text-2xl italic leading-none text-white">Scout</span>
     </div>
   );
 }

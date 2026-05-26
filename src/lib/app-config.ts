@@ -1,4 +1,4 @@
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://itender.app";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://scout.app";
 
 export const FILE_SIZE_LIMITS = {
   logo: 5 * 1024 * 1024,   // 5 MB

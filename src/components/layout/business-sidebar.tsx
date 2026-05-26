@@ -65,16 +65,8 @@ export function BusinessSidebar({
         {/* Wordmark */}
         <div className="px-5 pb-4 pt-6">
           <div className="inline-flex items-center gap-2">
-            <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-              <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
-              <path
-                d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
-                fill="currentColor"
-                strokeWidth="1.2"
-                strokeOpacity="0.5"
-                strokeLinejoin="round"
-              />
-            </svg>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-mark.png" alt="Scout logo" width={22} height={22} className="shrink-0 dark:invert" />
             <span className="text-base font-bold italic tracking-tight text-[var(--color-text)]">Scout</span>
           </div>
         </div>

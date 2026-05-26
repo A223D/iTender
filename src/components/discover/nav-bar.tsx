@@ -32,10 +32,10 @@ function getHomeNavLinks(homeView: HomeView | null): HomeNavItem[] {
 
   if (homeView === "business") {
     return [
-      { label: "Home", href: "/" },
-      { label: "Why Scout?", href: "#why-scout" },
-      { label: "How it Works", href: "#how-it-works" },
-      { label: "Browse Creators" },
+      { label: "Product", href: "#features" },
+      { label: "Power user", href: "#power" },
+      { label: "Web + mobile", href: "#split" },
+      { label: "How it works", href: "#how" },
     ];
   }
 
@@ -58,17 +58,9 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
     <header className="glass sticky top-0 z-30 rounded-none border-t-0 border-b border-b-white/10 dark:border-b-white/10">
       <div className="relative z-10 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl glass text-sm font-bold text-[var(--color-text)]">
-            <svg width="20" height="20" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-              <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
-              <path
-                d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
-                fill="currentColor"
-                strokeWidth="1.2"
-                strokeOpacity="0.5"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl glass">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-mark.png" alt="Scout logo" width={24} height={24} className="dark:invert" />
           </div>
           <div>
             <p className="font-sans text-base font-semibold tracking-tight text-[var(--color-text)]">Scout</p>
@@ -119,6 +111,16 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
             </div>
           ) : null}
 
+          {isBusinessHome ? (
+            <button
+              type="button"
+              onClick={() => router.push("/login")}
+              className="text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
+            >
+              Login
+            </button>
+          ) : null}
+
           {hasHomeNav ? (
             isCreatorHome ? (
               <a
@@ -130,10 +132,10 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
             ) : (
               <button
                 type="button"
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/login?audience=business")}
                 className="rounded-full bg-[var(--color-text)] px-5 py-2 text-sm font-bold dark:text-slate-950 text-paper transition hover:opacity-80 active:scale-95"
               >
-                Join as a Business
+                Get started
               </button>
             )
           ) : null}

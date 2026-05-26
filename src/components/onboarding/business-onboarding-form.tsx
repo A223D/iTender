@@ -268,7 +268,7 @@ export function BusinessOnboardingForm({ userId, email, name, initialProfile }: 
               </button>
               <div className="hidden h-4 w-px bg-black/10 sm:block" />
               <a
-                href="mailto:support@itender.com?subject=Business%20onboarding%20help"
+                href="mailto:support@scout.app?subject=Business%20onboarding%20help"
                 className="hidden text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:inline"
               >
                 Need help?
@@ -521,7 +521,7 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
 
       <div className="relative z-10 flex w-full flex-col">
         <div>
-          <ITenderLogo />
+          <ScoutLogo />
           <div className="ml-[38px] mt-1 font-mono text-[11px] font-medium uppercase text-white/35">For Business</div>
         </div>
 
@@ -537,7 +537,7 @@ function BrandPanel({ current, isEditing }: { current: number; isEditing: boolea
             your brand.
           </h2>
           <p className="mt-5 max-w-[330px] text-sm leading-6 text-white/65">
-            Two minutes to set up. Then iTender lines up creators in your city who actually fit your vibe.
+            Two minutes to set up. Then Scout lines up creators in your city who actually fit your vibe.
           </p>
         </div>
 
@@ -633,7 +633,7 @@ function CompletionScreen({
         to meet <em className="text-[var(--color-accent-fg)]">creators</em>.
       </h1>
       <p className="mt-4 max-w-[440px] text-[15px] leading-7 text-[var(--color-text-muted)]">
-        Your profile is live. Browse creators in your city or post your first brief, and iTender will surface
+        Your profile is live. Browse creators in your city or post your first brief, and Scout will surface
         matches as they roll in.
       </p>
       <button
@@ -878,22 +878,12 @@ function FormField({ label, required, children }: { label: string; required?: bo
   );
 }
 
-function ITenderLogo() {
+function ScoutLogo() {
   return (
     <div className="inline-flex items-center gap-2.5">
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <circle cx="14" cy="14" r="13" stroke="currentColor" strokeWidth="1.5" />
-          <path
-            d="M14 4L16.5 11.5L24 14L16.5 16.5L14 24L11.5 16.5L4 14L11.5 11.5L14 4Z"
-            fill="var(--scout-lime)"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-      <span className="font-display text-2xl italic leading-none text-white">iTender</span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo-mark-white.png" alt="Scout logo" width={28} height={28} className="shrink-0" />
+      <span className="font-display text-2xl italic leading-none text-white">Scout</span>
     </div>
   );
 }

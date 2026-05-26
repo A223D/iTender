@@ -38,7 +38,7 @@ export async function sendWelcomeEmail(to: string, brandName?: string) {
       <p style="margin:0 0 20px;font-size:15px;color:#444;line-height:1.7;">
         Your account is ready. You can now create campaigns, browse creator applications, and start chatting with the creators you choose.
       </p>
-      <a href="${process.env.NEXT_PUBLIC_APP_URL ?? "https://itender.app"}/dashboard"
+      <a href="${process.env.NEXT_PUBLIC_APP_URL ?? "https://scout.app"}/dashboard"
          style="display:inline-block;background:#4a7c59;color:#fff;font-size:14px;font-weight:700;padding:14px 28px;border-radius:14px;text-decoration:none;">
         Go to your dashboard →
       </a>
