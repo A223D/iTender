@@ -509,7 +509,7 @@ function PanelLogo() {
     <div className="inline-flex items-center gap-2.5">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/logo-mark-white.png" alt="Scout logo" width={28} height={28} className="shrink-0" />
-      <span className="font-display text-2xl italic leading-none text-white">Scout</span>
+      <span className="font-display text-2xl font-extrabold leading-none text-white">Scout</span>
     </div>
   );
 }

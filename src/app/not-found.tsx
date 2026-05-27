@@ -15,7 +15,7 @@ export default function NotFound() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo-mark.png" alt="Scout logo" width={26} height={26} className="dark:invert" />
           </div>
-          <span className="font-sans text-lg font-semibold tracking-tight text-[var(--color-text-muted)]">Scout</span>
+          <span className="font-sans text-lg font-bold text-[var(--color-text-muted)]">Scout</span>
         </Link>
 
         {/* 404 */}

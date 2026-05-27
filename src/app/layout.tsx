@@ -18,6 +18,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Scout | Small Business Influencer Marketplace",
   description: "Scout helps small businesses connect with micro-influencers for paid and in-kind collaborations.",
+  icons: {
+    icon: [{ url: "/logo-mark.png", type: "image/png" }],
+    shortcut: "/logo-mark.png",
+    apple: "/logo-mark.png",
+  },
 };
 
 export default function RootLayout({

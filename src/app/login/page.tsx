@@ -151,7 +151,7 @@ export default function LoginPage() {
             <img src="/logo-mark.png" alt="Scout logo" width={32} height={32} className="dark:invert" />
           </div>
           <div>
-            <p className="text-xl font-semibold tracking-tight text-[var(--color-text)]">Scout for Business</p>
+            <p className="text-xl font-bold text-[var(--color-text)]">Scout for Business</p>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">Connect with creators and grow your brand</p>
           </div>
         </div>

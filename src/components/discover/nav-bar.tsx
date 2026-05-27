@@ -63,7 +63,7 @@ export function NavBar({ initialAudience = null, homeView = null }: NavBarProps)
             <img src="/logo-mark.png" alt="Scout logo" width={24} height={24} className="dark:invert" />
           </div>
           <div>
-            <p className="font-sans text-base font-semibold tracking-tight text-[var(--color-text)]">Scout</p>
+            <p className="font-sans text-base font-bold text-[var(--color-text)]">Scout</p>
             <p className="text-xs text-[var(--color-text-muted)]">Micro-influencer collaborations</p>
           </div>
         </Link>

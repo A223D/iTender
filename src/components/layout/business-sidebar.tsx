@@ -67,7 +67,7 @@ export function BusinessSidebar({
           <div className="inline-flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo-mark.png" alt="Scout logo" width={22} height={22} className="shrink-0 dark:invert" />
-            <span className="text-base font-bold italic tracking-tight text-[var(--color-text)]">Scout</span>
+            <span className="text-base font-extrabold text-[var(--color-text)]">Scout</span>
           </div>
         </div>
 

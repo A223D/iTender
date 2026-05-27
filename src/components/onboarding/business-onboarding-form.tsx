@@ -458,19 +458,14 @@ function BrandBasicsStep({
         </FormField>
 
         <FormField label="Website URL">
-          <div className="relative">
-            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-[13px] font-medium text-[var(--color-text-hint)]">
-              https://
-            </span>
-            <Input
-              type="text"
-              inputMode="url"
-              value={form.websiteUrl}
-              onChange={(e) => set("websiteUrl", stripWebsiteProtocol(e.target.value))}
-              placeholder="yourbrand.com"
-              className="py-3.5 pl-[5.25rem]"
-            />
-          </div>
+          <Input
+            type="text"
+            inputMode="url"
+            value={form.websiteUrl}
+            onChange={(e) => set("websiteUrl", stripWebsiteProtocol(e.target.value))}
+            placeholder="yourbrand.com"
+            className="py-3.5"
+          />
         </FormField>
       </div>
     </div>
@@ -883,7 +878,7 @@ function ScoutLogo() {
     <div className="inline-flex items-center gap-2.5">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/logo-mark-white.png" alt="Scout logo" width={28} height={28} className="shrink-0" />
-      <span className="font-display text-2xl italic leading-none text-white">Scout</span>
+      <span className="font-display text-2xl font-extrabold leading-none text-white">Scout</span>
     </div>
   );
 }

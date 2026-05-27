@@ -63,7 +63,7 @@ export function DatePicker({
         <Popover.Content
           sideOffset={8}
           align="start"
-          className="glass-ambient z-50 rounded-2xl outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+          className="dropdown-surface z-50 rounded-2xl outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
         >
           <Calendar
             mode="single"

@@ -313,7 +313,7 @@ export function BusinessHomePage() {
       <div className="l-container">
         <footer className="l-footer">
           <div>
-            <span style={{ fontWeight: 700, fontStyle: "italic", color: "var(--color-text)", letterSpacing: "-0.01em", marginRight: 16 }}>Scout</span>
+            <span style={{ fontWeight: 800, color: "var(--color-text)", marginRight: 16 }}>Scout</span>
             <span>© 2026 · for the small businesses that take creators seriously</span>
           </div>
           <nav style={{ display: "flex", gap: 0, flexWrap: "wrap" }}>
