@@ -468,7 +468,7 @@ function BrandBasicsStep({
               value={form.websiteUrl}
               onChange={(e) => set("websiteUrl", stripWebsiteProtocol(e.target.value))}
               placeholder="yourbrand.com"
-              className="py-3.5 pl-16"
+              className="py-3.5 pl-[5.25rem]"
             />
           </div>
         </FormField>
