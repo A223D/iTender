@@ -1,6 +1,20 @@
 // CSS-driven mini mockups for the business landing page.
 // These are non-interactive decorative replicas of the real product UI.
 
+import Image from "next/image";
+
+function SpringSkincareImage() {
+  return (
+    <Image
+      src="/campaign-spring-skincare.png"
+      alt=""
+      fill
+      sizes="180px"
+      className="mk-card-img"
+    />
+  );
+}
+
 export function WindowFrame({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="l-window">
@@ -97,6 +111,9 @@ export function MockupDashboard() {
       {cards.map((c) => (
         <div key={c.t} className="mk-card">
           <div className="mk-card-hero">
+            {c.t === "Spring Skincare Drop" ? (
+              <SpringSkincareImage />
+            ) : null}
             <span className="chip">{c.d} left</span>
           </div>
           <div className="mk-card-body">
@@ -211,6 +228,7 @@ export function MockupPhone() {
       <div className="mk-phone-inner">
         <div className="mk-card">
           <div className="mk-card-hero" style={{ height: 80 }}>
+            <SpringSkincareImage />
             <span className="chip">9d left</span>
           </div>
           <div className="mk-card-body" style={{ padding: "8px 10px" }}>
@@ -230,6 +248,108 @@ export function MockupPhone() {
             <span key={n} style={{ width: 22, height: 22, borderRadius: 5, background: "rgba(255,255,255,0.04)", display: "grid", placeItems: "center", color: "var(--color-text-hint)" }}>
               {icon}
             </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function MockupPhoneDiscover() {
+  return (
+    <div className="mk-phone">
+      <span className="notch" />
+      <div className="mk-phone-inner">
+        <div className="mk-row" style={{ justifyContent: "space-between" }}>
+          <span style={{ fontSize: 12, fontWeight: 700, fontStyle: "italic" }}>Discover</span>
+          <span className="mk-pill cyan">3 new</span>
+        </div>
+        <div className="mk-card" style={{ marginTop: 2 }}>
+          <div className="mk-card-hero" style={{ minHeight: 96 }}>
+            <SpringSkincareImage />
+            <span className="chip">9d left</span>
+          </div>
+          <div className="mk-card-body" style={{ padding: "10px 12px", gap: 6 }}>
+            <p style={{ margin: 0, fontSize: 12, fontWeight: 700 }}>Spring Skincare Drop</p>
+            <p style={{ margin: 0, fontSize: 9.5, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>$400 + product · NYC</p>
+            <div style={{ display: "flex", gap: 4, marginTop: 2 }}>
+              <span className="mk-pill cyan">skincare</span>
+              <span className="mk-pill">IG Reels</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
+          <span style={{ flex: 1, height: 36, borderRadius: 999, background: "#67E8F9", color: "#020617", display: "grid", placeItems: "center", fontSize: 11.5, fontWeight: 700 }}>
+            I&apos;m interested
+          </span>
+          <span style={{ width: 36, height: 36, borderRadius: 999, border: "1px solid var(--color-divider)", display: "grid", placeItems: "center", color: "var(--color-text-hint)", flex: "none" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function MockupPhoneChat() {
+  return (
+    <div className="mk-phone">
+      <span className="notch" />
+      <div className="mk-phone-inner" style={{ padding: "28px 0 0" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 12px 10px", borderBottom: "1px solid var(--color-divider)" }}>
+          <span className="mk-av" style={{ width: 26, height: 26, fontSize: 9 }}>L</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 600 }}>Lumen &amp; Co.</p>
+            <p style={{ margin: 0, fontSize: 9, color: "#67E8F9", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>Spring Skincare Drop</p>
+          </div>
+        </div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 7, padding: 12, overflow: "hidden" }}>
+          <div className="mk-bubble them">Hi Maya! Loved your application — the morning routine angle is exactly it.</div>
+          <div className="mk-bubble me">Thank you! Could I shoot Friday?</div>
+          <div className="mk-bubble them">Friday&apos;s perfect. Kit&apos;s on the way</div>
+          <div className="mk-bubble me">Amazing — can&apos;t wait.</div>
+        </div>
+        <div style={{ padding: "8px 12px", borderTop: "1px solid var(--color-divider)" }}>
+          <div style={{ height: 28, borderRadius: 999, background: "var(--color-tile)", border: "1px solid var(--color-divider)", display: "flex", alignItems: "center", padding: "0 12px" }}>
+            <span style={{ fontSize: 9.5, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)", whiteSpace: "nowrap" }}>Message…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function MockupPhoneProfile() {
+  return (
+    <div className="mk-phone">
+      <span className="notch" />
+      <div className="mk-phone-inner">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 4 }}>
+          <span className="mk-av" style={{ width: 48, height: 48, fontSize: 16 }}>MO</span>
+          <p style={{ margin: 0, fontSize: 12, fontWeight: 700 }}>@mayaplays</p>
+          <p style={{ margin: 0, fontSize: 9, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>Lifestyle Creator · NYC</p>
+        </div>
+        <div className="mk-glass" style={{ padding: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          <div>
+            <span style={{ display: "block", fontSize: 8, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>EARNED</span>
+            <span style={{ fontWeight: 700, fontSize: 16, color: "#67E8F9", fontVariantNumeric: "tabular-nums" }}>$1,840</span>
+          </div>
+          <div>
+            <span style={{ display: "block", fontSize: 8, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>DEALS</span>
+            <span style={{ fontWeight: 700, fontSize: 16, fontVariantNumeric: "tabular-nums" }}>7</span>
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <span style={{ fontSize: 9, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>ACTIVE</span>
+          {["Spring Skincare Drop", "Summer Pop-Up Tour"].map((t) => (
+            <div key={t} className="mk-card" style={{ flexDirection: "row", alignItems: "center", gap: 8, padding: 8, minHeight: 0 }}>
+              <span className="mk-av" style={{ width: 22, height: 22, fontSize: 9 }}>{t[0]}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: 10, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t}</p>
+                <div className="mk-bar medium" style={{ height: 3, marginTop: 3 }} />
+              </div>
+              <span className="mk-pill cyan">live</span>
+            </div>
           ))}
         </div>
       </div>

@@ -19,8 +19,14 @@ export const metadata: Metadata = {
   title: "Scout | Small Business Influencer Marketplace",
   description: "Scout helps small businesses connect with micro-influencers for paid and in-kind collaborations.",
   icons: {
-    icon: [{ url: "/logo-mark.png", type: "image/png" }],
-    shortcut: "/logo-mark.png",
+    icon: [
+      { url: "/logo-mark.png", type: "image/png", media: "(prefers-color-scheme: light)" },
+      { url: "/logo-mark-white.png", type: "image/png", media: "(prefers-color-scheme: dark)" },
+    ],
+    shortcut: [
+      { url: "/logo-mark.png", type: "image/png", media: "(prefers-color-scheme: light)" },
+      { url: "/logo-mark-white.png", type: "image/png", media: "(prefers-color-scheme: dark)" },
+    ],
     apple: "/logo-mark.png",
   },
 };
