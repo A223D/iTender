@@ -293,7 +293,6 @@ function Nav({
         <a href="#why" className="v2-nav-link">Why Scout</a>
         <a href="#showcase" className="v2-nav-link">Product</a>
         <a href="#how" className="v2-nav-link">How it works</a>
-        <a href="#voices" className="v2-nav-link">Voices</a>
         <a href="#waitlist" className="v2-nav-link">Waitlist</a>
       </nav>
       <div className="v2-nav-actions">
@@ -606,59 +605,6 @@ function HowItWorks({ aud }: { aud: Audience }) {
   );
 }
 
-// ── Testimonials ──────────────────────────────────────────────────────────────
-
-function avatarTint(name: string): number {
-  let h = 0;
-  for (let i = 0; i < name.length; i++) h = ((h * 31 + name.charCodeAt(i)) >>> 0);
-  return h % 3;
-}
-
-function QuoteAvatar({ name }: { name: string }) {
-  const initials = name.split(/\s+/).slice(0, 2).map((s) => s[0]).join("").toUpperCase();
-  const bgs = ["var(--color-tile)", "var(--color-tile-strong)", "rgba(103,232,249,0.18)"];
-  return (
-    <div className="v2-avatar" style={{ background: bgs[avatarTint(name)] }}>{initials}</div>
-  );
-}
-
-function Voices() {
-  const quotes = [
-    { tag: "creator", q: "I stopped cold-pitching brands entirely. Now the right local campaigns just show up in my feed and I apply in one tap.", nm: "Maya O.", ds: "Lifestyle creator · 18.4k" },
-    { tag: "business", q: "Reviewing applicants used to be a spreadsheet nightmare. The side-by-side view means I shortlist twenty creators over a coffee.", nm: "Lumen & Co.", ds: "Skincare brand · NYC" },
-    { tag: "creator", q: "The chat feels like texting a friend, not filing a support ticket. Briefs are right there, payment is sorted in-app.", nm: "Jordan R.", ds: "Wellness creator · 24k" },
-    { tag: "business", q: "We run four campaigns at once. The three-pane messages view is the only reason that's survivable.", nm: "Quill Café", ds: "Local café · 3 locations" },
-    { tag: "creator", q: "I can see exactly what a collab pays and what's expected before I apply. No more guessing or awkward DMs.", nm: "Reese V.", ds: "Skincare creator · 12.4k" },
-    { tag: "business", q: "Posted a campaign Monday, had it matched with three creators by Wednesday. That never happened over Instagram.", nm: "Tonebox Studio", ds: "Audio brand" },
-  ] as const;
-
-  return (
-    <section id="voices" className="v2-section" style={{ paddingTop: 56 }}>
-      <div className="v2-container">
-        <div className="v2-section-head v2-reveal">
-          <span className="v2-eyebrow-mono">VOICES</span>
-          <h2 className="v2-h2">Both sides of the handshake.</h2>
-          <p className="v2-sub">Scout only works when creators and businesses both win. Here&apos;s how each side talks about it.</p>
-        </div>
-        <div className="v2-quotes v2-reveal">
-          {quotes.map((q, i) => (
-            <figure key={i} className="v2-quote" style={{ margin: 0 }}>
-              <span className={"v2-quote-tag " + q.tag}>{q.tag === "creator" ? "CREATOR" : "BUSINESS"}</span>
-              <blockquote style={{ margin: 0 }}><p>&ldquo;{q.q}&rdquo;</p></blockquote>
-              <figcaption className="v2-quote-by">
-                <QuoteAvatar name={q.nm} />
-                <div>
-                  <div className="nm">{q.nm}</div>
-                  <div className="ds">{q.ds}</div>
-                </div>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ── Two-door CTA ──────────────────────────────────────────────────────────────
 
@@ -913,7 +859,6 @@ function Footer({
             <ul>
               <li><button type="button" onClick={() => onJoinWaitlist("creator")}>Download the app</button></li>
               <li><a href="#how">How it works</a></li>
-              <li><a href="#voices">Creator stories</a></li>
             </ul>
           </div>
           <div>
@@ -1086,7 +1031,6 @@ export function LandingPageV2() {
         <WhyScout />
         <Showcase aud={aud} setAud={setAud} />
         <HowItWorks aud={aud} />
-        <Voices />
         <WaitlistSection selectedRole={waitlistRole} onRoleChange={setWaitlistRole} />
         <CTA onJoinWaitlist={onJoinWaitlist} />
         <Footer theme={theme} onJoinWaitlist={onJoinWaitlist} />
