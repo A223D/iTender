@@ -283,24 +283,64 @@ function Nav({
   theme: Theme; setTheme: (t: Theme) => void;
   onJoinWaitlist: (which: Audience) => void;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const close = () => setMenuOpen(false);
+
   return (
-    <header className="glass v2-nav">
-      <a href="#top" className="scout-focus" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", color: "var(--color-text)" }}>
-        <ScoutMark theme={theme} size={28} />
-        <span style={{ fontWeight: 900, letterSpacing: "-0.01em", fontSize: 17 }}>Scout</span>
-      </a>
-      <nav className="v2-nav-links">
-        <a href="#why" className="v2-nav-link">Why Scout</a>
-        <a href="#showcase" className="v2-nav-link">Product</a>
-        <a href="#how" className="v2-nav-link">How it works</a>
-        <a href="#waitlist" className="v2-nav-link">Waitlist</a>
-      </nav>
-      <div className="v2-nav-actions">
-        <ThemeToggle theme={theme} setTheme={setTheme} />
-        <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm v2-nav-login" onClick={() => onJoinWaitlist("business")}>Business login</button>
-        <button type="button" className="v2-btn v2-btn-primary v2-btn-sm" onClick={() => onJoinWaitlist(aud)}>Get started</button>
-      </div>
-    </header>
+    <>
+      <header className="v2-nav">
+        <a href="#top" className="scout-focus" onClick={close} style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", color: "var(--color-text)", flexShrink: 0 }}>
+          <ScoutMark theme={theme} size={28} />
+          <span style={{ fontWeight: 900, letterSpacing: "-0.01em", fontSize: 17 }}>Scout</span>
+        </a>
+        <nav className="v2-nav-links">
+          <a href="#why" className="v2-nav-link">Why Scout</a>
+          <a href="#showcase" className="v2-nav-link">Product</a>
+          <a href="#how" className="v2-nav-link">How it works</a>
+          <a href="#waitlist" className="v2-nav-link">Waitlist</a>
+        </nav>
+        <div className="v2-nav-actions">
+          <ThemeToggle theme={theme} setTheme={setTheme} />
+          <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm v2-nav-login" onClick={() => onJoinWaitlist("business")}>Business login</button>
+          <button type="button" className="v2-btn v2-btn-primary v2-btn-sm v2-nav-cta-desktop" onClick={() => onJoinWaitlist(aud)}>Get started</button>
+          <button
+            type="button"
+            className="v2-nav-hamburger scout-focus"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            {menuOpen ? (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </header>
+      {menuOpen && (
+        <div className="v2-mobile-menu" role="dialog" aria-label="Navigation menu">
+          <nav style={{ display: "flex", flexDirection: "column" }}>
+            <a href="#why" className="v2-mobile-menu-link" onClick={close}>Why Scout</a>
+            <a href="#showcase" className="v2-mobile-menu-link" onClick={close}>Product</a>
+            <a href="#how" className="v2-mobile-menu-link" onClick={close}>How it works</a>
+            <a href="#waitlist" className="v2-mobile-menu-link" onClick={close}>Waitlist</a>
+          </nav>
+          <div className="v2-mobile-menu-actions">
+            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" style={{ width: "100%" }} onClick={() => { onJoinWaitlist("business"); close(); }}>
+              Business login
+            </button>
+            <button type="button" className="v2-btn v2-btn-primary v2-btn-sm" style={{ width: "100%" }} onClick={() => { onJoinWaitlist(aud); close(); }}>
+              Get started
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
