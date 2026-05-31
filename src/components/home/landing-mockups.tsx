@@ -3,13 +3,20 @@
 
 import Image from "next/image";
 
-function SpringSkincareImage() {
+const campaignImages = {
+  "Spring Skincare Drop": "/campaign-spring-skincare.png",
+  "Summer Pop-Up Tour": "/campaign-summer-pop-up-tour.png",
+  "Studio Capsule": "/campaign-studio-capsule.png",
+  "Founders Series": "/campaign-founders-series.png",
+} as const;
+
+function CampaignImage({ src, sizes = "180px" }: { src: string; sizes?: string }) {
   return (
     <Image
-      src="/campaign-spring-skincare.png"
+      src={src}
       alt=""
       fill
-      sizes="180px"
+      sizes={sizes}
       className="mk-card-img"
     />
   );
@@ -101,19 +108,17 @@ export function MockupMatches() {
 
 export function MockupDashboard() {
   const cards = [
-    { t: "Spring Skincare Drop", d: "9d", stack: 3 },
-    { t: "Summer Pop-Up Tour", d: "22d", stack: 2 },
-    { t: "Studio Capsule", d: "34d", stack: 0 },
-    { t: "Founders Series", d: "18d", stack: 2 },
+    { t: "Spring Skincare Drop", d: "9d", stack: 3, img: campaignImages["Spring Skincare Drop"] },
+    { t: "Summer Pop-Up Tour", d: "22d", stack: 2, img: campaignImages["Summer Pop-Up Tour"] },
+    { t: "Studio Capsule", d: "34d", stack: 0, img: campaignImages["Studio Capsule"] },
+    { t: "Founders Series", d: "18d", stack: 2, img: campaignImages["Founders Series"] },
   ];
   return (
     <div className="mk mk-card-grid">
       {cards.map((c) => (
         <div key={c.t} className="mk-card">
           <div className="mk-card-hero">
-            {c.t === "Spring Skincare Drop" ? (
-              <SpringSkincareImage />
-            ) : null}
+            <CampaignImage src={c.img} />
             <span className="chip">{c.d} left</span>
           </div>
           <div className="mk-card-body">
@@ -228,7 +233,7 @@ export function MockupPhone() {
       <div className="mk-phone-inner">
         <div className="mk-card">
           <div className="mk-card-hero" style={{ height: 80 }}>
-            <SpringSkincareImage />
+            <CampaignImage src={campaignImages["Spring Skincare Drop"]} />
             <span className="chip">9d left</span>
           </div>
           <div className="mk-card-body" style={{ padding: "8px 10px" }}>
@@ -237,7 +242,9 @@ export function MockupPhone() {
           </div>
         </div>
         <div className="mk-card">
-          <div className="mk-card-hero" style={{ height: 60 }} />
+          <div className="mk-card-hero" style={{ height: 60 }}>
+            <CampaignImage src={campaignImages["Summer Pop-Up Tour"]} />
+          </div>
           <div className="mk-card-body" style={{ padding: "8px 10px" }}>
             <p style={{ margin: 0, fontSize: 10.5, fontWeight: 600 }}>Summer Pop-Up Tour</p>
             <p style={{ margin: "2px 0 0", fontSize: 9, color: "var(--color-text-hint)", fontFamily: "var(--font-mono,'JetBrains Mono',monospace)" }}>$650 + travel</p>
@@ -266,7 +273,7 @@ export function MockupPhoneDiscover() {
         </div>
         <div className="mk-card" style={{ marginTop: 2 }}>
           <div className="mk-card-hero" style={{ minHeight: 96 }}>
-            <SpringSkincareImage />
+            <CampaignImage src={campaignImages["Spring Skincare Drop"]} />
             <span className="chip">9d left</span>
           </div>
           <div className="mk-card-body" style={{ padding: "10px 12px", gap: 6 }}>
