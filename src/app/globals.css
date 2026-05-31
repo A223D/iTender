@@ -1482,6 +1482,184 @@ kbd.kbd {
 .v2-door .go .arr { transition: transform 200ms ease; }
 .v2-door:hover .go .arr { transform: translateX(4px); }
 
+/* Waitlist */
+.v2-waitlist {
+  position: relative;
+  scroll-margin-top: 76px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(320px, 1fr);
+  gap: 36px;
+  padding: 42px;
+  border-radius: 28px;
+  border: 1px solid var(--color-divider);
+  background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+}
+.light .v2-waitlist { background: rgba(255,255,255,0.72); }
+.v2-waitlist::before {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  left: -96px;
+  top: -118px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(103,232,249,0.18), transparent 68%);
+  pointer-events: none;
+}
+.v2-waitlist-copy,
+.v2-waitlist-form {
+  position: relative;
+}
+.v2-waitlist-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.v2-waitlist-copy .v2-sub {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 44ch;
+}
+.v2-waitlist-form {
+  scroll-margin-top: 76px;
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border-radius: 22px;
+  border: 1px solid var(--color-divider);
+  background: rgba(0,0,0,0.22);
+}
+.light .v2-waitlist-form { background: rgba(255,255,255,0.58); }
+.v2-field,
+.v2-role-field {
+  display: grid;
+  gap: 8px;
+}
+.v2-field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.v2-field label,
+.v2-role-field legend {
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+.v2-field label span {
+  color: var(--color-text-hint);
+  font-weight: 600;
+}
+.v2-waitlist-form .input-recessed {
+  width: 100%;
+  min-height: 46px;
+}
+.v2-role-field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.v2-role-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.v2-role-card {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--color-divider);
+  background: rgba(255,255,255,0.035);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 160ms ease;
+}
+.light .v2-role-card { background: rgba(255,255,255,0.56); }
+.v2-role-card:hover { transform: translateY(-1px); border-color: var(--color-text-hint); }
+.v2-role-card.active {
+  border-color: rgba(103,232,249,0.55);
+  background: rgba(103,232,249,0.13);
+}
+.v2-role-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.v2-role-card span {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 800;
+}
+.v2-role-card small {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.v2-waitlist-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 2px;
+}
+.v2-waitlist-actions .v2-btn { flex: none; }
+.v2-waitlist-actions .v2-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.v2-field-hint,
+.v2-form-message {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--color-text-hint);
+}
+.v2-form-message {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-divider);
+}
+.v2-form-message.success {
+  color: var(--accent);
+  background: rgba(103,232,249,0.10);
+  border-color: rgba(103,232,249,0.22);
+}
+.v2-form-message.error {
+  color: #fca5a5;
+  background: rgba(239,68,68,0.10);
+  border-color: rgba(239,68,68,0.22);
+}
+.light .v2-form-message.error { color: #b91c1c; }
+@media (max-width: 860px) {
+  .v2-waitlist {
+    grid-template-columns: 1fr;
+    padding: 28px;
+  }
+}
+@media (max-width: 640px) {
+  .v2-waitlist {
+    padding: 20px;
+    border-radius: 22px;
+  }
+  .v2-waitlist-form {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  .v2-field-row,
+  .v2-role-grid {
+    grid-template-columns: 1fr;
+  }
+  .v2-waitlist-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .v2-waitlist-actions .v2-btn {
+    width: 100%;
+  }
+}
+
 /* Footer */
 .v2-footer { border-top: 1px solid var(--color-divider); padding: 48px 0 56px; }
 .v2-footer-grid { display: grid; gap: 32px; grid-template-columns: 1fr; }

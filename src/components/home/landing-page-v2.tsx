@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { BgStack } from "@/components/ui/bg-stack";
@@ -22,6 +21,40 @@ import {
 } from "@/components/home/landing-mockups";
 
 type Theme = "dark" | "light";
+type WaitlistRole = "creator" | "brand";
+
+type WaitlistFormState = {
+  name: string;
+  email: string;
+  phone: string;
+  instagramHandle: string;
+  companyName: string;
+  websiteUrl: string;
+};
+
+const initialWaitlistForm: WaitlistFormState = {
+  name: "",
+  email: "",
+  phone: "",
+  instagramHandle: "",
+  companyName: "",
+  websiteUrl: "",
+};
+
+function validateWaitlistForm(form: WaitlistFormState, role: WaitlistRole) {
+  if (!form.name.trim()) return "Enter your name.";
+  if (!form.email.trim() && !form.phone.trim()) return "Enter an email or phone number.";
+  if (role === "creator" && !form.instagramHandle.trim()) return "Enter your Instagram handle.";
+  if (role === "brand" && !form.companyName.trim()) return "Enter your company name.";
+  return "";
+}
+
+function getWaitlistRole(audience: Audience): WaitlistRole {
+  return audience === "business" ? "brand" : "creator";
+}
+
+const WAITLIST_ANCHOR_ID = "waitlist";
+const WAITLIST_FORM_ID = "waitlist-form";
 
 // Runs as useLayoutEffect in the browser, useEffect on the server
 const useIsomorphicLayoutEffect =
@@ -244,11 +277,11 @@ function AudienceSwitch({ value, onChange }: { value: Audience; onChange: (a: Au
 // ── Nav ──────────────────────────────────────────────────────────────────────
 
 function Nav({
-  aud, theme, setTheme, onEnter,
+  aud, theme, setTheme, onJoinWaitlist,
 }: {
   aud: Audience;
   theme: Theme; setTheme: (t: Theme) => void;
-  onEnter: (which: Audience) => void;
+  onJoinWaitlist: (which: Audience) => void;
 }) {
   return (
     <header className="glass v2-nav">
@@ -261,11 +294,12 @@ function Nav({
         <a href="#showcase" className="v2-nav-link">Product</a>
         <a href="#how" className="v2-nav-link">How it works</a>
         <a href="#voices" className="v2-nav-link">Voices</a>
+        <a href="#waitlist" className="v2-nav-link">Waitlist</a>
       </nav>
       <div className="v2-nav-actions">
         <ThemeToggle theme={theme} setTheme={setTheme} />
-        <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm v2-nav-login" onClick={() => onEnter("business")}>Business login</button>
-        <button type="button" className="v2-btn v2-btn-primary v2-btn-sm" onClick={() => onEnter(aud)}>Get started</button>
+        <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm v2-nav-login" onClick={() => onJoinWaitlist("business")}>Business login</button>
+        <button type="button" className="v2-btn v2-btn-primary v2-btn-sm" onClick={() => onJoinWaitlist(aud)}>Get started</button>
       </div>
     </header>
   );
@@ -273,7 +307,7 @@ function Nav({
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
-function Hero({ aud, setAud, onEnter }: { aud: Audience; setAud: (a: Audience) => void; onEnter: (w: Audience) => void }) {
+function Hero({ aud, setAud, onJoinWaitlist }: { aud: Audience; setAud: (a: Audience) => void; onJoinWaitlist: (w: Audience) => void }) {
   const a = AUD[aud];
 
   return (
@@ -295,7 +329,7 @@ function Hero({ aud, setAud, onEnter }: { aud: Audience; setAud: (a: Audience) =
         <button
           type="button"
           className="v2-btn v2-btn-primary"
-          onClick={() => onEnter(aud)}
+          onClick={() => onJoinWaitlist(aud)}
         >
           {a.primary}
         </button>
@@ -628,7 +662,7 @@ function Voices() {
 
 // ── Two-door CTA ──────────────────────────────────────────────────────────────
 
-function CTA({ onEnter }: { onEnter: (w: Audience) => void }) {
+function CTA({ onJoinWaitlist }: { onJoinWaitlist: (w: Audience) => void }) {
   return (
     <section className="v2-section" style={{ paddingTop: 32, paddingBottom: 96 }}>
       <div className="v2-container">
@@ -636,13 +670,13 @@ function CTA({ onEnter }: { onEnter: (w: Audience) => void }) {
           <span className="v2-eyebrow" style={{ position: "relative" }}><span className="dot" />PICK YOUR DOOR</span>
           <h2 className="v2-h2" style={{ position: "relative", maxWidth: "18ch", margin: "0 auto" }}>Two sides, one marketplace. Where do you come in?</h2>
           <div className="v2-doors">
-            <button type="button" className="v2-door" onClick={() => onEnter("creator")}>
+            <button type="button" className="v2-door" onClick={() => onJoinWaitlist("creator")}>
               <div className="v2-door-ic"><IconStar size={20} /></div>
               <h3>I&apos;m a creator</h3>
               <p>Get the Scout app, build your profile, and start applying to local campaigns that fit your niche.</p>
               <span className="go">Download the app <span className="arr">→</span></span>
             </button>
-            <button type="button" className="v2-door" onClick={() => onEnter("business")}>
+            <button type="button" className="v2-door" onClick={() => onJoinWaitlist("business")}>
               <div className="v2-door-ic"><IconCampaigns size={20} /></div>
               <h3>I&apos;m a business</h3>
               <p>Open the web workspace, post your first campaign, and review creator applicants the same day.</p>
@@ -655,9 +689,214 @@ function CTA({ onEnter }: { onEnter: (w: Audience) => void }) {
   );
 }
 
-// ── Footer ────────────────────────────────────────────────────────────────────
+// Waitlist
 
-function Footer({ theme, onEnter }: { theme: Theme; onEnter: (w: Audience) => void }) {
+function WaitlistSection({
+  selectedRole, onRoleChange,
+}: {
+  selectedRole: WaitlistRole;
+  onRoleChange: (role: WaitlistRole) => void;
+}) {
+  const [form, setForm] = useState<WaitlistFormState>(initialWaitlistForm);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  function updateField<K extends keyof WaitlistFormState>(key: K, value: WaitlistFormState[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
+    if (status !== "idle") {
+      setStatus("idle");
+      setMessage("");
+    }
+  }
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const validationError = validateWaitlistForm(form, selectedRole);
+    if (validationError) {
+      setStatus("error");
+      setMessage(validationError);
+      return;
+    }
+
+    setStatus("submitting");
+    setMessage("");
+
+    const response = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, role: selectedRole }),
+    });
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      setStatus("error");
+      setMessage(typeof result?.error === "string" ? result.error : "Could not join the waitlist right now.");
+      return;
+    }
+
+    setStatus("success");
+    setMessage("You're on the waitlist. We'll be in touch soon.");
+    setForm(initialWaitlistForm);
+  }
+
+  const isCreator = selectedRole === "creator";
+  const isSubmitting = status === "submitting";
+
+  return (
+    <section className="v2-section" style={{ paddingTop: 44, paddingBottom: 32 }}>
+      <div className="v2-container">
+        <div id={WAITLIST_ANCHOR_ID} className="v2-waitlist v2-reveal">
+          <div className="v2-waitlist-copy">
+            <span className="v2-eyebrow"><span className="dot" />JOIN THE WAITLIST</span>
+            <h2 className="v2-h2">Get early access to Scout.</h2>
+            <p className="v2-sub">
+              Tell us who you are and where to reach you. We&apos;ll use this to invite the right creators and brands as Scout opens up.
+            </p>
+          </div>
+
+          <form id={WAITLIST_FORM_ID} className="v2-waitlist-form" onSubmit={onSubmit} noValidate>
+            <div className="v2-field">
+              <label htmlFor="waitlist-name">Name</label>
+              <input
+                id="waitlist-name"
+                name="name"
+                className="input-recessed"
+                value={form.name}
+                onChange={(event) => updateField("name", event.target.value)}
+                autoComplete="name"
+                required
+              />
+            </div>
+
+            <div className="v2-field-row">
+              <div className="v2-field">
+                <label htmlFor="waitlist-email">Email</label>
+                <input
+                  id="waitlist-email"
+                  name="email"
+                  type="email"
+                  className="input-recessed"
+                  value={form.email}
+                  onChange={(event) => updateField("email", event.target.value)}
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div className="v2-field">
+                <label htmlFor="waitlist-phone">Phone</label>
+                <input
+                  id="waitlist-phone"
+                  name="phone"
+                  type="tel"
+                  className="input-recessed"
+                  value={form.phone}
+                  onChange={(event) => updateField("phone", event.target.value)}
+                  autoComplete="tel"
+                  placeholder="Optional if email is added"
+                />
+              </div>
+            </div>
+
+            <fieldset className="v2-role-field">
+              <legend>I am a</legend>
+              <div className="v2-role-grid">
+                <label className={`v2-role-card ${isCreator ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="creator"
+                    checked={isCreator}
+                    onChange={() => onRoleChange("creator")}
+                  />
+                  <span>Creator</span>
+                  <small>Apply for local campaigns.</small>
+                </label>
+                <label className={`v2-role-card ${!isCreator ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="brand"
+                    checked={!isCreator}
+                    onChange={() => onRoleChange("brand")}
+                  />
+                  <span>Brand</span>
+                  <small>Find creator partners.</small>
+                </label>
+              </div>
+            </fieldset>
+
+            {isCreator ? (
+              <div className="v2-field">
+                <label htmlFor="waitlist-instagram">Instagram handle</label>
+                <input
+                  id="waitlist-instagram"
+                  name="instagramHandle"
+                  className="input-recessed"
+                  value={form.instagramHandle}
+                  onChange={(event) => updateField("instagramHandle", event.target.value)}
+                  autoComplete="off"
+                  placeholder="@yourhandle"
+                  required
+                />
+              </div>
+            ) : (
+              <div className="v2-field-row">
+                <div className="v2-field">
+                  <label htmlFor="waitlist-company">Company name</label>
+                  <input
+                    id="waitlist-company"
+                    name="companyName"
+                    className="input-recessed"
+                    value={form.companyName}
+                    onChange={(event) => updateField("companyName", event.target.value)}
+                    autoComplete="organization"
+                    required
+                  />
+                </div>
+                <div className="v2-field">
+                  <label htmlFor="waitlist-website">Website <span>optional</span></label>
+                  <input
+                    id="waitlist-website"
+                    name="websiteUrl"
+                    type="url"
+                    className="input-recessed"
+                    value={form.websiteUrl}
+                    onChange={(event) => updateField("websiteUrl", event.target.value)}
+                    autoComplete="url"
+                    placeholder="https://example.com"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="v2-waitlist-actions">
+              <button type="submit" className="v2-btn v2-btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? "Joining..." : "Join the waitlist"}
+              </button>
+              <p className="v2-field-hint">Email or phone is required. We will only use it for Scout launch updates.</p>
+            </div>
+
+            {message ? (
+              <p className={`v2-form-message ${status === "success" ? "success" : "error"}`} role={status === "error" ? "alert" : "status"}>
+                {message}
+              </p>
+            ) : null}
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Footer
+
+function Footer({
+  theme, onJoinWaitlist,
+}: {
+  theme: Theme;
+  onJoinWaitlist: (w: Audience) => void;
+}) {
   return (
     <footer className="v2-footer">
       <div className="v2-container">
@@ -672,7 +911,7 @@ function Footer({ theme, onEnter }: { theme: Theme; onEnter: (w: Audience) => vo
           <div>
             <h4>Creators</h4>
             <ul>
-              <li><button type="button" onClick={() => onEnter("creator")}>Download the app</button></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("creator")}>Download the app</button></li>
               <li><a href="#how">How it works</a></li>
               <li><a href="#voices">Creator stories</a></li>
             </ul>
@@ -680,8 +919,8 @@ function Footer({ theme, onEnter }: { theme: Theme; onEnter: (w: Audience) => vo
           <div>
             <h4>Businesses</h4>
             <ul>
-              <li><button type="button" onClick={() => onEnter("business")}>Start a campaign</button></li>
-              <li><button type="button" onClick={() => onEnter("business")}>Business login</button></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Start a campaign</button></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Business login</button></li>
               <li><a href="#showcase">The workspace</a></li>
             </ul>
           </div>
@@ -771,11 +1010,11 @@ function setFavicon(theme: Theme) {
 }
 
 export function LandingPageV2() {
-  const router = useRouter();
-
   // Lazy initializers read from localStorage/DOM on client, use safe defaults for SSR
   const [aud, setAud] = useState<Audience>(getInitialAudience);
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [waitlistRole, setWaitlistRole] = useState<WaitlistRole>(getWaitlistRole(aud));
+  const [waitlistScrollRequest, setWaitlistScrollRequest] = useState(0);
 
   // Persist audience to localStorage when it changes
   useEffect(() => {
@@ -803,16 +1042,36 @@ export function LandingPageV2() {
 
   useReveal(aud);
 
-  function onEnter(which: Audience) {
+  useEffect(() => {
+    if (!waitlistScrollRequest) return;
+
+    let secondFrame = 0;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        const waitlistForm = document.getElementById(WAITLIST_FORM_ID);
+        if (!waitlistForm) return;
+
+        const nav = document.querySelector<HTMLElement>(".v2-nav");
+        const navOffset = nav ? nav.getBoundingClientRect().height + 16 : 72;
+        const top = Math.max(0, waitlistForm.getBoundingClientRect().top + window.scrollY - navOffset);
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
+  }, [waitlistScrollRequest]);
+
+  function onJoinWaitlist(which: Audience) {
     setAud(which);
+    setWaitlistRole(getWaitlistRole(which));
+    setWaitlistScrollRequest((request) => request + 1);
     localStorage.setItem("scout-audience", which);
     document.cookie = getAudienceCookieValue(which);
-
-    if (which === "business") {
-      router.push("/login");
-    } else {
-      router.push("/signup");
-    }
+    window.history.replaceState(null, "", `#${WAITLIST_ANCHOR_ID}`);
   }
 
   return (
@@ -820,16 +1079,17 @@ export function LandingPageV2() {
       <BgStack />
       <div className="v2-spotlight" aria-hidden="true" />
       <div id="top" suppressHydrationWarning>
-        <Nav aud={aud} theme={theme} setTheme={setTheme} onEnter={onEnter} />
-        <Hero aud={aud} setAud={setAud} onEnter={onEnter} />
+        <Nav aud={aud} theme={theme} setTheme={setTheme} onJoinWaitlist={onJoinWaitlist} />
+        <Hero aud={aud} setAud={setAud} onJoinWaitlist={onJoinWaitlist} />
         <Marquee />
         <Signals />
         <WhyScout />
         <Showcase aud={aud} setAud={setAud} />
         <HowItWorks aud={aud} />
         <Voices />
-        <CTA onEnter={onEnter} />
-        <Footer theme={theme} onEnter={onEnter} />
+        <WaitlistSection selectedRole={waitlistRole} onRoleChange={setWaitlistRole} />
+        <CTA onJoinWaitlist={onJoinWaitlist} />
+        <Footer theme={theme} onJoinWaitlist={onJoinWaitlist} />
       </div>
     </>
   );
