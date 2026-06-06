@@ -208,17 +208,17 @@ const AUD = {
   creator: {
     label: "Creator",
     eyebrow: "GET PAID TO POST WHAT YOU LOVE",
-    h: ["Local brands that", "actually fit", "your feed."],
-    sub: "Browse paid campaigns and gifted collabs built for micro-creators. Show interest in a tap, chat with brands, get paid — all from the Scout app.",
+    h: ["Scout: The Link Between", "Creators and", "Local Businesses."],
+    sub: "Discover campaigns from restaurants, cafés, shops, local artisans, and other businesses looking for creators like you.",
     primary: "Download the app",
     secondary: "See how it works",
     note: "Free for creators · iOS & Android",
   },
   business: {
     label: "Business",
-    eyebrow: "FIND CREATORS THAT ACTUALLY CONVERT",
-    h: ["Run every campaign,", "every creator,", "on one screen."],
-    sub: "Launch a campaign, review applicants side-by-side, and message matched creators across every campaign — from a desktop workspace built for the work, not a phone app stretched to fit.",
+    eyebrow: "FIND THE VOICES YOUR CUSTOMERS TRUST",
+    h: ["Scout: The Link Between", "Creators and", "Local Businesses."],
+    sub: "Post opportunities, review applicants, and manage creator partnerships all in one place.",
     primary: "Start a campaign",
     secondary: "Tour the workspace",
     note: "Free while you launch your first campaign · no card",
@@ -294,9 +294,8 @@ function Nav({
           <span style={{ fontWeight: 900, letterSpacing: "-0.01em", fontSize: 17 }}>Scout</span>
         </a>
         <nav className="v2-nav-links">
-          <a href="#why" className="v2-nav-link">Why Scout</a>
-          <a href="#showcase" className="v2-nav-link">Product</a>
-          <a href="#how" className="v2-nav-link">How it works</a>
+          <a href="#why" className="v2-nav-link">Why Scout?</a>
+          <a href="#showcase" className="v2-nav-link">How it works</a>
           <a href="#waitlist" className="v2-nav-link">Waitlist</a>
         </nav>
         <div className="v2-nav-actions">
@@ -325,9 +324,8 @@ function Nav({
       {menuOpen && (
         <div className="v2-mobile-menu" role="dialog" aria-label="Navigation menu">
           <nav style={{ display: "flex", flexDirection: "column" }}>
-            <a href="#why" className="v2-mobile-menu-link" onClick={close}>Why Scout</a>
-            <a href="#showcase" className="v2-mobile-menu-link" onClick={close}>Product</a>
-            <a href="#how" className="v2-mobile-menu-link" onClick={close}>How it works</a>
+            <a href="#why" className="v2-mobile-menu-link" onClick={close}>Why Scout?</a>
+            <a href="#showcase" className="v2-mobile-menu-link" onClick={close}>How it works</a>
             <a href="#waitlist" className="v2-mobile-menu-link" onClick={close}>Waitlist</a>
           </nav>
           <div className="v2-mobile-menu-actions">
@@ -346,54 +344,102 @@ function Nav({
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
-function Hero({ aud, setAud, onJoinWaitlist }: { aud: Audience; setAud: (a: Audience) => void; onJoinWaitlist: (w: Audience) => void }) {
+function Hero({ aud, setAud, onJoinWaitlist, theme }: { aud: Audience; setAud: (a: Audience) => void; onJoinWaitlist: (w: Audience) => void; theme: Theme }) {
   const a = AUD[aud];
+  const isLight = theme === "light";
+
+  const ghostBtnStyle = {
+    padding: "12px 28px",
+    fontSize: 15,
+    color: "rgba(255,255,255,0.85)",
+    border: "1px solid rgba(255,255,255,0.35)",
+  };
 
   return (
-    <section id="top" className="v2-container v2-hero">
-      <span className="v2-eyebrow"><span className="dot" />{a.eyebrow}</span>
-
-      <h1 className="v2-h1" style={{ maxWidth: "16ch" }}>
-        {a.h[0]}<br />
-        <span className="grad">{a.h[1]}</span> {a.h[2]}
-      </h1>
-
-      <p className="v2-sub">{a.sub}</p>
-
-      <div style={{ marginTop: 34 }}>
-        <AudienceSwitch value={aud} onChange={setAud} />
+    <section id="top" style={{
+      position: "relative",
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      overflow: "hidden",
+      padding: "0",
+    }}>
+      {/* Hero background */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        <Image
+          src={aud === "business" ? "/busimg.png" : "/creatorimg.png"}
+          alt="Hero"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center top" }}
+          priority
+        />
+        {/* Overlay for text readability — lighter in light mode */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: isLight
+            ? "rgba(10,4,24,0.55)"
+            : "rgba(10,4,24,0.65)",
+        }} />
       </div>
 
-      <div className="v2-hero-actions">
-        <button
-          type="button"
-          className="v2-btn v2-btn-primary"
-          onClick={() => onJoinWaitlist(aud)}
-        >
-          {a.primary}
-        </button>
-        <a href="#showcase" className="v2-btn v2-btn-ghost">{a.secondary}</a>
-      </div>
+      {/* Left: text content */}
+      <div className="v2-container" style={{ position: "relative", zIndex: 5, paddingTop: 120, paddingBottom: 80 }}>
+        <div style={{ maxWidth: 520 }}>
+          <h1 style={{
+            fontSize: "clamp(36px, 6vw, 72px)",
+            fontWeight: 900,
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+            color: "#ffffff",
+            margin: "0 0 16px",
+            textTransform: "uppercase",
+          }} suppressHydrationWarning>
+            {a.eyebrow}
+          </h1>
 
-      <div className="v2-hero-note">
-        <span className="av-stack">
-          <span className="av" /><span className="av" /><span className="av" /><span className="av" />
-        </span>
-        <span>{a.note}</span>
-      </div>
+          <p style={{
+            fontSize: "clamp(15px, 1.8vw, 22px)",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.85)",
+            margin: "0 0 8px",
+          }}>
+            <span style={{ color: "#d097ed" }}>Scout:</span> the link between creators and businesses
+          </p>
 
-      <div className="v2-stage">
-        {aud === "business" ? (
-          <div className="v2-stage-pane v2-stage-business" key="biz">
-            <WindowFrame title="scout.app/matches — lumen & co."><MockupMatches /></WindowFrame>
+          <p style={{
+            fontSize: "clamp(15px, 1.4vw, 20px)",
+            color: "rgba(255,255,255,0.6)",
+            lineHeight: 1.6,
+            margin: "0 0 32px",
+            maxWidth: 440,
+          }}>
+            {a.sub}
+          </p>
+
+
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
+            <button type="button"
+              className={"v2-btn " + (aud === "creator" ? "v2-btn-primary" : "v2-btn-ghost")}
+              onClick={() => setAud("creator")}
+              style={aud === "creator" ? { background: "#7c3aed", border: "none", padding: "12px 28px", fontSize: 15 } : ghostBtnStyle}>
+              <IconStar size={15} /> I&apos;m a Creator
+            </button>
+            <button type="button"
+              className={"v2-btn " + (aud === "business" ? "v2-btn-primary" : "v2-btn-ghost")}
+              onClick={() => setAud("business")}
+              style={aud === "business" ? { background: "#7c3aed", border: "none", padding: "12px 28px", fontSize: 15 } : ghostBtnStyle}>
+              <IconCampaigns size={15} /> I&apos;m a Business
+            </button>
           </div>
-        ) : (
-          <div className="v2-stage-pane v2-stage-creator" key="cre">
-            <div><MockupPhoneProfile /></div>
-            <div className="mid"><MockupPhoneDiscover /></div>
-            <div><MockupPhoneChat /></div>
-          </div>
-        )}
+
+          <button
+            type="button"
+            onClick={() => onJoinWaitlist(aud)}
+            style={{ background: "#ffffff", color: "#1a0533", fontWeight: 700, fontSize: 15, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 999, boxShadow: "0 4px 20px rgba(0,0,0,0.25)", marginBottom: 8, border: "none" }}>
+            Join Scout
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -405,12 +451,11 @@ function Marquee() {
   const niches: [string, string][] = [
     ["🍕", "Food & drink"], ["💪", "Fitness"], ["👗", "Fashion"], ["✨", "Beauty"],
     ["🌿", "Wellness"], ["🏡", "Home"], ["📸", "Photography"], ["☕", "Café"],
-    ["🎨", "Art & craft"], ["🐾", "Pets"], ["💄", "Skincare"], ["🎵", "Music"],
+    ["🎨", "Art & craft"], ["🐱", "Pets"], ["💄", "Skincare"], ["🎵", "Music"],
   ];
-  const types: [string, boolean][] = [
-    ["Paid campaigns", true], ["Gifted collabs", false], ["Local pop-ups", false],
-    ["Product launches", true], ["UGC packages", false], ["Long-form video", false],
-    ["Event coverage", false], ["Recurring partnerships", true],
+  const types = [
+    "Paid campaigns", "Gifted collabs", "Recurring partnerships", "Product launches",
+    "Event coverage", "Brand ambassadors", "Store openings", "UGC opportunities",
   ];
 
   return (
@@ -418,15 +463,15 @@ function Marquee() {
       <p className="v2-eyebrow-mono" style={{ textAlign: "center", display: "block", marginBottom: 22 }}>ONE MARKETPLACE · EVERY NICHE</p>
       <div className="v2-marquee-wrap">
         <div className="v2-marquee">
-          {[...niches, ...niches].map(([e, l], i) => (
+          {niches.map(([e, l], i) => (
             <span key={i} className="v2-chip"><span className="e">{e}</span>{l}</span>
           ))}
         </div>
       </div>
       <div className="v2-marquee-wrap" style={{ marginTop: 14 }}>
-        <div className="v2-marquee rev">
-          {[...types, ...types].map(([l, cy], i) => (
-            <span key={i} className={"v2-chip " + (cy ? "v2-chip-cyan" : "")}>{l}</span>
+        <div className="v2-marquee">
+          {types.map((l, i) => (
+            <span key={i} className="v2-chip v2-chip-cyan">{l}</span>
           ))}
         </div>
       </div>
@@ -468,33 +513,30 @@ function WhyScout() {
     <section id="why" className="v2-section">
       <div className="v2-container">
         <div className="v2-section-head v2-reveal">
-          <span className="v2-eyebrow-mono">WHY SCOUT</span>
-          <h2 className="v2-h2">Built so the right people actually find each other.</h2>
-          <p className="v2-sub">No cold DMs, no scattered spreadsheets. Scout matches creators and businesses on niche, goals, and mutual fit — then gives each side the right tool for their half of the work.</p>
+          <h2 className="v2-h2">WHY SCOUT?</h2>
+          <p className="v2-sub">We help creators discover relevant opportunities and help businesses find creators who match their brand.</p>
         </div>
 
         <div className="v2-bento v2-reveal">
-          <div className="v2-bento-card c4">
-            <div className="v2-bento-glow" />
+          <div className="v2-bento-card c3">
             <div className="v2-bento-ic"><IconUser size={18} /></div>
-            <h3>Matched on fit, not follower count</h3>
-            <p>Creators surface for campaigns that match their niche, location, and audience — and businesses see why each applicant fits before they ever open a thread. Smaller, truer audiences beat vanity reach.</p>
+            <h3>Matched on fit</h3>
+            <p>Creators and businesses are matched based on niche, location, audience, and goals, not just follower count.</p>
           </div>
-          <div className="v2-bento-card c2">
+          <div className="v2-bento-card c3">
             <div className="v2-bento-ic"><IconCheck size={18} /></div>
-            <h3>Clear from the start</h3>
-            <p>Deliverables, compensation, and timelines are visible up front. No guessing.</p>
+            <h3>Clarity from the start</h3>
+            <p>Campaign details, deliverables, compensation, and timelines are visible up front.</p>
           </div>
           <div className="v2-bento-card c3">
             <div className="v2-bento-ic"><IconMessages size={18} /></div>
             <h3>One place for every conversation</h3>
-            <p>Replace cold email and DM chaos with threaded conversations grouped by campaign — synced live across web and mobile.</p>
+            <p>Manage applications, messages, and collaborations in a single workspace.</p>
           </div>
           <div className="v2-bento-card c3">
-            <div className="v2-bento-glow" />
             <div className="v2-bento-ic"><IconGlobe size={18} /></div>
-            <h3>Local-first by design</h3>
-            <p>Scout is built for the corner café and the city-wide brand alike — collaborations that happen where you actually are.</p>
+            <h3>Built for local connections</h3>
+            <p>Scout makes it easy for creators and businesses in the same community to discover and work with each other.</p>
           </div>
         </div>
       </div>
@@ -517,51 +559,51 @@ const SHOWCASE: Record<Audience, ShowcaseItem[]> = {
   creator: [
     {
       tag: "01 — DISCOVER",
-      h: "Campaigns built for your niche, ready to browse.",
-      body: "Scout surfaces paid and gifted collabs that fit your focus and your city. Tap to show interest in the ones you want — the brand sees it instantly.",
-      bullets: ["Paid, gifted, and hybrid offers — filtered to your niche", "See compensation and deliverables before you show interest", "Local opportunities, ranked by fit"],
+      h: "Discover opportunities tailored to you",
+      body: "",
+      bullets: ["Download the Scout app", "Build your creator profile", "Browse campaigns ranked by fit"],
       art: () => <MockupPhoneDiscover />,
       reverse: false,
     },
     {
       tag: "02 — COLLABORATE",
-      h: "Chat with brands like a normal human.",
-      body: "Once you match, every campaign gets its own thread. Talk through the brief, lock dates, and ship — in the same messaging patterns you already use all day.",
-      bullets: ["One thread per campaign, never lose the context", "Brand brief pinned right above the conversation", "Real-time — no refresh, no waiting"],
+      h: "Collaborate with businesses that want to work with you",
+      body: "",
+      bullets: ["Show interest in a campaign", "Chat with interested businesses", "Agree on deliverables and timelines"],
       art: () => <MockupPhoneChat />,
-      reverse: true,
+      reverse: false,
     },
     {
       tag: "03 — GROW",
-      h: "Watch the deals — and the earnings — add up.",
-      body: "Your profile tracks active campaigns, brand deals, and what you've earned. Build a track record that brings the next collab to you.",
-      bullets: ["Earnings and active deals at a glance", "A portfolio brands can actually browse", "Repeat partnerships, not one-off gigs"],
+      h: "Build your reputation and grow your network",
+      body: "",
+      bullets: ["Track your earnings and active campaigns", "Showcase your completed collaborations on your portfolio", "Establish credibility with future collaborators and build long-lasting business partnerships"],
       art: () => <MockupPhoneProfile />,
       reverse: false,
     },
   ],
   business: [
     {
-      tag: "01 — MULTI-CREATOR CHAT",
-      h: "Twelve creators, three campaigns, one window.",
-      body: "A Slack-style three-pane layout: campaigns on the left, threads in the middle, the active conversation on the right. Switch with j/k, send with ↵. No more drilling.",
-      bullets: ["Independent scroll in each pane — no accidental jumps", "Per-campaign unread counts that survive a refresh", "Inline campaign brief above every thread"],
+      tag: "01 — LAUNCH",
+      h: "Launch a campaign on our website in minutes",
+      body: "",
+      bullets: ["Set the your goals, compensation type + details, and deliverables", "Outline the type of content and creator that fits your campaign", "Publish your campaign"],
       art: () => <WindowFrame title="scout.app/matches"><MockupMatches /></WindowFrame>,
       reverse: false,
     },
     {
-      tag: "02 — APPLICANT REVIEW",
-      h: "Compare twenty creators in twenty minutes.",
-      body: "Applicants left, full detail right — pitch, platforms, portfolio, brand history. Multi-select with shift-click for bulk accept, reject, or message-from-template.",
-      bullets: ["Sort by followers, recency, or audience fit", "Keyboard-driven: a accept · r pass · m message", "Every action is undoable for 5 seconds"],
+      tag: "02 — CONNECT",
+      h: "Connect with the right creators for your campaign",
+      body: "",
+      bullets: ["Browse interested creators ranked by fit", "Review and compare creator profiles, content, and past collaborations", "Message creators that fit your goals and brand"],
       art: () => <WindowFrame title="scout.app/campaigns/spring-drop"><MockupReview /></WindowFrame>,
       reverse: true,
     },
     {
-      tag: "03 — DASHBOARD",
-      h: "Every campaign, every metric, one glance.",
-      body: "Live KPIs, dense campaign cards with applicant previews and days-left chips, plus an activity rail that batches what changed since this morning.",
-      bullets: ["Responsive grid — up to four columns of campaigns", "Stale-campaign nudges after 7 quiet days", "Click any activity row to jump into the thread"],
+      tag: "03 — TRACK",
+      h: "Track and stay on top of every campaign",
+      body: "",
+      bullets: ["Track active campaigns and all creator applications", "Monitor progress, deliverables, and deadlines", "Ensure campaigns stay on track from start to finish", "Build long-lasting creator partnerships"],
       art: () => <WindowFrame title="scout.app/dashboard"><MockupDashboard /></WindowFrame>,
       reverse: false,
     },
@@ -571,39 +613,73 @@ const SHOWCASE: Record<Audience, ShowcaseItem[]> = {
 function Showcase({ aud, setAud }: { aud: Audience; setAud: (a: Audience) => void }) {
   const items = SHOWCASE[aud];
   const isCreator = aud === "creator";
+  const [step, setStep] = useState(0);
+
+  useEffect(() => { setStep(0); }, [aud]);
+
+  const it = items[step];
+
   return (
-    <section id="showcase" className="v2-section" style={{ paddingTop: 56 }}>
+    <section id="showcase" className="v2-section" style={{ paddingTop: 56, scrollMarginTop: 48 }}>
       <div className="v2-container">
         <div className="v2-section-head v2-reveal">
-          <span className="v2-eyebrow-mono">{isCreator ? "THE CREATOR APP" : "THE BUSINESS WORKSPACE"}</span>
-          <h2 className="v2-h2">{isCreator ? "Everything you need, in your pocket." : "Everything you need, on the big screen."}</h2>
-          <p className="v2-sub">{isCreator
-            ? "Creators work from the Scout mobile app — discovery, applications, and chat, built for the moments you're actually thinking about content."
-            : "Businesses work from the Scout web app — dense, parallel, keyboard-driven. The interface you've wished every creator tool had."
-          }</p>
+          <h2 className="v2-h2">HOW IT WORKS</h2>
+          <p className="v2-sub">
+            {isCreator ? (
+              <><strong>The creator app.</strong> Everything you need, in your pocket.</>
+            ) : (
+              <><strong>The business workspace.</strong> Everything you need, on the big screen.</>
+            )}
+          </p>
           <div style={{ marginTop: 26, display: "flex", justifyContent: "center" }}>
             <AudienceSwitch value={aud} onChange={setAud} />
           </div>
         </div>
 
-        <div style={{ display: "grid", gap: 8 }}>
-          {items.map((it, i) => (
-            <div key={aud + i} className={"v2-showcase v2-reveal" + (it.reverse ? " rev" : "")} style={{ padding: "40px 0" }}>
-              <div>
-                <span className="v2-step-tag">{it.tag}</span>
-                <h2 className="v2-h2" style={{ fontSize: "clamp(24px,3vw,36px)" }}>{it.h}</h2>
-                <p className="v2-sub" style={{ marginLeft: 0 }}>{it.body}</p>
-                <ul className="v2-feature-list">
-                  {it.bullets.map((b, j) => (
-                    <li key={j}><span className="b"><CheckIcon /></span>{b}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="v2-showcase-art" style={{ display: "flex", justifyContent: "center" }}>
-                {it.art()}
-              </div>
-            </div>
+        {/* Step tabs */}
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 40 }}>
+          {items.map((item, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setStep(i)}
+              style={{
+                padding: "9px 22px",
+                borderRadius: 999,
+                border: "1px solid",
+                borderColor: step === i ? "rgba(124,58,237,0.7)" : "var(--color-divider)",
+                background: step === i ? "rgba(124,58,237,0.18)" : "transparent",
+                color: step === i ? "#ffffff" : "var(--color-text-muted)",
+                fontFamily: "var(--font-mono, monospace)",
+                fontSize: 12,
+                fontWeight: 600,
+                letterSpacing: "0.04em",
+                cursor: "pointer",
+                transition: "all 180ms ease",
+              }}
+            >
+              {item.tag}
+            </button>
           ))}
+        </div>
+
+        {/* Active step panel */}
+        <div key={aud + "-" + step} className="v2-showcase" style={{ padding: "40px 0", animation: "showcase-in 400ms cubic-bezier(0.16,1,0.3,1) both" }}>
+          <div>
+            <h2 className="v2-h2" style={{ fontSize: "clamp(24px,3vw,36px)" }}>{it.h}</h2>
+            {it.body && <p className="v2-sub" style={{ marginLeft: 0 }}>{it.body}</p>}
+            <ol style={{ margin: "20px 0 0", padding: 0, listStyle: "none", display: "grid", gap: 12 }}>
+              {it.bullets.map((b, j) => (
+                <li key={j} style={{ display: "flex", alignItems: "baseline", gap: 12, fontSize: "clamp(15px,1.5vw,19px)", lineHeight: 1.55, color: "var(--color-text-muted)" }}>
+                  <span style={{ fontVariantNumeric: "tabular-nums", fontWeight: 700, color: "#7c3aed", flexShrink: 0 }}>{j + 1}.</span>
+                  {b}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="v2-showcase-art" style={{ display: "flex", justifyContent: "center" }}>
+            {it.art()}
+          </div>
         </div>
       </div>
     </section>
@@ -612,68 +688,7 @@ function Showcase({ aud, setAud }: { aud: Audience; setAud: (a: Audience) => voi
 
 // ── How it works ─────────────────────────────────────────────────────────────
 
-function HowItWorks({ aud }: { aud: Audience }) {
-  const steps = aud === "creator"
-    ? [
-        { h: "Build your profile", p: "Import your socials, set your niche and city. Takes about two minutes in the app." },
-        { h: "Show interest in campaigns", p: "Browse local paid and gifted offers that match your vibe. One tap to let the brand know you're in." },
-        { h: "Collaborate & get paid", p: "Match, agree the brief in chat, create the content, and get paid through Scout." },
-      ]
-    : [
-        { h: "Brief in three steps", p: "Goals, compensation, deliverables, deadline. A live preview shows what creators will see." },
-        { h: "Review applicants side-by-side", p: "Compare pitch, platforms, and fit. Multi-select for bulk actions or accept one at a time." },
-        { h: "Launch & grow", p: "Every matched creator gets a thread grouped by campaign. Ship, measure, repeat." },
-      ];
 
-  return (
-    <section id="how" className="v2-section" style={{ paddingTop: 56 }}>
-      <div className="v2-container">
-        <div className="v2-section-head v2-reveal">
-          <span className="v2-eyebrow-mono">HOW IT WORKS</span>
-          <h2 className="v2-h2">{aud === "creator" ? "From download to first deal in a day." : "From signup to first match in an afternoon."}</h2>
-        </div>
-        <div className="v2-steps v2-reveal">
-          {steps.map((s, i) => (
-            <div key={i} className="v2-step">
-              <h3 className="v2-h3">{s.h}</h3>
-              <p>{s.p}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-// ── Two-door CTA ──────────────────────────────────────────────────────────────
-
-function CTA({ onJoinWaitlist }: { onJoinWaitlist: (w: Audience) => void }) {
-  return (
-    <section className="v2-section" style={{ paddingTop: 32, paddingBottom: 96 }}>
-      <div className="v2-container">
-        <div className="v2-cta v2-reveal">
-          <span className="v2-eyebrow" style={{ position: "relative" }}><span className="dot" />PICK YOUR DOOR</span>
-          <h2 className="v2-h2" style={{ position: "relative", maxWidth: "18ch", margin: "0 auto" }}>Two sides, one marketplace. Where do you come in?</h2>
-          <div className="v2-doors">
-            <button type="button" className="v2-door" onClick={() => onJoinWaitlist("creator")}>
-              <div className="v2-door-ic"><IconStar size={20} /></div>
-              <h3>I&apos;m a creator</h3>
-              <p>Get the Scout app, build your profile, and start applying to local campaigns that fit your niche.</p>
-              <span className="go">Download the app <span className="arr">→</span></span>
-            </button>
-            <button type="button" className="v2-door" onClick={() => onJoinWaitlist("business")}>
-              <div className="v2-door-ic"><IconCampaigns size={20} /></div>
-              <h3>I&apos;m a business</h3>
-              <p>Open the web workspace, post your first campaign, and review creator applicants the same day.</p>
-              <span className="go">Start a campaign <span className="arr">→</span></span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // Waitlist
 
@@ -734,10 +749,9 @@ function WaitlistSection({
       <div className="v2-container">
         <div id={WAITLIST_ANCHOR_ID} className="v2-waitlist v2-reveal">
           <div className="v2-waitlist-copy">
-            <span className="v2-eyebrow"><span className="dot" />JOIN THE WAITLIST</span>
-            <h2 className="v2-h2">Get early access to Scout.</h2>
+            <h2 className="v2-h2" style={{ color: "var(--accent)" }}>Join the Waitlist</h2>
             <p className="v2-sub">
-              Tell us who you are and where to reach you. We&apos;ll use this to invite the right creators and brands as Scout opens up.
+              Be among the first to try Scout. Tell us a bit about yourself so we can bring the right creators and businesses onto the platform as we grow.
             </p>
           </div>
 
@@ -796,7 +810,6 @@ function WaitlistSection({
                     onChange={() => onRoleChange("creator")}
                   />
                   <span>Creator</span>
-                  <small>Apply for local campaigns.</small>
                 </label>
                 <label className={`v2-role-card ${!isCreator ? "active" : ""}`}>
                   <input
@@ -807,7 +820,6 @@ function WaitlistSection({
                     onChange={() => onRoleChange("brand")}
                   />
                   <span>Brand</span>
-                  <small>Find creator partners.</small>
                 </label>
               </div>
             </fieldset>
@@ -878,10 +890,11 @@ function WaitlistSection({
 // Footer
 
 function Footer({
-  theme, onJoinWaitlist,
+  theme, onJoinWaitlist, onShowHowItWorks,
 }: {
   theme: Theme;
   onJoinWaitlist: (w: Audience) => void;
+  onShowHowItWorks: (w: Audience) => void;
 }) {
   return (
     <footer className="v2-footer">
@@ -892,21 +905,20 @@ function Footer({
               <ScoutMark theme={theme} size={26} />
               <span style={{ fontWeight: 900, fontSize: 16 }}>Scout</span>
             </a>
-            <p>The local marketplace where small brands and micro-creators actually find each other.</p>
+            <p>The link between creators and businesses.</p>
           </div>
           <div>
             <h4>Creators</h4>
             <ul>
-              <li><button type="button" onClick={() => onJoinWaitlist("creator")}>Download the app</button></li>
-              <li><a href="#how">How it works</a></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("creator")}>Join creator waitlist</button></li>
+              <li><button type="button" onClick={() => onShowHowItWorks("creator")}>How it works</button></li>
             </ul>
           </div>
           <div>
             <h4>Businesses</h4>
             <ul>
-              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Start a campaign</button></li>
-              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Business login</button></li>
-              <li><a href="#showcase">The workspace</a></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Join business waitlist</button></li>
+              <li><button type="button" onClick={() => onShowHowItWorks("business")}>How it works</button></li>
             </ul>
           </div>
           <div>
@@ -995,11 +1007,19 @@ function setFavicon(theme: Theme) {
 }
 
 export function LandingPageV2() {
-  // Lazy initializers read from localStorage/DOM on client, use safe defaults for SSR
-  const [aud, setAud] = useState<Audience>(getInitialAudience);
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
-  const [waitlistRole, setWaitlistRole] = useState<WaitlistRole>(getWaitlistRole(aud));
+  // Always start with SSR-safe defaults so server and client render the same HTML
+  const [aud, setAud] = useState<Audience>("creator");
+  const [theme, setTheme] = useState<Theme>("dark");
+  const [waitlistRole, setWaitlistRole] = useState<WaitlistRole>(getWaitlistRole("creator"));
   const [waitlistScrollRequest, setWaitlistScrollRequest] = useState(0);
+
+  // After mount, sync to stored audience and theme (client-only)
+  useEffect(() => {
+    const storedAud = getInitialAudience();
+    setAud(storedAud);
+    setWaitlistRole(getWaitlistRole(storedAud));
+    setTheme(getInitialTheme());
+  }, []);
 
   // Persist audience to localStorage when it changes
   useEffect(() => {
@@ -1065,15 +1085,20 @@ export function LandingPageV2() {
       <div className="v2-spotlight" aria-hidden="true" />
       <div id="top" suppressHydrationWarning>
         <Nav aud={aud} theme={theme} setTheme={setTheme} onJoinWaitlist={onJoinWaitlist} />
-        <Hero aud={aud} setAud={setAud} onJoinWaitlist={onJoinWaitlist} />
+        <Hero aud={aud} setAud={setAud} onJoinWaitlist={onJoinWaitlist} theme={theme} />
         <Marquee />
-        <Signals />
         <WhyScout />
         <Showcase aud={aud} setAud={setAud} />
-        <HowItWorks aud={aud} />
         <WaitlistSection selectedRole={waitlistRole} onRoleChange={setWaitlistRole} />
-        <CTA onJoinWaitlist={onJoinWaitlist} />
-        <Footer theme={theme} onJoinWaitlist={onJoinWaitlist} />
+        <Footer theme={theme} onJoinWaitlist={onJoinWaitlist} onShowHowItWorks={(which) => {
+            setAud(which);
+            const el = document.getElementById("showcase");
+            if (!el) return;
+            const nav = document.querySelector<HTMLElement>(".v2-nav");
+            const navOffset = nav ? nav.getBoundingClientRect().height + 16 : 72;
+            const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - navOffset);
+            window.scrollTo({ top, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+          }} />
       </div>
     </>
   );
