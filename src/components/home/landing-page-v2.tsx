@@ -294,9 +294,8 @@ function Nav({
           <span style={{ fontWeight: 900, letterSpacing: "-0.01em", fontSize: 17 }}>Scout</span>
         </a>
         <nav className="v2-nav-links">
-          <a href="#why" className="v2-nav-link">Why Scout</a>
-          <a href="#showcase" className="v2-nav-link">Product</a>
-          <a href="#how" className="v2-nav-link">How it works</a>
+          <a href="#why" className="v2-nav-link">Why Scout?</a>
+          <a href="#showcase" className="v2-nav-link">How it works</a>
           <a href="#waitlist" className="v2-nav-link">Waitlist</a>
         </nav>
         <div className="v2-nav-actions">
@@ -325,9 +324,8 @@ function Nav({
       {menuOpen && (
         <div className="v2-mobile-menu" role="dialog" aria-label="Navigation menu">
           <nav style={{ display: "flex", flexDirection: "column" }}>
-            <a href="#why" className="v2-mobile-menu-link" onClick={close}>Why Scout</a>
-            <a href="#showcase" className="v2-mobile-menu-link" onClick={close}>Product</a>
-            <a href="#how" className="v2-mobile-menu-link" onClick={close}>How it works</a>
+            <a href="#why" className="v2-mobile-menu-link" onClick={close}>Why Scout?</a>
+            <a href="#showcase" className="v2-mobile-menu-link" onClick={close}>How it works</a>
             <a href="#waitlist" className="v2-mobile-menu-link" onClick={close}>Waitlist</a>
           </nav>
           <div className="v2-mobile-menu-actions">
@@ -346,8 +344,16 @@ function Nav({
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
-function Hero({ aud, setAud, onJoinWaitlist }: { aud: Audience; setAud: (a: Audience) => void; onJoinWaitlist: (w: Audience) => void }) {
+function Hero({ aud, setAud, onJoinWaitlist, theme }: { aud: Audience; setAud: (a: Audience) => void; onJoinWaitlist: (w: Audience) => void; theme: Theme }) {
   const a = AUD[aud];
+  const isLight = theme === "light";
+
+  const ghostBtnStyle = {
+    padding: "12px 28px",
+    fontSize: 15,
+    color: "rgba(255,255,255,0.85)",
+    border: "1px solid rgba(255,255,255,0.35)",
+  };
 
   return (
     <section id="top" style={{
@@ -364,13 +370,16 @@ function Hero({ aud, setAud, onJoinWaitlist }: { aud: Audience; setAud: (a: Audi
           src={aud === "business" ? "/busimg.png" : "/creatorimg.png"}
           alt="Hero"
           fill
+          sizes="100vw"
           style={{ objectFit: "cover", objectPosition: "center top" }}
           priority
         />
-        {/* Dark overlay on left for text readability */}
+        {/* Overlay for text readability — lighter in light mode */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(90deg, rgba(10,4,24,0.92) 0%, rgba(10,4,24,0.75) 45%, rgba(10,4,24,0.0) 70%)",
+          background: isLight
+            ? "rgba(10,4,24,0.55)"
+            : "rgba(10,4,24,0.65)",
         }} />
       </div>
 
@@ -413,25 +422,23 @@ function Hero({ aud, setAud, onJoinWaitlist }: { aud: Audience; setAud: (a: Audi
             <button type="button"
               className={"v2-btn " + (aud === "creator" ? "v2-btn-primary" : "v2-btn-ghost")}
               onClick={() => setAud("creator")}
-              style={aud === "creator" ? { background: "#7c3aed", border: "none", padding: "12px 28px", fontSize: 15 } : { padding: "12px 28px", fontSize: 15 }}>
+              style={aud === "creator" ? { background: "#7c3aed", border: "none", padding: "12px 28px", fontSize: 15 } : ghostBtnStyle}>
               <IconStar size={15} /> I&apos;m a Creator
             </button>
             <button type="button"
               className={"v2-btn " + (aud === "business" ? "v2-btn-primary" : "v2-btn-ghost")}
               onClick={() => setAud("business")}
-              style={aud === "business" ? { background: "#7c3aed", border: "none", padding: "12px 28px", fontSize: 15 } : { padding: "12px 28px", fontSize: 15 }}>
+              style={aud === "business" ? { background: "#7c3aed", border: "none", padding: "12px 28px", fontSize: 15 } : ghostBtnStyle}>
               <IconCampaigns size={15} /> I&apos;m a Business
             </button>
           </div>
 
-          <a
-            href={aud === "creator" ? "#" : "/login"}
-            style={{ background: "#ffffff", color: "#1a0533", fontWeight: 700, fontSize: 15, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 999, boxShadow: "0 4px 20px rgba(0,0,0,0.25)", marginBottom: 8, textDecoration: "none" }}>
-            {aud === "creator"
-              ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
-              : <IconCampaigns size={16} />}
-            {a.primary}
-          </a>
+          <button
+            type="button"
+            onClick={() => onJoinWaitlist(aud)}
+            style={{ background: "#ffffff", color: "#1a0533", fontWeight: 700, fontSize: 15, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 999, boxShadow: "0 4px 20px rgba(0,0,0,0.25)", marginBottom: 8, border: "none" }}>
+            Join Scout
+          </button>
         </div>
       </div>
     </section>
@@ -613,11 +620,17 @@ function Showcase({ aud, setAud }: { aud: Audience; setAud: (a: Audience) => voi
   const it = items[step];
 
   return (
-    <section id="showcase" className="v2-section" style={{ paddingTop: 56 }}>
+    <section id="showcase" className="v2-section" style={{ paddingTop: 56, scrollMarginTop: 48 }}>
       <div className="v2-container">
         <div className="v2-section-head v2-reveal">
-          <h2 className="v2-h2">{isCreator ? "THE CREATOR APP" : "THE BUSINESS WORKSPACE"}</h2>
-          <p className="v2-sub">{isCreator ? "Everything you need, in your pocket." : "Everything you need, on the big screen."}</p>
+          <h2 className="v2-h2">HOW IT WORKS</h2>
+          <p className="v2-sub">
+            {isCreator ? (
+              <><strong>The creator app.</strong> Everything you need, in your pocket.</>
+            ) : (
+              <><strong>The business workspace.</strong> Everything you need, on the big screen.</>
+            )}
+          </p>
           <div style={{ marginTop: 26, display: "flex", justifyContent: "center" }}>
             <AudienceSwitch value={aud} onChange={setAud} />
           </div>
@@ -877,10 +890,11 @@ function WaitlistSection({
 // Footer
 
 function Footer({
-  theme, onJoinWaitlist,
+  theme, onJoinWaitlist, onShowHowItWorks,
 }: {
   theme: Theme;
   onJoinWaitlist: (w: Audience) => void;
+  onShowHowItWorks: (w: Audience) => void;
 }) {
   return (
     <footer className="v2-footer">
@@ -896,16 +910,15 @@ function Footer({
           <div>
             <h4>Creators</h4>
             <ul>
-              <li><button type="button" onClick={() => onJoinWaitlist("creator")}>Download the app</button></li>
-              <li><a href="#how">How it works</a></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("creator")}>Join creator waitlist</button></li>
+              <li><button type="button" onClick={() => onShowHowItWorks("creator")}>How it works</button></li>
             </ul>
           </div>
           <div>
             <h4>Businesses</h4>
             <ul>
-              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Start a campaign</button></li>
-              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Business login</button></li>
-              <li><a href="#showcase">The workspace</a></li>
+              <li><button type="button" onClick={() => onJoinWaitlist("business")}>Join business waitlist</button></li>
+              <li><button type="button" onClick={() => onShowHowItWorks("business")}>How it works</button></li>
             </ul>
           </div>
           <div>
@@ -1072,12 +1085,20 @@ export function LandingPageV2() {
       <div className="v2-spotlight" aria-hidden="true" />
       <div id="top" suppressHydrationWarning>
         <Nav aud={aud} theme={theme} setTheme={setTheme} onJoinWaitlist={onJoinWaitlist} />
-        <Hero aud={aud} setAud={setAud} onJoinWaitlist={onJoinWaitlist} />
+        <Hero aud={aud} setAud={setAud} onJoinWaitlist={onJoinWaitlist} theme={theme} />
         <Marquee />
         <WhyScout />
         <Showcase aud={aud} setAud={setAud} />
         <WaitlistSection selectedRole={waitlistRole} onRoleChange={setWaitlistRole} />
-        <Footer theme={theme} onJoinWaitlist={onJoinWaitlist} />
+        <Footer theme={theme} onJoinWaitlist={onJoinWaitlist} onShowHowItWorks={(which) => {
+            setAud(which);
+            const el = document.getElementById("showcase");
+            if (!el) return;
+            const nav = document.querySelector<HTMLElement>(".v2-nav");
+            const navOffset = nav ? nav.getBoundingClientRect().height + 16 : 72;
+            const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - navOffset);
+            window.scrollTo({ top, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+          }} />
       </div>
     </>
   );
