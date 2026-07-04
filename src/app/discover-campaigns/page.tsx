@@ -1,10 +1,19 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
 import { CampaignBoard } from "@/components/discover/campaign-board";
 import { NavBar } from "@/components/discover/nav-bar";
 import { audienceCookieName, getSelectedAudience } from "@/lib/audience";
+import { publicPageMetadata } from "@/lib/seo";
 import { Campaign } from "@/types/jobs";
 import { createClient } from "@/utils/supabase/server";
+
+export const metadata: Metadata = publicPageMetadata({
+  title: "Discover Creator Campaigns",
+  description: "Browse live Scout campaigns from small businesses looking for micro-influencer creators.",
+  path: "/discover-campaigns",
+  image: "/og/scout-og-discover.png",
+});
 
 export default async function DiscoverCampaignsPage() {
   const cookieStore = await cookies();

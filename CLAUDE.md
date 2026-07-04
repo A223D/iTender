@@ -9,6 +9,7 @@ npm run dev      # Start development server
 npm run build    # Production build
 npm run start    # Serve production build
 npm run lint     # Run ESLint
+node scripts/generate-seo-assets.mjs  # Regenerate favicon/app icon/OG assets
 ```
 
 No test suite is configured.
@@ -60,6 +61,12 @@ Located in [src/app/api/](src/app/api/):
 - `webhooks/supabase` — receives DB webhook events (e.g., triggers emails on new applications)
 
 Email sending uses Resend; templates live in [src/lib/email.ts](src/lib/email.ts).
+
+### SEO
+
+Shared SEO constants and helpers live in [src/lib/seo.ts](src/lib/seo.ts). The root layout declares global metadata, app icons, manifest, OpenGraph/Twitter defaults, Apple web app metadata, and Organization/WebSite/WebApplication JSON-LD. Metadata routes are [src/app/robots.ts](src/app/robots.ts), [src/app/sitemap.ts](src/app/sitemap.ts), and [src/app/manifest.ts](src/app/manifest.ts).
+
+Public metadata overrides exist on `/waitlist` and `/discover-campaigns`. Private/auth route groups use layout-level noindex metadata for admin, campaigns, creators, dashboard, login, matches, onboarding, and settings. Production canonical, sitemap, and robots URLs depend on `NEXT_PUBLIC_APP_URL` being set to the real domain.
 
 ### Path Alias
 

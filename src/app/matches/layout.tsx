@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -5,6 +6,13 @@ import { MatchesPanelShell } from "@/components/matches/matches-panel-shell";
 import type { MatchGroup, MatchItem } from "@/components/matches/matches-list";
 import { createClient } from "@/utils/supabase/server";
 import { type RawMatchRow, extractProfilePhoto } from "@/types/models";
+import { NO_INDEX_METADATA } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  ...NO_INDEX_METADATA,
+  title: "Matches",
+  description: "Chat with Scout creator matches.",
+};
 
 export default async function MatchesLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();

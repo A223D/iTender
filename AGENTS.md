@@ -3,6 +3,7 @@
 - `npm run build` — Production build
 - `npm run start` — Serve production build
 - `npm run lint` — ESLint (next/core-web-vitals + next/typescript)
+- `node scripts/generate-seo-assets.mjs` — Regenerate favicon/app icon/OG image assets
 - No test suite configured
 
 ## App Identity
@@ -75,6 +76,14 @@ Uses `"use server"` form actions + cookie-based auth (`ADMIN_SECRET` env var, 1h
 
 ### Audience/Cookie System
 `src/lib/audience.ts` — `scout_audience` cookie, 1yr max-age, SameSite=Lax. `useAudienceSelection()` hook in `src/components/home/use-audience-selection.ts` sets cookie + `startTransition(() => router.refresh())`.
+
+### Waitlist Page (`/waitlist`)
+The waitlist signup form is its own route (`src/app/waitlist/page.tsx`, reads `?role=creator|business` from `searchParams`), not part of the homepage. `Nav`, `Footer`, `WaitlistSection`, `ThemeToggle`, `ScoutMark`, and waitlist types/helpers live in `src/components/home/landing-shared.tsx` so both `landing-page-v2.tsx` (`/`) and `waitlist-page-content.tsx` (`/waitlist`) render the same components. Homepage CTAs `router.push(`/waitlist?role=${audience}`)` instead of scrolling to an in-page form. `Nav`/`Footer` take optional `homeHref`/`sectionPrefix` props so their links resolve correctly on either page.
+
+### SEO System
+`src/lib/seo.ts` is the shared source for site URL/name/description/keywords, public page metadata, noindex metadata, and JSON-LD objects. `src/app/layout.tsx` wires global metadata, icons, manifest, canonical root URL, OpenGraph/Twitter defaults, Apple web app metadata, and Organization/WebSite/WebApplication JSON-LD. Metadata routes live at `src/app/robots.ts`, `src/app/sitemap.ts`, and `src/app/manifest.ts`; production SEO URLs depend on `NEXT_PUBLIC_APP_URL` being set to the canonical domain.
+
+Private/auth areas use route-level layouts with `NO_INDEX_METADATA`: `admin`, `campaigns`, `creators`, `dashboard`, `login`, `matches`, `onboarding`, and `settings`. Public metadata overrides currently exist on `/waitlist` and `/discover-campaigns`, each with its own canonical path and OG image. SEO assets live in `public/` and `public/og/`; regenerate them with `node scripts/generate-seo-assets.mjs` after changing Scout brand imagery.
 
 ### Notifications Quirks
 - `campaignIds.join(",")` in `useEffect` dependency for stable string comparison (not array reference)
