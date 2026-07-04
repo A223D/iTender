@@ -48,6 +48,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -1498,6 +1499,10 @@ kbd.kbd {
 .v2-door:hover .go .arr { transform: translateX(4px); }
 
 /* Waitlist */
+.v2-waitlist-page-section { padding-top: 44px; padding-bottom: 32px; }
+@media (max-width: 640px) {
+  .v2-waitlist-page-section { padding-top: 20px; padding-bottom: 24px; }
+}
 .v2-waitlist {
   position: relative;
   scroll-margin-top: 76px;
@@ -1535,6 +1540,9 @@ kbd.kbd {
   margin-left: 0;
   margin-right: 0;
   max-width: 44ch;
+}
+@media (max-width: 640px) {
+  .v2-waitlist-copy .v2-sub { margin-top: 8px; }
 }
 .v2-waitlist-form {
   scroll-margin-top: 76px;
@@ -1665,9 +1673,12 @@ kbd.kbd {
   .v2-waitlist-form {
     padding: 16px;
     border-radius: 18px;
+    gap: 10px;
   }
-  .v2-field-row,
-  .v2-role-grid {
+  .v2-waitlist-form .input-recessed {
+    min-height: 48px;
+  }
+  .v2-field-row {
     grid-template-columns: 1fr;
   }
   .v2-waitlist-actions {
